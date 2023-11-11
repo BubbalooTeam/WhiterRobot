@@ -1,0 +1,498 @@
+#langs
+
+language: "en"
+language_flag: "🇺🇸 English"
+button_lang: "🌐 Language"
+select_lang: "<b>Select Language.</b>\n<b>User Language:</b> <code>{}</code>"
+language_switch_success: "Switched to {} successfully!"
+LANG_SET: "<i>The chat language has been set to 🇺🇸 English.</i>"
+LANG: "<i>I need you to enter a value.</i>\n<code>Ex: /setlang en</code>"
+LANG_: "<i>Invalid language. Currently available languages are: PT, EN, ES</i>"
+
+
+#bot
+START: "<i>Hey there <b>{}</b>! My name is <b>{}</b>. I'm here to have fun and help you manage your groups!\n\nClick the Help button to learn more about how to use my full potential.\n\nFollow WhiterKangNews (@WhiterKangNews) if you want to stay up to date with news, updates and weather of bot inactivity!\n\nMade with love by @DaviTudo.</i>\n\n<b><u>Want to add me to your group?</u> <a href='https://t.me/{}?startgroup=new'>Click Here!</a></b>"
+START_NO_PRIVATE: "Hi my name is <b>{}</b>."
+ABOUT_TEXT: "<b>— WhiterKang</b>\n\n- <b>Version number:</b> <code>{}</code>\n- <b>Source Code:</b> <a href='https://github.com/BubbalooTeam/WhiterRobot'>📦 GitHub</a>\n- <b>Developer:</b> @DaviTudo\n\n©2023 - <a href='https://github.com/BubbalooTeam/'>🌐 BubbalooTeam</a>"
+HELP_MSG: "Hi! My name is <b>{}</b>.  I'm a modular group management bot with some fun extras!  Take a look at the following to get an idea of some of the things I can help you with.\n\nBasic commands:\n- /start: Cool command to see if I'm Alive or Not :3\n- /help: send this help message\n- /ping See the delay for the bot to return the message.\n- /about See more about the developers.\n\nAll commands can be used with the following characters: <code>/ !</ code>"
+BACK_BNT: "⬅️ Back"
+HELP_BNT: "❔ Help"
+REPO_BNT: "📦 Source Code"
+ABOUT_BNT: "ℹ️ About"
+SUP_BNT: "Support"
+CONFIG_TEXT: "<b>⚙ Settings</b> — Here are the settings for this group. To learn more, <b>click the buttons below.</b>"
+HELP_BASE: "Here is help for the <b>{}</b> module:\n\n"
+MOREINFO_BNT: "🔧 More Info..."
+
+# Smartphone help
+help-name-smartphone: "Smartphones"
+help-plugin-smartphone: "— Commands to search for specifications of mobile devices such as <b>Cell Phones</b> and <b>Tablets</b>\n\n• !d [Device] — Used to search for technical specifications of a device.\n• /magisk — Fetch the latest magisk for Android.\n• /twrp [Device CodeName] — Fetch the latest TWRP for a device.\n• /app [App Name] —  Search for an APP in the Play-Store.\n• /device [Device CodeName] — Search for the device by codename."
+
+# Stickers help
+help-name-stickers: "Stickers"
+help-plugin-stickers: "— Commands dedicated to sticker information and plagiarism.\n\n• /kang — Used to plagiarize a sticker.\n• /stickerid — Gets information about the sticker id.\n• /getsticker — Gets the file and some sticker information."
+
+# Medias help
+help-name-medias: "Medias"
+help-plugin-medias: "— Commands for Downloading and subsequently sending media from <b>YouTube, Instagram, TikTok, Twitter, Thereads</b>. and among others.\n\n• /yt [title] — Searches for the first 20 videos in the YouTube.\n• /ytdl [title or url] — Download media from YouTube.\n• /dl | /mdl | /sdl [url] — Download media from Instagram, TikTok, Twitter, Thereads."
+
+COM_1: "Cleaning up..."
+COM_2: "<i>Looking for...</i>"
+NO_CHANGEINFO_PERM: "You do not have sufficient administrative rights to change this group's information!"
+USER_NO_ADMIN: "You are not an administrator!"
+
+
+
+#stickers
+KANGING: "Stealing the sticker..."
+STICKER_NO_REPLY: "Want me to guess the sticker?  Please tag a sticker."
+STICKER_NOT_NAME: "The sticker has no name."
+NO_STICKER_SUPORTED: "<code>Not supported!</code>"
+USE_EXISTING_PACK: "<code>Using existing sticker pack...</code>"
+CREATE_STICKER_PACK: "<b>Creating a new sticker pack...</b>"
+CONVERTING_VIDEO: "<code>Converting video/gif to sticker, Please wait...</code>"
+STICKERS_NOT_FOUND_USER: "It looks like you've never interacted with me in private chat, you need to do that first.  ."
+STICKERS_KANGED: "<b>Sticker successfully stolen!</b>\n<a href='t.me/addstickers/{}'>Pack</a>.\n<b>Emoji:</b> {}"
+
+ANILIST_NOT_QUERY: "<code>Will I send you the Anilist wind?</code>"
+ANILIST_VISIT_WEB: "View on Website"
+
+#medias
+DOWNLOAD_YT: "📦 <i>Downloading...</i>"
+UPLOADING_YT: "📦 <i>Sending...</i>"
+VID_BNT: "📹 Video"
+SONG_BNT: "💿 Audio"
+YOUTUBE_CAPTION: "<b><a href={}>{}</a></b>\n<b>❯ Duration:</b> <i>{}</i>\n<b>❯ Channel:</b> <i>{}</i>\n<b>❯ Views:</b> <i>{}</i>\n<b>❯ Likes:</b> <i>{}</i>"
+YOUTUBE_FILE_BIG: "Sorry! The video you want to download exceeds the size of 2GB.\nUnable to download and upload, Sorry."
+NO_ARGS_YT: "<code>Will I lower the wind?!</code>"
+MEDIAS_BNT: "Media"
+MEDIAS_CAPTION_BNT: "📃 Captions:"
+AUTO_DOWNLOAD_BNT: "⬇️ Automatic:"
+MEDIAS_CONFIG_TEXT: "<b>⚙ Medias</b> — Here are the <b>'Medias'</b> settings for this chat. To learn more, <b>Click the buttons below to find out what it's for.</b>"
+NO_FOR_YOU: "This is not for you..."
+
+#reverse
+REVERSE_RESULTS: "<b>Search Results:</b> "
+REVERSING: "<code>Processing...</code>"
+
+#print
+
+TAKING_PRINT: "Taking screenshot..."
+NO_ARGS_PRINT: "Usage: <code>/print https://example.com</code> - Takes a screenshot of the specified website."
+ERROR_PRINT_DNS: "<b>Cannot access this site</b>\n\n\n<i>Connection to {} was refused.</i>"
+
+#AFK
+AFK_IS_NOW_REASON: "{} is now AFK!\nSaid it is: {}"
+IS_AFK: "{} is AFK!\n<b>Last seen</b> <i>{}</i> <b>ago</b>"
+IS_AFK_REASON: "{} is AFK!\nSaid it is: {}\n\n<b>Last seen</b> <i>{}</i> <b>ago</b>"
+AFK_IS_NOW: "{} is now AFK!"
+AFK_LOOGER: "{} is no longer AFK!"
+
+#pin
+NO_PIN_BOT: "Can't pin messages here!  Make sure I'm an admin and can pin messages."
+NO_PIN_USER: "You don't have sufficient administrative rights to pin/unpin messages!"
+PIN_NO_REPLY: "<i>You need to reply to a message to pin it.</i>"
+PIN_SUCCESS: '<i>I pinned <a href="{}">this message</a>.</i>'
+UNPIN_ALL_SUCCESS: "<i>I have unpinned all chat messages.</i>"
+UNPIN_SUCCESS: '<i>I have unpinned <a href="{}">this message</a>.</i>'
+UNPIN_NO_REPLY: "<i>You need to reply to a message to unpin or use <code>/unpin all</code> to unpin all.<i>"
+ANTICHANNELPIN_ENABLED: "Unpinning messages from channels linked to this group has been <b>Enabled.</b>"
+ANTICHANNELPIN_DISABLED: "Unpinning messages from channels linked to this group has been <b>Disabled.</b>"
+ANTICHANNELPIN_ERROR: "Please give me a valid argument <b>on/off</b>."
+CHANNELPIN_DISABLED: "Currently unpinning channel messages is: <b>Disabled</b>."
+CHANNELPIN_ENABLED: "Currently unpinning channel messages is: <b>Enabled</b>."
+PIN_SILENT_ON: "Silence."
+PIN_SILENT_OFF: "Notify group members."
+UNPIN_LOGGER: "<b>{}:</b>\n#UNPIN\n<b>Administrator:</b> {}<code>({})\n<b>Message:</b> [Link]({})"
+PIN_LOGGER: "<b>{}:</b>\n#PIN\n<b>Administrator:</b> {}<code>({})</code>\n<b>Message:</b> [Link]({})\n<b>Mode:</b> {}"
+
+
+#ddd
+DDD_RESULT: "📞 <b>DDD - {}</b> \n<b>- State:</b> {} - {}\n\n<b>Cities:</b> <code>{}</code>"
+
+
+#Bans
+UNBAN_SUCCESS: "This user can rejoin the group."
+UNBAN_LOGGER: "<b>{}:</b>\n#UNBAN\n<b>Administrator:</b> {}\n<b>User:</b> {} (<code>{}</code>)"
+BAN_IN_ADMIN: "Why would I ban an admin?  Sounds like a pretty stupid idea."
+BAN_IN_DEV: "Why would I ban my developer?  Sounds like a pretty stupid idea."
+BAN_MY_SELF: "I won't banish myself, are you crazy?"
+BAN_SUCCESS: "User {} was banned for {} in chat: <b>{}</b>\n<b>Reason</b>: <code>{}</code>"
+BAN_LOADING: "<code>Baning user...</code>"
+NO_BAN_BOT: "I can't restrict people here!  Make sure I'm an admin and I can add new admins."
+NO_BAN_USER: "You don't have sufficient administrative rights to ban/unban users!"
+BAN_LOGGER: "<b>{}:</b>\n#BAN\n<b>Administrator:</b> {}\n<b>User:</b> {} (<code>{}</code>)\n<b>Reason:</b> <code>{}</code>"
+TBAN_LOGGER: "<b>{}:</b>\n#TEMP_BANNED\n<b>Admin:</b> {}\n<b>User:</b> {} (<code>{}</code>)\n<b>Time:</b> {}\n<b>Reason:</b> <code>{}</code>"
+TBAN_SUCCESS: "{} was temporarily banned for <b>{}</b> in <b>{}</b>\n<b>Reason</b>: <code>{}</code>"
+BANS_NOT_ESPECIFIED_USER: "<code>No valid user_id or message specified.</code>"
+BANS_ID_INVALID: "<code>Invalid username or userid, please try again with valid information ⚠</code>"
+MUTE_IN_ADMIN: "Why would I mutate an administrator? That seems like a pretty dumb idea to me."
+MUTE_IN_MYSELF: "I will not mutate!"
+MUTE_SUCESS: "{} is muted(mutated) on <b>{}</b>\n<b>Reason:</b> <code>{}</code>"
+MUTING: "<code>Muting User...</code>"
+MUTE_IN_DEV: "Why would I mutate my developer? That seems like a really stupid idea to me."
+NO_MUTE_USER: "You do not have sufficient rights to mute users"
+NO_MUTE_BOT: "I can't restrict people here! Make sure I'm an admin and I can add new admins."
+PEER_ID_INVALID: "I have no control over this user, or the ID is not valid.  If you reply to one of his messages, I will be able to interact with him."
+
+#rules
+RULES_UPDATED: "Successfully set rules for this group."
+RULES_NO_ARGS: "<b>You did not specify an argument to change the rules</b>"
+RULES: "The rules for <b>{}</b> are:\n\n{}"
+NO_RULES: "Group admins haven't set any rules for this chat yet."
+RULES_CLEAR_SUCCESS: "Successfully cleared rules!"
+
+#simi
+SIMI_NO_RESPONSE: "I don't know this subject, but I know about others: history, tips..."
+SIMI_API_OFF: "The api is showing unexpected errors!"
+
+
+#disable 
+COMMAND_NOW_DISABLED: "<i>Command {} Now Disabled!!!</i>"
+ALREADY_DISABLED_COMMAND: "<i>Command already disabled!</i>"
+NO_DISABLE_COMMAND: "<i>Which command do you want to disable?</i>"
+
+
+#enable
+COMMAND_NOW_ENABLED: "<i>Command {} Now enabled!!!</i>"
+NO_DISABLED_COMMAND: "<i>Command not disabled!</i>"
+NO_ENABLE_COMMAND: "<i>Which command do you want to enable?</i>"
+
+
+#antispam
+ANTISPAM_ERR_USR_SUDO: "I spy with my little eyes... A sudo user war! Why are they fighting?"
+ANTISPAM_ERR_USR_SUPPORT: "OOOOH, someone is trying to ban a support user! <b>getting popcorn</b>"
+ANTISPAM_ERR_USR_BOT: "Bruuh! So fun that! How about I ban myself globally, why not? Nice try."
+ANTISPAM_ERR_NOT_USR: "This is not a user!"
+ANTISPAM_ERR_USR_DELETED: "This is a deleted account! Why bother?"
+ANTISPAM_ERR_NO_NEW_REASON: "This user has already been banned; I would change the reason, but you didn't give me a reason..."
+ANTISPAM_LOGGER_UPDATE_GBAN: "<b>New Reason for Global Ban</b>\n<b>Admin sudo:</b> {}\n<b>User:</b> {}\n<b>ID:< /b> <code>{}</code>\n<b>Previous reason:</b> {}\n<b>New reason:</b> {}"
+ANTISPAM_REASON_UPDATED: "This user has already been banned. I updated the reason.\nOld reason: <code>{}</code>\nNew reason: <code>{}</code>"
+ANTISPAM_NEW_GBAN: "<b>Globally Banned</b>\n<b>User:</b> {}\n<b>ID:</b> <code>{}</code>\n<b> Reason:</b> {}\n<b>LOGS:</b>@WhiterKangGBANs"
+ANTISPAM_LOGGER_NEW_GBAN: "<b>Global Ban</b>\n<b>Admin sudo:</b> {}\n<b>User:</b> {}\n<b>ID:</b> <code>{}</code>\n<b>Reason:</b> {}\n<b>Gbanned in:</b> <code>{} Chats</b>\n<b>LOGs: </b>@WhiterKangGBANs"
+ANTISPAM_NO_REASON: "No reason given"
+ANTISPAM_USER_NOT_GBANNED: "This user is not globally banned"
+ANTISPAM_UNGBANNED: "I'll give you a second chance, done, globally unbanned."
+ANTISPAM_LOGGER_UNGBAN: "<b>Global Ban Removal</b>\n<b>Admin Sudo:</b> {}\n<b>User:</b> {}\n<b>ID:</b> b> <code>{}</code><b>Reason:</b> {}"
+ANTISPAM_ERR_UNGBAN: "Unable to unban globally due to: {}"
+ANTISPAM_CHECKBAN_USER_REMOVED: "<b>This user has been globally banned and has been removed.<b>\nReason: <code>{}</code>"
+ANTISPAM_ON: "I've enabled antispam security on this group. This will help protect you from spammers, nasty characters, and the biggest trolls."
+ANTISPAM_OFF: "I have disabled antispam security on this group. Global Bans will no longer affect your users. You will be less protected from trolls and spammers!"
+ANTISPAM_ERR_WRONG_ARG: "Give me some arguments to choose a setting! true/false, yes/no!\n\nYour current setting is: {}\nIf true, any gbans that occur will also happen in your group. When false, you will be at the mercy of spammers."
+ANTISPAM_USERINFO_GBANNED: "Banned globally: <b>{}</b>"
+ANTISPAM_USERINFO_GBAN_REASON: "\nReason: {}"
+ANTISPAM_CHATSETTINGS_GBAN: "This group is fulfilling *gbans*: {}."
+ANTISPAM_ATTEAL: "\n<b>Talk to</b> @DaviTudo"
+
+
+#weather 
+WEATHER_LANGUAGE: "en-US"
+WEATHER_UNIT: "e"
+WEATHER_DETAILS: "<b>{location}</b>:\n\nTemperature: <code>{temperature} °F</code>\nThermal sensation: <code>{feels_like} °F</code>\nAir  umidity: <code>{air_humidity}%</code>\nWind: <code>{wind_speed} mph</code>\n\n- <i>{overview}</i>"
+WEATHER_NO_ARGS: "<b>Usage:</b> <code>/weather location or city</code> - Gets information about the weather in the <i>location or city</i>."
+WEATHER_LOCATION_NOT_FOUND: "Location not found."
+WEATHER_INLINE_DETAILS: "{overview}, Temperature: {temperature} °F, Thermal Feeling: {feels_like} °F, Air Humidity: {air_humidity}%, Wind: {wind_speed} mph"
+WEATHER_INLINE_NO_ARGS: "weather < location >"
+WEATHER_SENDER_ERROR: "🌐 There was an error sending the weather information"
+
+#telegra.ph
+TG_NO_REPLY_MEDIA: "<code>Reply to some media.</code>"
+TG_NOT_SUPORTED: "<code>Not supported!</code>"
+TG_UPLOADING: "<code>Uploading to telegraph...</code>"
+TG_UPLOADED: "<b>[Here, your telegraph link!](https://telegra.ph{})</b>"
+
+
+#LOGS
+LOGS_DEFINED: "This group has been established as the registration channel for {}."
+LOGS_DEFINED_MESSAGE: 'The registration channel has been successfully established!'
+
+
+#zombies
+ZOMBIES_LOGGER: "<b>{}</b>:\n#ZOMBIES\n<b>Administrator:</b> {}\n<b>Number of accounts deleted:</b> {}"
+ZOMBIES_BAN: "I have removed all <b>{}</b> accounts deleted from the <b>{}</b> group!"
+NO_ZOMBIES: "There are no deleted accounts in the group!"
+NO_RIGHTS_ZOMBIES: "Balabachea! You do not have sufficient administrative rights to ban/unban users!"
+
+
+#android 
+MAGISK_STRING: "<b>Latest magisk releases</b>\n\n"
+DEVICE_SUCCESS: "<b>Brand:</b> <code>{}</code>\n<b>Name:</b> <code>{}</code>\n<b>Device:</b> <code>{}</code>\n<b>Codename:</b> <code>{}</code>"
+DEVICE_NO_CODENAME: "<i>Want me to guess?  Please enter a codename.</i>"
+DEVICE_NOT_FOUND: "<code>Device</code> <b>{}</b> <code>not found!</code>"
+ANDROID_DOWNLOAD: "<b>Download</b>: [{}]({})\n"
+ANDROID_TYPE: "<b>Type</b>: {}\n"
+ANDROID_SIZE: "<b>Build Size</b> <code>{}</code>\n"
+ANDROID_VERSION: "<b>Version</b>: <code>{}</code>\n"
+ANDROID_DATE: "<b>Date</b>: <code>{}</code>\n"
+ANDROID_MAINTAINER: "<b>Maintainer:</b> {}\n"
+ANDROID_GIT_ERROR: "WhiterKang has been trying to connect to GitHub, it looks like GitHub is offline."
+ANDROID_ERR_OTA: "Tell the ROM maintainer to fix your OTA json. I'm pretty sure this doesn't work with OTA and it won't work with this bot either :P"
+ANDROID_NOT_FOUND: "We couldn't was possible find any results matching your query."
+ANDROID_BNT_DOWNLOAD: "Click here to download!" 
+LOS_NO_QUERY: "Please enter a codename.\nFor example: /los herolte"
+PE_NO_QUERY: "Please enter a codename.\nFor example: /pe whyred"
+CRD_NO_QUERY: "Please enter a codename.\nFor example: /crdroid whyred"
+EVO_NO_QUERY: "Please enter a codename.\nFor example: /evo whyred"
+ANDROID_PHH: "<b>Latest release of Phh GSIs</b>\n"
+ANDROID_PHH_NAME: "<b>Name:</b> <code>{}</code>\n"
+ANDROID_PHH_VERSION: "<b>Version:</b> <code>{}</code>\n"
+ANDROID_PHH_DATE: "<b>Date:</b> <code>{}</code>\n\n"
+VIEW_IN_PLAYSTORE_BNT: "See the Play Store"
+APP_DEVELOPER: "<b>Developer :</b> <i>[{}]({})</i>\n"
+APP_RATING: "<b>Rating :</b> <i>{} ⭐️</i>\n"
+
+
+#memes
+MEMES_NO_MESSAGE: "Bruh.."
+MEMES_NOT_DOING_THAT: "I'm not doing that!"
+MEMES_RUNS_LIST:
+    - "Where do you think you're going?"
+    - "Huh? What? They left?"
+    - "ZZZZzz... Huh? What? Ah, just them again!"
+    - "Come back here!"
+    - "Not so fast..."
+    - "Look at the wall!"
+    - "Don't leave me alone with them!!"
+    - "Run, or you die."
+    - "Jokes about you, I'm everywhere"
+    - "You're about to regret it..."
+    - "You can also try /kickme, I heard it's fun."
+    - "Go bother someone, nobody cares here."
+    - "You can run, but you can't hide."
+    - "Is that all you have?"
+    - "I'm behind you..."
+    - "You have company!"
+    - "We can do this the easy way or the hard way."
+    - "You don't understand, do you?"
+    - "Yes, you better run!"
+    - "Please remind me how much I care?"
+    - "I would run faster if I were you."
+    - "This is definitely the bot we are looking for."
+    - "May the odds be always in your favor."
+    - "Last known words."
+    - "And they disappeared forever, never to be seen again."
+    - "'Oh, look at me! I'm so cool and I can outrun a bot!'  - this person"
+    - "Yes, yes, just play /kick already."
+    - "Here, take this ring and go to Mordor while you're at it."
+    - "Legend says, they keep running..."
+    - "Unlike Harry Potter, your parents cannot protect you from me."
+    - "Fear leads to anger. Anger leads to hate. Hatred leads to suffering. If you keep running in fear, you can"
+    - "be the next Vader."
+    - "Several calculations later, I have decided that my interest in your antics is exactly 0."
+    - "Legend says, they keep running."
+    - "Hold it, you're not sure we want it here anyway."
+    - "You're a magician- Oh. Wait. You're not Harry, keep walking."
+    - "There are no runners in the halls!"
+    - "See you later, drink."
+    - "Who left the dogs?"
+    - "It's fun, because nobody cares."
+    - "Ah, what a waste. I liked that."
+    - "Frankly, my dear, I don't give a damn."
+    - "My smoothie brings all the guys to the playground... So run faster!"
+    - "You can't OPEN the truth!"
+    - "A long time ago, in a galaxy far away... Someone would have cared. Not anymore."
+    - "Hey, look at them! They're running away from the inevitable bannillo hammer...cute."
+    - "They shot first. So I did."
+    - "What are you running for, a white rabbit?"
+    - "As the doctor would say... RUN!"
+MEMES_INSULTS_LIST:
+    - "Why are you such an idiot?"
+    - "Unfortunately your mother was unable to abort you in time."
+    - "I think you better get out of my way, I don't like visual pollution."
+    - "Command not found. Like your father."
+    - "Do you realize you're doing something silly? Apparently not."
+    - "You can write better than that."
+    - "Section 9 bot rule 157 prevents me from responding to stupid human beings like you."
+    - "So stupid that I feel like not answering."
+    - "Believe me, you're not normal."
+    - "I bet your brain looks as good as new since you never use it."
+    - "If I wanted to kill myself, I will boost your ego and jump to your IQ."
+    - "Zombies eat brains... you're safe."
+    - "You didn't evolve from monkeys, they evolved from you."
+    - "Come back and talk to me when your IQ exceeds your age."
+    - "I'm not saying you're stupid, I'm just saying you've been unlucky when it comes to thinking."
+    - "What language are you speaking? Because it sounds like shit."
+    - "Stupidity is not a crime, so you are free to leave."
+    - "You are proof that CAN evolution can be reversed."
+    - "I ask how old you are, but I know you can't count that high."
+    - "As an outsider, what do you think of the human race?"
+    - "The rains are not everything, in your case they are nothing."
+    - "Normal people live and learn. You just live."
+    - "I don't know what makes you so stupid, but it really works."
+    - "Keep talking, one day you'll say something smart! (I doubt it, though)"
+    - "I'm surprised, say something smart."
+    - "Your IQ is smaller than the size of your shoes."
+    - "Wow! Your neurotransmitters don't work anymore."
+    - "Are you crazy for being stupid?"
+    - "Everyone has the right to be stupid, but the privilege is being abused."
+    - "I'm sorry when I called you an idiot. I thought you already knew that."
+    - "You should try to taste cyanide."
+    - "Their enzymes are designed to digest rat poison."
+    - "You should try to sleep forever."
+    - "Take a gun and shoot yourself."
+    - "You could make a world record jumping out of a plane without a parachute."
+    - "Stop talking nonsense and jump in front of a bullet train."
+    - "Try bathing with hydrochloric acid instead of water."
+    - "Try this: if you run out of breath for an hour, it could save you forever."
+    - "Turn green! Stop inhaling oxygen."
+    - "God was looking for you. You should go out and find him."
+    - "Give 100%. Now, donate blood."
+    - "Try jumping from a hundred floors, but you can only do it once."
+    - "You should donate your brain, seeing as you've never used it."
+    - "Offer to aim at a shooting range."
+    - "Headshots are fun. Get one."
+    - "You should try swimming with great white sharks."
+    - "You should paint yourself red and run in a ball marathon."
+    - "You can stay underwater for the rest of your life without coming back up."
+    - "How about you stop breathing like one day? That'll be great."
+    - "Try to provoke a tiger while they are both in a cage."
+    - "Have you ever tried to shoot yourself from 100 meters away using a canon."
+    - "You should try to keep the TNT in your mouth and turn it on."
+    - "Try playing catch and launch with RDX, its fun."
+    - "I heard that photography is poisonous, but I suppose you don't mind inhaling it for fun."
+    - "Let yourself go to space forgetting about oxygen on Earth."
+    - "You should try playing snake and ladders, with real snakes and no ladders."
+    - "Dance naked on a pair of HT cables."
+    - "The real volcano is the best pool for you."
+    - "You must try the hot bath in a volcano."
+    - "Try spending a day in a diner and it will be yours forever."
+    - "Hit the uranium with a slow sled in its presence. It will be a worthwhile experience."
+    - "You can be the first person to step on the sun. Try it."
+MEMES_SLAPS_TEMPLATES_LIST:
+    - "{user1} {hits} {user2} with an {item}."
+    - "{user1} {hits} {user2} in the face with an {item}."
+    - "{user1} {hits} {user2} a bit with an {item}."
+    - "{user1} {throws} {item} on {user2}."
+    - "{user1} {throws} {item} in {user2}'s face."
+    - "{user1} throws {item} at {user2}'s head."
+    - "{user1} thinks about hitting {user2} with {item}."
+    - "{user1} knocks {user2} down and repeatedly hits him with {item}."
+    - "{user1} picks up {item} and {hits} {user2}."
+    - "{user1} ties {user2} to a chair and {throws} {item}."
+    - "{user1} gave {user2} a friendly push so he can learn to swim in lava"
+MEMES_ITEMS_LIST:
+    - "cast iron frying pan"
+    - "big trout"
+    - "baseball bat"
+    - "cricket bat"
+    - "wooden cane"
+    - "nail"
+    - "rubber penis"
+    - "shovel"
+    - "fan"
+    - "a Nokia 3310"
+    - "toaster"
+    - "Positive laptop"
+    - "television"
+    - "five-ton truck"
+    - "cock"
+    - "book"
+    - "laptop"
+    - "old television"
+    - "administrator's horn"
+    - "a giant vibrator"
+    - "rubber chicken"
+    - "nailed bat"
+    - "fire extinguisher"
+    - "51 liter"
+    - "piece of land"
+    - "hive"
+    - "piece of rotten meat"
+    - "Bear"
+    - "admin's mother"
+MEMES_THROW_LIST:
+    - "play"
+    - "spear"
+    - "send"
+    - "throws"
+MEMES_HIT_LIST:
+    - "strike"
+    - "hit"
+    - "strike"
+    - "punch"
+    - "attack"
+
+#lastfm
+ERROR_LASTFM_USERNAME: "<i>Error. Please make sure you entered the correct username</i>"
+NONE_MUSIC_SCROBBLE: "<i>It looks like you didn't scrob any songs.</i>"
+UNREGISTRED_USER: "Unregistred user"
+UNREGISTRED_USER_PM: "<i>You have not set your username, go to PM and set it.</i>"
+LAST_GO_PM: "Go PM"
+IS_LISTERING_: "is listening for the {}th time"
+IS_LISTERING: "is listening"
+LAST_YOUTUBE_BNT: "🎥 YouTube"
+LAST_PROFILE_BNT: "👤 Profile"
+LAST_SHARE_BNT: "↗️ Share"
+LAST_CREATE_ACCOUNT_BNT: "Create a LastFM account"
+CREATE_LASTFM_ACCOUNT: "<i>Use /set [username] to set your lastfm username. If you don't already have a LastFM account, click the button below to register.</i>"
+NO_SET_USERNAME_LAST: "<i>Bruuh... use /set [lastfm username].</i>"
+SET_USER_LAST: "<i>Your username has been set successfully.</i>"
+UPDATE_USER_LAST: "<i>Your username has been updated successfully.</i>"
+NO_USER_DELETE: "<i>You do not have a registered username</i>"
+USER_DELETED: "<i>Your username has been deleted!</i>"
+PROFILE_USER: "<b>Profile {}</b>\n"
+ROFILE_SCROBBLES: "<b>Scrobbles:</b> {}\n"
+PROFILE_COUNTRY: "<b>Country:</b> {}\n"
+PROFILE_LOVED: "<b>Loved tracks:</b> {}\n"
+PROFILE_LATEST: "<b>Latest scrobbles:</b>\n{}"
+
+#cleanservice 
+CLEANSERVICE_ENABLED: "From now on, all service messages in this group will be deleted."
+CLEANSERVICE_DISABLED: "From now on, all service messages in this group will no longer be deleted."
+CLEANSERVICE_ERROR: "Hey, Insert the <b>on/off</b> argument."
+CLEANSERVICE_STATUS_ON: "Currently cleaning messages from services in this group are <b>Enabled.</b>"
+CLEANSERVICE_STATUS_OFF: "Currently cleaning messages from services in this group are <b>Disabled.</b>"
+
+
+#promote
+PROMOTE_LOGGER: "<b>{}</b>\n#PROMOTE\n<b>Administrator:</b> {}\n<b>Administrator Promoted:</b> {}"
+DEMOTE_LOGGER: "<b>{}</b>\n#DEMOTE\n<b>Administrator:</b> {}\n<b>Demoted Administrator:</b> {}"
+
+#wikipédia
+WIKI_RESULT: "<b>Results of your wikipedia search:</b>\n\n{}"
+
+
+#upload
+DOWNLOAD_UPLOAD: "<code>{}</code>\n<i>Downloaded: {}%</i>\n<i>Please wait: {}</i>\n\n📦 <i>Downloading...</i>"
+UPLOAD_DOWNLOAD_FINISHED: "<i>Download Finished, Uploading...</i>"
+
+
+#notes
+NOTES_SAVED: "🗒 <b>The note</b> <code>{}</code> <b>has been saved successfully!</b>"
+NOTES_NO_REPLY: "Reply something to save."
+NOTES_NOT_NAME: "You need to write the note name."
+NOTES_NO_PERM: "You do not have sufficient permissions to change group notes."
+NOTES_LIST: "<b>List of notes for chat {}:</b>\n\n"
+NOTES_NOT_FOUND: "Notes found for this chat."
+NOTES_SUB_LIST: "\n\n<i>You can get these notes by typing <code>/get notename</code>, or</i> <code>#notename</code>"
+NOTES_REMOVED: "🗒 <b>The note</b> <code>{}</code> <b>has been removed successfully!</b>"
+NOTES_REMOVE_NOT_FOUND: "🗒 <b>The note</b> <code>{}</code> <b>does not exist.</b>"
+
+
+#warns
+WARNS_BANNED: "{}/{} Warnings, {} Been banned!"
+WARNS_MUTED: "{}/{} Warnings, {} Has been muted until an admin unmutes it!"
+WARNS_KICKED: "{}/{} Warnings, {} Been kicked!"
+RULES_WARN_BNT: "📝 Rules"
+UNWARN_BNT: "Remove Warning"
+USER_WARNED: "{} <b>has been warned!</b>\nHe/she has {}/{} Warnings.\n<b>Reason:</b> {}"
+UNWARNED: "The last warning has been removed!"
+USER_NOT_WARNS: "This user has no warnings!"
+ATT_USER_NO_WARNS: "{} has no warnings."
+ATT_USER_WARNS: "Currently, {} have {}/{} Warnings!"
+NO_RULES_WARN_YOU: "This is not for you! If you want to see the rules type /rules"
+UNWARNED_CALLBACKQUERY: "The warning for {} has been removed by {}."
+ 
+#donate
+
+donate_string: "If you like the project, then you want to donate?  Incredible.\nThis will help me keep it alive and free! You can show your love and support by donating. Any value is appreciated.  Thanks!\n\n<b>Pix:</b> <i>esliarafernanda@gmail.com</i>"
+
+#admins
+ADMINS_STRING: "<b>Chat admins</b> <code>{chat_title}</code>:\n\n{admins_list}"
+
+#gps
+GPS_BNT: "🌎 Open in Google Maps"
+
+
+#welcome
+WELCOME_LOGGER: "<b>{}</b>\n#WELCOME\n<b>User</b>: <i>{}</i>\n<b>User Id</b>: <code>{}</code>"
