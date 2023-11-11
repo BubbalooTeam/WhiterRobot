@@ -31,7 +31,7 @@ USERS_STARTED = db["USERS_START"]
 AFK = db["_AFK"]
 
 REPO_ = "https://github.com/BubbalooTeam/WhiterRobot"
-BRANCH_ = "main"
+BRANCH_ = "WhiterRobot"
 
 @WhiterX.on_message(filters.command(["status"], Config.TRIGGER))
 async def status_(c: WhiterX, m: Message):
