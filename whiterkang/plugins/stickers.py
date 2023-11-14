@@ -30,7 +30,7 @@ async def getsticker_(c: WhiterX, m: Message):
     sticker = m.reply_to_message.sticker
     if sticker:
         if sticker.is_animated:
-            await m.reply_text(_("Stickers Animados, Não são suportados!"))
+            await m.reply_text(("Stickers Animados, Não são suportados!"))
         else:
             extension = ".png" if not sticker.is_video else ".webm"
             file = await m.reply_to_message.download(
@@ -44,8 +44,8 @@ async def getsticker_(c: WhiterX, m: Message):
             ),
         )
     else:
-        await message.reply_text(
-            _(
+        await m.reply_text(
+            (
                 "Responda a um adesivo com esse comando para que eu possa enviá-lo para você como \
 <b>Arquivo .png ou .gif</b>.\n<i>Só funcionara com vídeos e adesivos estáticos</i>"
             )
@@ -153,7 +153,7 @@ async def kang(c: WhiterX, m: Message):
                 if stickerset.set.count >= max_stickers:
                     packnum += 1
                     packname = (
-                        f"{pack_prefix}_{packnum}_{m.from_user.id}_by_{client.me.username}"
+                        f"{pack_prefix}_{packnum}_{m.from_user.id}_by_{c.me.username}"
                     )
                 else:
                     packname_found = True
