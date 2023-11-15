@@ -69,6 +69,6 @@ yarl==1.9.2
 wget
 wikipedia
 gpytranslate==1.5.1
-yt-dlp==2023.10.13
+yt-dlp==2023.11.14
 psutil==5.9.6
 zalgo_text
