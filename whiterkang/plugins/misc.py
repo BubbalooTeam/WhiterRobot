@@ -1,14 +1,24 @@
 # Copyright (C) 2023 BubbalooTeam
+
 import requests
+import html
 
 from gpytranslate import Translator
 from covid import Covid
+from uuid import uuid4
 
 from pyrogram import filters
-from pyrogram.types import Message
+from pyrogram.types import (
+    Message,
+    InlineKeyboardMarkup,
+    InlineKeyboardButton,
+    InlineQuery,
+    InlineQueryResultArticle,
+    InputTextMessageContent,
+)
 
 from whiterkang import WhiterX, Config
-from whiterkang.helpers import tld
+from whiterkang.helpers import tld, inline_handler, group_apps
 
 @WhiterX.on_message(filters.command(["cota"], Config.TRIGGER))
 async def cotas_money(_, message: Message):
@@ -46,3 +56,51 @@ async def cotas_money(_, message: Message):
 
     await message.reply_photo(photo="https://telegra.ph/file/d60e879db1cdba793a98c.jpg",
     caption=result.format(cotacao_dolar[:4], dat_dolar, var_dolar, cotacao_euro[:4], dat_euro, var_euro, cotacao_btc[:3], dat_btc, var_btc, cotacao_doge[:4], dat_doge, var_doge, cotacao_iene[:4], dat_iene, var_iene, cotacao_ars[:4], dat_ars, var_ars, cotacao_rub[:4], dat_rub, var_rub))
+
+@WhiterX.on_inline_query(group=group_apps)
+async def search_inline(c: WhiterX, q: InlineQuery):
+    cmd = q.query.split(maxsplit=1)[0] if q.query else q.query
+
+    res = inline_handler.search_cmds(cmd)
+    if not res:
+        return await q.answer(
+            [
+                InlineQueryResultArticle(
+                    title="No results for {query}".format(query=cmd),
+                    input_message_content=InputTextMessageContent(
+                        "No results for {query}".format(query=cmd)
+                    ),
+                )
+            ],
+            cache_time=0,
+        )
+    articles = []
+    for result in res:
+        stripped_command = result["command"].split()[0]
+        articles.append(
+            InlineQueryResultArticle(
+                id=uuid4(),
+                title=result["command"],
+                thumb_url=result["url_thumb"],
+                description=result["txt_description"],
+                input_message_content=InputTextMessageContent(
+                    f"{html.escape(result['command'])}: {result['txt_description']}"
+                ),
+                reply_markup=InlineKeyboardMarkup(
+                    [
+                        [
+                            InlineKeyboardButton(
+                                text="🌐 Run '{query}'".format(
+                                    query=stripped_command
+                                ),
+                                switch_inline_query_current_chat=stripped_command,
+                            )
+                        ]
+                    ]
+                ),
+            )
+        )
+    try:
+        await q.answer(articles, cache_time=0)
+    except Exception:
+        return
