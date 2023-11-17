@@ -910,7 +910,7 @@ async def save_notes(c: WhiterX, m: Message):
     if check_note:
         await DB_NOTES.update_one({"chat_id": chat_id, "name": trigger}, {"$set": {"raw_data": raw_data, "file_id": file_id, "type": note_type}})
     else:
-        await db.insert_one({"chat_id": chat_id, "name": trigger, "raw_data": raw_data, "file_id": file_id, "type": note_type})
+        await DB_NOTES.insert_one({"chat_id": chat_id, "name": trigger, "raw_data": raw_data, "file_id": file_id, "type": note_type})
     await m.reply((await tld(chat_id, "NOTES_SAVED")).format(trigger))
 
 @WhiterX.on_message(filters.command("notes", Config.TRIGGER) & filters.group)
