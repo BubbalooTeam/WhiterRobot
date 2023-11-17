@@ -10,7 +10,7 @@ from pyrogram.enums import ChatType
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, InlineQuery, InlineQueryResultArticle, InputTextMessageContent, InlineQueryResultPhoto
 
 from whiterkang import WhiterX, Config, db
-from whiterkang.helpers import disableable_dec, http, add_gp, find_user, add_user, find_gp, search_yt, draw_scrobble, tld, input_str
+from whiterkang.helpers import disableable_dec, http, add_gp, find_user, add_user, find_gp, search_yt, draw_scrobble, tld, input_str, inline_handler
 
 API = "http://ws.audioscrobbler.com/2.0"
 LAST_KEY = Config.LASTFM_API_KEY
@@ -364,7 +364,7 @@ async def now_play(c: WhiterX, cb: InlineQuery):
             [
                 [
                     InlineKeyboardButton(
-                        await tld(cb.chat.id, "LAST_YOUTUBE_BNT"), url=link_
+                        await tld(cb.from_user.id, "LAST_YOUTUBE_BNT"), url=link_
                     ),
                     InlineKeyboardButton(
                         await tld(cb.from_user.id, "LAST_PROFILE_BNT"), url=prof
@@ -418,3 +418,5 @@ async def now_play(c: WhiterX, cb: InlineQuery):
             results=results,
             cache_time=1
         )
+
+inline_handler.add_cmd("status", "Share the music you are listening to with your friends.", "https://telegra.ph/file/d9e8a2572131b2f5205ae.jpg", aliases=["lastfm", "lt"])
