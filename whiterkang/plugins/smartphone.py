@@ -10,7 +10,7 @@ from babel.dates import format_datetime
 from yaml import load, Loader
 
 from pyrogram import filters
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 
 from whiterkang import WhiterX, Config
 from whiterkang.helpers import disableable_dec, is_disabled, search_device, get_device, add_user, find_user, tld, gsmarena_tr_category, gsmarena_tr_info, input_str, humanbytes, http
@@ -52,61 +52,136 @@ async def deviceinfo(c: WhiterX, m: Message):
         get_search_api = await search_device(searchi)
         
         if not get_search_api == []:
-            name = get_search_api[0]["name"]
-            img = get_search_api[0]["img"]
-            id = get_search_api[0]["id"]
-            link = f"https://www.gsmarena.com/{id}.php"
-            description = get_search_api[0]["description"]
+            if len(get_search_api) == 1:
+                name = get_search_api[0]["name"]
+                img = get_search_api[0]["img"]
+                id = get_search_api[0]["id"]
+                link = f"https://www.gsmarena.com/{id}.php"
+                description = get_search_api[0]["description"]
             
-            try:
-                get_device_api = await get_device(id)
-                name_cll = get_device_api.get("name", "N/A")
-                base_device = f"<b>Photo Device:</b> <i>{img}</i>\n<b>Source URL:</b> <i>{link}</i>"
-                DEVICE_TEXT = f"{base_device}\n\n📌 <b><u>{name_cll}</b></u>\n📅 <b>Announced:</b> <i>{get_device_api['detailSpec'][1]['specifications'][0]['value']}</i>"
-                
-                for spec_index in range(14):
-                    try:
-                        base_category = get_device_api['detailSpec'][spec_index]['category']
-                        translated_category = CATEGORY_EMOJIS.get(base_category, '')
-                        category = gsmarena_tr_category(base_category, await tld(m.chat.id, "language"))
-                        specs = get_device_api['detailSpec'][spec_index]['specifications']
-                        section_text = f"\n\n<b>{translated_category} <u>{category}</b></u>:\n"
-                        
-                        for spec in specs:
-                            base_name = spec['name']
-                            name = gsmarena_tr_info(base_name, await tld(m.chat.id, "language"))
-                            value = spec['value']
-                            section_text += f"- <b>{name}:</b> <i>{value}</i>\n\n"
-                        
-                        DEVICE_TEXT += section_text
-                    except (IndexError, KeyError):
-                        pass
-                        
-                #Create Description
-                DEVICE_TEXT += f"\n\n<b>Description</b>: <i>{description}</i>"
-                
                 try:
-                    await m.reply(DEVICE_TEXT, disable_web_page_preview=False)
+                    get_device_api = await get_device(id)
+                    name_cll = get_device_api.get("name", "N/A")
+                    base_device = f"<b>Photo Device:</b> <i>{img}</i>\n<b>Source URL:</b> <i>{link}</i>"
+                    DEVICE_TEXT = f"{base_device}\n\n📌 <b><u>{name_cll}</b></u>\n📅 <b>Announced:</b> <i>{get_device_api['detailSpec'][1]['specifications'][0]['value']}</i>"
+                
+                    for spec_index in range(14):
+                        try:
+                            base_category = get_device_api['detailSpec'][spec_index]['category']
+                            translated_category = CATEGORY_EMOJIS.get(base_category, '')
+                            category = gsmarena_tr_category(base_category, await tld(m.chat.id, "language"))
+                            specs = get_device_api['detailSpec'][spec_index]['specifications']
+                            section_text = f"\n\n<b>{translated_category} <u>{category}</b></u>:\n"
+                        
+                            for spec in specs:
+                                base_name = spec['name']
+                                name = gsmarena_tr_info(base_name, await tld(m.chat.id, "language"))
+                                value = spec['value']
+                                section_text += f"- <b>{name}:</b> <i>{value}</i>\n\n"
+                        
+                            DEVICE_TEXT += section_text
+                        except (IndexError, KeyError):
+                            pass
+                        
+                    #Create Description
+                    DEVICE_TEXT += f"\n\n<b>Description</b>: <i>{description}</i>"
+                
+                    try:
+                        await m.reply(DEVICE_TEXT, disable_web_page_preview=False)
+                    except Exception as err:
+                        # Send the image with the first part of the caption
+                        caption_part = DEVICE_TEXT[:1024]
+                        caption_rest = DEVICE_TEXT[1024:]
+
+                        await c.send_photo(chat_id=m.chat.id, photo=img, caption=caption_part)
+
+                        # Split the remaining caption and send as regular text messages
+                        message_chunks = [caption_rest[i:i + 4096] for i in range(0, len(caption_rest), 4096)]
+                        for chunk in message_chunks:
+                            await c.send_message(chat_id=m.chat.id, text=chunk)
+                    
+                    
                 except Exception as err:
-                    # Send the image with the first part of the caption
-                    caption_part = DEVICE_TEXT[:1024]
-                    caption_rest = DEVICE_TEXT[1024:]
+                    return await m.reply(f"Couldn't retrieve device details. The GSM Arena website might be offline. <i>Error</i>: <b>{err}</b>\n<b>Line</b>: {err.__traceback__.tb_lineno}")
+            else:
+                buttons = []
+                user_id = int(m.from_user.id)
+                try:
+                    for devices in get_search_api:
+                        device_id = devices["id"]
+                        img = devices["img"]
+                        link = f"https://www.gsmarena.com/{device_id}.php"
+                        description = devices["description"]
+                        device_geral = await get_device(device_id)
+                        device_name = device_geral.get("name", "N/A")
+                        buttons.append([InlineKeyboardButton(device_name, callback_data=f"d.{device_id}|{user_id}")])
+                    reply_markup = InlineKeyboardMarkup(buttons)
+                    await m.reply("Por favor, escolha um dispositivo:", reply_markup=reply_markup)
+                except Exception as err:
+                    return await m.reply(f"Couldn't retrieve device details. The GSM Arena website might be offline. <i>Error</i>: <b>{err}</b>\n<b>Line</b>: {err.__traceback__.tb_lineno}")
 
-                    await c.send_photo(chat_id=m.chat.id, photo=img, caption=caption_part)
-
-                    # Split the remaining caption and send as regular text messages
-                    message_chunks = [caption_rest[i:i + 4096] for i in range(0, len(caption_rest), 4096)]
-                    for chunk in message_chunks:
-                        await c.send_message(chat_id=m.chat.id, text=chunk)
-                    
-                    
-            except Exception as err:
-                return await m.reply(f"Couldn't retrieve device details. The GSM Arena website might be offline. <i>Error</i>: <b>{err}</b>\n<b>Line</b>: {err.__traceback__.tb_lineno}")
-        
         else:
             return await m.reply("Couldn't find this device! :(")
     else:
         return await m.reply("I can't guess the device!! woobs!!")
+    
+@WhiterX.on_callback_query(filters.regex(r"^d\.(.*?)\|(.*?)$"))
+async def deviceinfo_callback(c: WhiterX, cb: CallbackQuery):
+    try:
+        device_id, user_id = cb.data.split('|')
+    except ValueError:
+        return print(cb.data)
+    
+    if cb.from_user.id != int(user_id):
+        return await cb.answer(await tld(cb.message.chat.id, "NO_FOR_YOU"), show_alert=True)
+    
+    await cb.edit_message_text("!..")
+
+    try:
+        get_device_api = await get_device(device_id)
+        name_cll = get_device_api.get("name", "N/A")
+        DEVICE_TEXT = f"📌 <b><u>{name_cll}</b></u>\n📅 <b>Announced:</b> <i>{get_device_api['detailSpec'][1]['specifications'][0]['value']}</i>"
+        
+        await cb.edit_message_text(".!.")
+
+        for spec_index in range(14):
+            try:
+                base_category = get_device_api['detailSpec'][spec_index]['category']
+                translated_category = CATEGORY_EMOJIS.get(base_category, '')
+                category = gsmarena_tr_category(base_category, await tld(cb.message.chat.id, "language"))
+                specs = get_device_api['detailSpec'][spec_index]['specifications']
+                section_text = f"\n\n<b>{translated_category} <u>{category}</b></u>:\n"
+                
+                for spec in specs:
+                    base_name = spec['name']
+                    name = gsmarena_tr_info(base_name, await tld(cb.message.chat.id, "language"))
+                    value = spec['value']
+                    section_text += f"- <b>{name}:</b> <i>{value}</i>\n\n"
+                        
+                DEVICE_TEXT += section_text
+            except (IndexError, KeyError):
+                pass
+
+        await cb.edit_message_text("..!")
+                
+        try:
+            await cb.edit_message_text(DEVICE_TEXT, disable_web_page_preview=False)
+        except Exception as err:
+            await c.delete_messages(cb.message.chat.id, cb.message.id)
+            # Send the image with the first part of the caption
+            caption_part = DEVICE_TEXT[:1024]
+            caption_rest = DEVICE_TEXT[1024:]
+
+            await c.send_message(chat_id=cb.message.chat.id, text=caption_part)
+
+            # Split the remaining caption and send as regular text messages
+            message_chunks = [caption_rest[i:i + 4096] for i in range(0, len(caption_rest), 4096)]
+            for chunk in message_chunks:
+                await c.send_message(chat_id=cb.message.chat.id, text=chunk)
+             
+    except Exception as err:
+        return await cb.edit_message_text(f"Couldn't retrieve device details. The GSM Arena website might be offline. <i>Error</i>: <b>{err}</b>\n<b>Line</b>: {err.__traceback__.tb_lineno}")
+            
 
 @WhiterX.on_message(filters.command(["twrp"], Config.TRIGGER))
 async def twrp(c: WhiterX, m: Message):
