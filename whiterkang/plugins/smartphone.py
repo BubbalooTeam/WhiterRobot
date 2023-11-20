@@ -12,7 +12,7 @@ from yaml import load, Loader
 from pyrogram import filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 
-from whiterkang import WhiterX, Config
+from whiterkang import WhiterX, Config, db
 from whiterkang.helpers import disableable_dec, is_disabled, search_device, get_device, add_user, find_user, tld, gsmarena_tr_category, gsmarena_tr_info, input_str, humanbytes, http
 
 CATEGORY_EMOJIS = {
@@ -33,6 +33,8 @@ CATEGORY_EMOJIS = {
 }
 
 DEVICE_LIST = "https://raw.githubusercontent.com/androidtrackers/certified-android-devices/master/by_device.json"
+
+DB_DEVICES = db["DEVICES"]
 
 @WhiterX.on_message(filters.command(["deviceinfo", "d"], Config.TRIGGER))
 @disableable_dec("deviceinfo")
@@ -105,6 +107,7 @@ async def deviceinfo(c: WhiterX, m: Message):
                     return await m.reply(f"Couldn't retrieve device details. The GSM Arena website might be offline. <i>Error</i>: <b>{err}</b>\n<b>Line</b>: {err.__traceback__.tb_lineno}")
             else:
                 buttons = []
+                infos = {}
                 user_id = int(m.from_user.id)
                 try:
                     for devices in get_search_api:
@@ -114,7 +117,11 @@ async def deviceinfo(c: WhiterX, m: Message):
                         description = devices["description"]
                         device_geral = await get_device(device_id)
                         device_name = device_geral.get("name", "N/A")
+                        await DB_DEVICES.insert_one({"device_id": device_id, "link": link, "img": img, "description": description})
                         buttons.append([InlineKeyboardButton(device_name, callback_data=f"d.{device_id}|{user_id}")])
+                        if len(buttons) >= 30:
+                            break
+
                     reply_markup = InlineKeyboardMarkup(buttons)
                     await m.reply("Por favor, escolha um dispositivo:", reply_markup=reply_markup)
                 except Exception as err:
@@ -137,10 +144,22 @@ async def deviceinfo_callback(c: WhiterX, cb: CallbackQuery):
     
     await cb.edit_message_text("!..")
 
+    resultinfos = await DB_DEVICES.find_one({"device_id": device_id})
+    
+    if resultinfos:
+        link = resultinfos["link"]
+        img = resultinfos["img"]
+        description = resultinfos["description"]
+    else:
+        link = "Unavalaible"
+        img = "Unavalaible"
+        description = "Unavalaible"
+
     try:
         get_device_api = await get_device(device_id)
         name_cll = get_device_api.get("name", "N/A")
-        DEVICE_TEXT = f"📌 <b><u>{name_cll}</b></u>\n📅 <b>Announced:</b> <i>{get_device_api['detailSpec'][1]['specifications'][0]['value']}</i>"
+        base_device = f"<b>Photo Device:</b> <i>{img}</i>\n<b>Source URL:</b> <i>{link}</i>"
+        DEVICE_TEXT = f"{base_device}\n\n📌 <b><u>{name_cll}</b></u>\n📅 <b>Announced:</b> <i>{get_device_api['detailSpec'][1]['specifications'][0]['value']}</i>"
         
         await cb.edit_message_text(".!.")
 
@@ -162,6 +181,9 @@ async def deviceinfo_callback(c: WhiterX, cb: CallbackQuery):
             except (IndexError, KeyError):
                 pass
 
+        #Create Description
+        DEVICE_TEXT += f"\n\n<b>Description</b>: <i>{description}</i>"
+
         await cb.edit_message_text("..!")
                 
         try:
@@ -172,7 +194,7 @@ async def deviceinfo_callback(c: WhiterX, cb: CallbackQuery):
             caption_part = DEVICE_TEXT[:1024]
             caption_rest = DEVICE_TEXT[1024:]
 
-            await c.send_message(chat_id=cb.message.chat.id, text=caption_part)
+            await c.send_photo(chat_id=cb.message.chat.id, photo=img, caption=caption_part)
 
             # Split the remaining caption and send as regular text messages
             message_chunks = [caption_rest[i:i + 4096] for i in range(0, len(caption_rest), 4096)]
