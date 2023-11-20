@@ -142,7 +142,7 @@ async def deviceinfo_callback(c: WhiterX, cb: CallbackQuery):
     if cb.from_user.id != int(user_id):
         return await cb.answer(await tld(cb.message.chat.id, "NO_FOR_YOU"), show_alert=True)
     
-    await cb.edit_message_text("!..")
+    await cb.edit_message_text("[.!....]")
 
     resultinfos = await DB_DEVICES.find_one({"device_id": device_id})
     
@@ -152,7 +152,7 @@ async def deviceinfo_callback(c: WhiterX, cb: CallbackQuery):
         description = resultinfos["description"]
     else:
         link = "Unavalaible"
-        img = "Unavalaible"
+        img = "https://telegra.ph/file/55e52e064767ad9c1a6b7.jpg"
         description = "Unavalaible"
 
     try:
@@ -161,7 +161,7 @@ async def deviceinfo_callback(c: WhiterX, cb: CallbackQuery):
         base_device = f"<b>Photo Device:</b> <i>{img}</i>\n<b>Source URL:</b> <i>{link}</i>"
         DEVICE_TEXT = f"{base_device}\n\n📌 <b><u>{name_cll}</b></u>\n📅 <b>Announced:</b> <i>{get_device_api['detailSpec'][1]['specifications'][0]['value']}</i>"
         
-        await cb.edit_message_text(".!.")
+        await cb.edit_message_text("[...!..]")
 
         for spec_index in range(14):
             try:
@@ -184,7 +184,7 @@ async def deviceinfo_callback(c: WhiterX, cb: CallbackQuery):
         #Create Description
         DEVICE_TEXT += f"\n\n<b>Description</b>: <i>{description}</i>"
 
-        await cb.edit_message_text("..!")
+        await cb.edit_message_text("[.....!]")
                 
         try:
             await cb.edit_message_text(DEVICE_TEXT, disable_web_page_preview=False)
