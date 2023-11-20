@@ -6,7 +6,7 @@ async-timeout
 attrs==23.1.0
 bs4
 babel==2.13.1
-certifi==2023.7.22
+certifi==2023.11.17
 captcha
 chardet==5.2.0
 charset-normalizer==3.3.2
