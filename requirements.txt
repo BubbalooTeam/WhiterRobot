@@ -65,7 +65,7 @@ typing-extensions==4.8.0
 tortoise-orm==0.20.0
 urllib3==2.1.0
 ujson
-yarl==1.9.2
+yarl==1.9.3
 wget
 wikipedia
 gpytranslate==1.5.1
