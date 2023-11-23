@@ -13,8 +13,7 @@ from pyrogram import filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 
 from whiterkang import WhiterX, Config, db
-from whiterkang.helpers import disableable_dec, is_disabled, search_device, get_device, add_user, find_user, tld, gsmarena_tr_category, gsmarena_tr_info, input_str, humanbytes, http
-
+from whiterkang.helpers import disableable_dec, is_disabled, search_device, get_device, add_user, find_user, tld, gsmarena_tr_category, gsmarena_tr_info, input_str, humanbytes, http, add_device, find_device, del_device
 CATEGORY_EMOJIS = {
     "Display": "📱",
     "Platform": "⚙️",
@@ -108,7 +107,7 @@ async def deviceinfo(c: WhiterX, m: Message):
             else:
                 buttons = []
                 infos = {}
-                user_id = int(m.from_user.id)
+                user_id = m.from_user.id
                 try:
                     for devices in get_search_api:
                         device_id = devices["id"]
@@ -117,7 +116,7 @@ async def deviceinfo(c: WhiterX, m: Message):
                         description = devices["description"]
                         device_geral = await get_device(device_id)
                         device_name = device_geral.get("name", "N/A")
-                        await DB_DEVICES.insert_one({"device_id": device_id, "link": link, "img": img, "description": description})
+                        await add_device(user_id, device_id, link, img, description)
                         buttons.append([InlineKeyboardButton(device_name, callback_data=f"d.{device_id}|{user_id}")])
                         if len(buttons) >= 30:
                             break
@@ -144,16 +143,7 @@ async def deviceinfo_callback(c: WhiterX, cb: CallbackQuery):
     
     await cb.edit_message_text("[.!....]")
 
-    resultinfos = await DB_DEVICES.find_one({"device_id": device_id})
-    
-    if resultinfos:
-        link = resultinfos["link"]
-        img = resultinfos["img"]
-        description = resultinfos["description"]
-    else:
-        link = "Unavalaible"
-        img = "https://telegra.ph/file/55e52e064767ad9c1a6b7.jpg"
-        description = "Unavalaible"
+    link, img, description = await find_device(user_id, device_id)
 
     try:
         get_device_api = await get_device(device_id)
@@ -185,6 +175,8 @@ async def deviceinfo_callback(c: WhiterX, cb: CallbackQuery):
         DEVICE_TEXT += f"\n\n<b>Description</b>: <i>{description}</i>"
 
         await cb.edit_message_text("[.....!]")
+
+        await del_device(user_id)
                 
         try:
             await cb.edit_message_text(DEVICE_TEXT, disable_web_page_preview=False)
