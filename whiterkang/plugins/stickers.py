@@ -223,20 +223,19 @@ async def kang(c: WhiterX, m: Message):
                     )
                 )
             except PeerIdInvalid:
-                return await progress_mesage.edit_text(
+                return await prog_msg.edit_text(
                     await tld(m.chat.id, "STICKERS_NOT_FOUND_USER"),
-                    reply_markup=ikb(
+                    reply_markup=InlineKeyboardMarkup(
                         [
                             [
-                                (
-                                    "/start",
-                                    f"https://t.me/{c.me.username}?start",
-                                    "url",
+                                InlineKeyboardButton(
+                                    "/start", url=f"https://t.me/{c.me_username}?start"
                                 )
                             ]
                         ]
                     ),
                 )
+    except Exception as 
     except Exception as all_e:
         await progress_mesage.edit_text(f"{all_e.__class__.__name__} : {all_e}")
     else:
