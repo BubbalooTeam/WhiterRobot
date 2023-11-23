@@ -67,11 +67,12 @@ async def start_(c: WhiterX, m: Union[Message, CallbackQuery]):
 async def about_menu(c: WhiterX, cb: CallbackQuery):
     keyboard = [
         [
-            (await tld(cb.message.chat.id, "BACK_BNT"), "start_back"),
+            InlineKeyboardButton(await tld(cb.message.chat.id, "BACK_BNT"), "start_back"),
         ],
     ]
     text = (await tld(cb.message.chat.id, "ABOUT_TEXT")).format(version.__WhiterX_version__)
-    await cb.edit_message_text(text, reply_markup=ikb(keyboard), disable_web_page_preview=True)
+    await cb.edit_message_text(text, reply_markup=InlineKeyboardMarkup(keyboard), disable_web_page_preview=True)
+
 
 @WhiterX.on_callback_query(filters.regex(pattern=r"^lang_menu$"))
 async def infos(client: WhiterX, cb: CallbackQuery):
