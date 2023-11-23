@@ -29,13 +29,6 @@ async def add_device(uid: int, device_id: str, link: str, img: str, description:
                                      "description": description
                                     }
                                    )
-        
-        devices = await DB_DEVICES.find_one({"user_id": uid, "device_id": device_id})
-
-        if devices:
-            logging.info(f"Saved a smartphone id: {device_id}")
-        else:
-            logging.error("An error occurred in save basic infos devices [id/link/img/description]")
     except Exception as e:
         return logging.error(f"An error occurred: {e}")
 
