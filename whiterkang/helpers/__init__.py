@@ -3,6 +3,7 @@ from .database.disabled import is_disabled
 from .database.afk import add_afk_reason, add_afk, del_afk, is_afk, find_reason_afk, check_afk
 from .database.medias import csdl, cisdl, tsdl, tisdl
 from .database.core import add_user, find_user, add_gp, del_gp, find_gp
+from .database.smartphones import add_device, find_device, del_device
 from .pexels import PexelsImagesAPI
 from .gsmarena import search_device, get_device
 from .decorators import disableable_dec, inline_handler, input_str
