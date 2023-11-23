@@ -314,8 +314,8 @@ async def media_config(c: WhiterX, callback: CallbackQuery):
 
     keyboard = [
         [
-            (await tld(chat.id, "MEDIAS_CAPTION_BNT"), "media_config"),
-            (state[(await cisdl(chat.id))], "media_config+"),
+            InlineKeyboardButton(await tld(chat.id, "MEDIAS_CAPTION_BNT"), "media_config"),
+            InlineKeyboardButton(state[(await cisdl(chat.id))], "media_config+"),
         ],
     ]
 
@@ -332,9 +332,9 @@ async def media_config(c: WhiterX, callback: CallbackQuery):
             ]
         ]
 
-    keyboard += [[(await tld(chat.id, "BACK_BNT"), "config")]]
+    keyboard += [[InlineKeyboardButton(await tld(chat.id, "BACK_BNT"), "config")]]
     return await callback.edit_message_text(
-        await tld(chat.id, "MEDIAS_CONFIG_TEXT"), reply_markup=ikb(keyboard)
+        await tld(chat.id, "MEDIAS_CONFIG_TEXT"), reply_markup=InlineKeyboardMarkup(keyboard)
     )
 
 @WhiterX.on_callback_query(filters.regex(r"config"))
@@ -355,14 +355,14 @@ async def config(c: WhiterX, union: Message | CallbackQuery):
 
     keyboard = [
         [
-            (await tld(chat.id, "MEDIAS_BNT"), "media_config"),
+            InlineKeyboardButton(await tld(chat.id, "MEDIAS_BNT"), "media_config"),
         ],
         [
-            (await tld(chat.id, "button_lang"), "lang_menu"),
+            InlineKeyboardButton(await tld(chat.id, "button_lang"), "lang_menu"),
         ],
     ]
 
-    await reply(await tld(chat.id, "CONFIG_TEXT"), reply_markup=ikb(keyboard))
+    await reply(await tld(chat.id, "CONFIG_TEXT"), reply_markup=InlineKeyboardMarkup(keyboard))
 
 @WhiterX.on_message(filters.command("yt", prefixes=["/", "!"]))
 async def yt_search_cmd(c: WhiterX, m: Message):
