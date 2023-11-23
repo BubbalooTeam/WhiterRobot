@@ -14,12 +14,11 @@ from yt_dlp import YoutubeDL
 from urllib.parse import unquote
 from bs4 import BeautifulSoup
 
-from pyrogram.helpers import ikb
 from pyrogram import filters, enums
 from pyrogram.errors import BadRequest, FloodWait, Forbidden, MediaEmpty, MessageNotModified, UserNotParticipant
 from pyrogram.raw.types import InputMessageID
 from pyrogram.raw.functions import channels, messages
-from pyrogram.types import Message, CallbackQuery, InputMediaVideo, InputMediaPhoto
+from pyrogram.types import Message, CallbackQuery, InputMediaVideo, InputMediaPhoto, InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.enums import ChatType, ChatAction 
 
 
@@ -79,13 +78,13 @@ async def ytdlcmd(c: WhiterX, m: Message):
 
     keyboard = [
         [
-            (
+            InlineKeyboardButton(
                 await tld(m.chat.id, "SONG_BNT"),
-                f'_aud.{yt["id"]}|{afsize}|{vformat}|{temp}|{user}|{m.id}',
+                callback_data=f'_aud.{yt["id"]}|{afsize}|{vformat}|{temp}|{user}|{m.id}'
             ),
-            (
+            InlineKeyboardButton(
                 await tld(m.chat.id, "VID_BNT"),
-                f'_vid.{yt["id"]}|{vfsize}|{vformat}|{temp}|{user}|{m.id}',
+                callback_data=f'_vid.{yt["id"]}|{vfsize}|{vformat}|{temp}|{user}|{m.id}'
             ),
         ]
     ]
@@ -100,7 +99,8 @@ async def ytdlcmd(c: WhiterX, m: Message):
     text += f"💾 <code>{humanbytes(afsize)}</code> (audio) / <code>{humanbytes(int(vfsize))}</code> (video)\n"
     text += f"⏳ <code>{datetime.timedelta(seconds=yt.get('duration'))}</code>"
 
-    await m.reply_text(text, reply_markup=ikb(keyboard))
+    await m.reply_text(text, reply_markup=InlineKeyboardMarkup(keyboard))
+
 
 
 @WhiterX.on_callback_query(filters.regex("^(_(vid|aud))"))
