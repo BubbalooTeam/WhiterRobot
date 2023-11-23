@@ -9,7 +9,6 @@ from whiterkang.helpers import tld, disableable_dec, EMOJI_PATTERN, convert_vide
 
 from pyrogram import filters
 from pyrogram.errors import PeerIdInvalid, StickersetInvalid
-from pyrogram.helpers import ikb
 from pyrogram.raw.functions.messages import GetStickerSet, SendMedia
 from pyrogram.raw.functions.stickers import AddStickerToSet, CreateStickerSet
 from pyrogram.raw.types import (
