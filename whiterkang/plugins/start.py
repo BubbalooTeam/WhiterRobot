@@ -12,7 +12,6 @@ from typing import Union
 from importlib import import_module
 
 from pyrogram import filters
-from pyrogram.helpers import array_chunk, ikb
 from pyrogram.enums import ChatType
 from pyrogram.types import (
     CallbackQuery,
@@ -126,23 +125,23 @@ async def help_menu(c: WhiterX, m: Union[Message, CallbackQuery]):
     msg = m if isinstance(m, Message) else m.message
     buttons: list = []
     for help in sorted(HELPABLE):
-        buttons.append((await tld(msg.chat.id, f"help-name-{help}"), f"help_plugin {help}"))
+        buttons.append(InlineKeyboardButton(await tld(msg.chat.id, f"help-name-{help}"), f"help_plugin {help}"))
 
-    # This will limit the row list to having 3 buttons only
-    keyboard = array_chunk(buttons, 3)
+    # Divides the button in a 3x3 shape
+    keyboard = [buttons[i:i+3] for i in range(0, len(buttons), 3)]
 
-    # Adds back button if it is a callback
+    # Add a back button
     if isinstance(m, CallbackQuery):
-        keyboard += [[(await tld(msg.chat.id, "BACK_BNT"), "start_back")]]
+        keyboard.append([InlineKeyboardButton(await tld(msg.chat.id, "BACK_BNT"), "start_back")])
 
     await reply_msg(
         (await tld(msg.chat.id, "HELP_MSG")).format(c.me.first_name),
-        reply_markup=ikb(keyboard),
+        reply_markup=InlineKeyboardMarkup(keyboard),
     )
 
 @WhiterX.on_callback_query(filters.regex(pattern="^help_plugin (?P<module>.+)"))
 async def help_plugin(c: WhiterX, cb: CallbackQuery):
     match = cb.matches[0]["module"]
-    keyboard = [[(await tld(cb.message.chat.id, "BACK_BNT"), "help_menu")]]
+    keyboard = [InlineKeyboardButton(await tld(cb.message.chat.id, "BACK_BNT"), "help_menu")]
     text = (await tld(cb.message.chat.id, "HELP_BASE")).format(await tld(cb.message.chat.id, f"help-name-{match}")) + await tld(cb.message.chat.id, f"help-plugin-{match}")
-    await cb.edit_message_text(text, reply_markup=ikb(keyboard))
+    await cb.edit_message_text(text, reply_markup=InlineKeyboardMarkup([keyboard]))
