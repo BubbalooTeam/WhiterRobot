@@ -35,7 +35,7 @@ multidict==6.0.4
 motor
 Pillow==10.1.0
 pyaes==1.6.1
-git+https://github.com/BubbalooTeam/pyrogram
+pyrogram==2.0.106
 PyroMod
 stagger>=1.0.0
 PySocks==1.7.1
