@@ -106,7 +106,6 @@ async def deviceinfo(c: WhiterX, m: Message):
                     return await m.reply(f"Couldn't retrieve device details. The GSM Arena website might be offline. <i>Error</i>: <b>{err}</b>\n<b>Line</b>: {err.__traceback__.tb_lineno}")
             else:
                 buttons = []
-                infos = {}
                 user_id = m.from_user.id
                 try:
                     for devices in get_search_api:
