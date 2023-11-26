@@ -18,7 +18,7 @@ from pyrogram.raw.types import (
     InputStickerSetItem,
     InputStickerSetShortName,
 )
-from pyrogram.types import Message
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 
 
 SUPPORTED_TYPES = ["jpeg", "png", "webp"]
