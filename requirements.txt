@@ -1,12 +1,12 @@
 aiohttp
-anyio==4.0.0
+anyio==4.1.0
 aiosqlite>=0.16.0,<0.20.0
 async-lru==2.0.4
 async-timeout
 attrs==23.1.0
 bs4
 babel==2.13.1
-certifi==2023.7.22
+certifi==2023.11.17
 captcha
 chardet==5.2.0
 charset-normalizer==3.3.2
@@ -27,7 +27,7 @@ hpack==4.0.0
 httpcore
 httpx[http2,socks]==0.25.1
 hachoir
-humanize==4.8.0
+humanize==4.9.0
 hyperframe==6.0.1
 idna==3.4
 lxml==4.9.3
@@ -65,7 +65,7 @@ typing-extensions==4.8.0
 tortoise-orm==0.20.0
 urllib3==2.1.0
 ujson
-yarl==1.9.2
+yarl==1.9.3
 wget
 wikipedia
 gpytranslate==1.5.1
