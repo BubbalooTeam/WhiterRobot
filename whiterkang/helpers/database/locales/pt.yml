@@ -23,6 +23,8 @@ SUP_BNT: "Suporte"
 CONFIG_TEXT: "<b>⚙ Configurações</b> — Aqui estão as configurações para esse chat. Para saber mais, <b>clique nos botões abaixo.</b>"
 HELP_BASE: "Aqui está a ajuda para o modulo <b>{}</b>:\n\n"
 MOREINFO_BNT: "🔧 Mais Informações..."
+ONLY_DM: "Esse comando só pode ser usado em minha DM."
+ONLY_GROUPS: "Esse comando só pode ser usado em grupos, favor dirija-se a um e tente novamente."
 
 # Smartphone help
 help-name-smartphone: "Smartphones"
@@ -151,6 +153,8 @@ SIMI_API_OFF: "A api está apresentado erros inesperados!"
 COMMAND_NOW_DISABLED: "<i>Comando {} Agora Desativado!!!</i>"
 ALREADY_DISABLED_COMMAND: "<i>Comando já desativado!</i>"
 NO_DISABLE_COMMAND: "<i>Qual comando você deseja desativar?</i>"
+
+DISABLEABLE_COMMANDS: "<b>Comandos disponiveis para ser desativados</b>:\n\n"
 
 #enable
 COMMAND_NOW_ENABLED: "<i>Comando {} Agora Ativado!!!</i>"
