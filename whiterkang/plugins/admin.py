@@ -27,11 +27,13 @@ from whiterkang.helpers import (
     is_self,
     unwarn_bnt,
     disableable_dec,
+    is_disabled,
     check_antispam,
     check_ban,
     add_user,
     find_user,
     input_str,
+    DISABLABLE_CMDS,
 )
 from whiterkang.helpers.tools import extract_time
 
@@ -53,6 +55,10 @@ CAPTCHA_DB = db["CAPTCHA"]
 
 # Notes and Filters
 DB_NOTES = db["CHAT_NOTES"]
+DB_FILTERS = db["CHAT_FILTERS"]
+
+# Disable/enable
+DB_DISABLEABLE = db["DISABLED"]
 
 
 SMART_OPEN = "“"
@@ -1057,3 +1063,71 @@ async def note_by_hashtag(c: WhiterX, m: Message):
     note_data = m.text[1:]
     targeted_message = m.reply_to_message or m
     await serve_note(c, targeted_message, txt=note_data)
+
+
+@WhiterX.on_message(filters.command("disable", Config.TRIGGER))
+async def disble_cmd(c: WhiterX, m: Message):
+    chat_id = m.chat.id
+    check_admin = m.from_user.id  
+    query = input_str(m)
+
+    if not await is_admin(chat_id, check_admin):
+        return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
+    if await check_rights(chat_id, check_admin, "can_change_info"):
+        return await m.reply(await tld(chat_id, "NO_CHANGEINFO_PERM"))
+
+    if m.chat.type == ChatType.PRIVATE:
+        return await m.reply(await tld(chat_id, "ONLY_GROUPS"))
+    else:
+        if not query in DISABLABLE_CMDS:
+            return await m.reply(await tld(chat_id, "NO_DISABLE_COMMAND"))
+        else:
+            found = await DB_DISABLEABLE.find_one({"chat_id": chat_id, "cmd": query})
+            if found:
+                return await m.reply(await tld(chat_id, "ALREADY_DISABLED_COMMAND"))
+            else:
+                dis_cmd = await DB_DISABLEABLE.insert_one({"chat_id": chat_id, "cmd": query})
+                await m.reply((await tld(chat_id, "COMMAND_NOW_DISABLED")).format(query))
+                
+
+@WhiterX.on_message(filters.command("enable", Config.TRIGGER))
+async def enable_cmd(c: WhiterX, m: Message):
+    chat_id = m.chat.id
+    check_admin = m.from_user.id  
+    query = input_str(m)
+
+    if not await is_admin(chat_id, check_admin):
+        return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
+    if await check_rights(chat_id, check_admin, "can_change_info"):
+        return await m.reply(await tld(chat_id, "NO_CHANGEINFO_PERM"))
+    
+    if m.chat.type == ChatType.PRIVATE:
+        return await m.reply(await tld(chat_id, "ONLY_GROUPS"))
+    else:
+        if not query in DISABLABLE_CMDS:
+            return await m.reply(await tld(chat_id, "NO_ENABLE_COMMAND")) 
+        else:
+            found = await DB_DISABLEABLE.find_one({"chat_id": chat_id, "cmd": query})
+            if found:
+                dis_cmd = await DB_DISABLEABLE.delete_one({"chat_id": chat_id, "cmd": query})
+                await m.reply((await tld(chat_id, "COMMAND_NOW_ENABLED")).format(query))
+            else:
+                return await m.reply(await tld(chat_id, "NO_DISABLED_COMMAND"))
+                
+
+@WhiterX.on_message(filters.command("disableable", Config.TRIGGER))
+async def disableable(_, m: Message):
+    chat_id = m.chat.id
+    user_id = m.from_user.id
+
+    if not await is_admin(chat_id, user_id):
+        return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
+    if await check_rights(chat_id, user_id, "can_change_info"):
+        return await m.reply(await tld(chat_id, "NO_CHANGEINFO_PERM"))
+    
+    text = await tld(chat_id, "DISABLEABLE_COMMANDS")
+    for command in sorted(DISABLABLE_CMDS):
+        text += f"• <code>{command}</code>\n"
+    await m.reply(text)
+
+    
