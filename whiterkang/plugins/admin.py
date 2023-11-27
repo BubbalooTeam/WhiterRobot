@@ -8,6 +8,7 @@ import os.path
 
 from pyrogram import filters
 from pyrogram.errors import PeerIdInvalid, UserIdInvalid, UsernameInvalid, BadRequest
+from pyrogram.errors.exceptions.bad_request_400 import ChatNotModified
 from pyrogram.types import ChatPermissions, Message, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 from pyrogram.enums import ChatMemberStatus, ChatMembersFilter, ChatType
 
@@ -70,6 +71,66 @@ RESTRICTED_SYMBOLS_IN_NOTENAMES = [
 
 
 BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\(buttonurl:(?:/{0,2})(.+?)(:same)?\))")
+
+LOCK_TYPES = {
+    "messages": "can_send_messages",
+    "stickers": "can_send_other_messages",
+    "gifs": "can_send_other_messages",
+    "media": "can_send_media_messages",
+    "games": "can_send_other_messages",
+    "inline": "can_send_other_messages",
+    "url": "can_add_web_page_previews",
+    "polls": "can_send_polls",
+    "group_info": "can_change_info",
+    "useradd": "can_invite_users",
+    "pin": "can_pin_messages",
+}
+
+async def current_chat_permissions(chat_id):
+    perms = []
+    perm = (await WhiterX.get_chat(chat_id)).permissions
+    if perm.can_send_messages:
+        perms.append("can_send_messages")
+    if perm.can_send_media_messages:
+        perms.append("can_send_media_messages")
+    if perm.can_send_other_messages:
+        perms.append("can_send_other_messages")
+    if perm.can_add_web_page_previews:
+        perms.append("can_add_web_page_previews")
+    if perm.can_send_polls:
+        perms.append("can_send_polls")
+    if perm.can_change_info:
+        perms.append("can_change_info")
+    if perm.can_invite_users:
+        perms.append("can_invite_users")
+    if perm.can_pin_messages:
+        perms.append("can_pin_messages")
+
+    return perms
+
+async def tg_lock(m, permissions: list, perm: str, lock: bool):
+    if lock:
+        if perm not in permissions:
+            return await m.reply_text("Already locked.")
+        permissions.remove(perm)
+    else:
+        if perm in permissions:
+            return await m.reply_text("Already Unlocked.")
+        permissions.append(perm)
+
+    permissions = {perm: True for perm in list(set(permissions))}
+
+    try:
+        await WhiterX.set_chat_permissions(
+            m.chat.id, ChatPermissions(**permissions)
+        )
+    except ChatNotModified:
+        return await m.reply_text(
+            "To unlock this, you have to unlock 'messages' first."
+        )
+
+    await m.reply_text(("Locked." if lock else "Unlocked."))
+
 
 def get_format_keys(string: str) -> List[str]:
     """Return a list of formatting keys present in string."""
@@ -1073,7 +1134,7 @@ async def disble_cmd(c: WhiterX, m: Message):
 
     if not await is_admin(chat_id, check_admin):
         return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
-    if not await check_rights(chat_id, check_admin, "can_change_info"):
+    if await check_rights(chat_id, check_admin, "can_change_info"):
         return await m.reply(await tld(chat_id, "NO_CHANGEINFO_PERM"))
 
     if m.chat.type == ChatType.PRIVATE:
@@ -1098,7 +1159,7 @@ async def enable_cmd(c: WhiterX, m: Message):
 
     if not await is_admin(chat_id, check_admin):
         return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
-    if not await check_rights(chat_id, check_admin, "can_change_info"):
+    if await check_rights(chat_id, check_admin, "can_change_info"):
         return await m.reply(await tld(chat_id, "NO_CHANGEINFO_PERM"))
     
     if m.chat.type == ChatType.PRIVATE:
@@ -1122,12 +1183,71 @@ async def disableable(_, m: Message):
 
     if not await is_admin(chat_id, user_id):
         return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
-    if not await check_rights(chat_id, user_id, "can_change_info"):
-        return await m.reply(await tld(chat_id, "NO_CHANGEINFO_PERM"))
+    if await check_rights(chat_id, user_id, "can_restrict_members"):
+        return await m.reply(await tld(chat_id, "NO_BAN_BOT"))
     
     text = await tld(chat_id, "DISABLEABLE_COMMANDS")
     for command in sorted(DISABLABLE_CMDS):
         text += f"• <code>{command}</code>\n"
     await m.reply(text)
 
+@WhiterX.on_message(filters.command(["lock", "unlock"]) & ~filters.private)
+async def locks_func(c: WhiterX, m: Message):
+    chat_id = m.chat.id
+    check_admin = m.from_user.id
+    if not await is_admin(chat_id, check_admin):
+        return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
+    if await check_rights(chat_id, check_admin, "can_change_info"):
+        return await m.reply(await tld(chat_id, "NO_CHANGEINFO_PERM"))
     
+    if len(m.command) != 2:
+        return await m.reply_text("Invalid argument; Visit help in section Admins")
+
+    parameter = m.text.strip().split(None, 1)[1].lower()
+    state = m.command[0].lower()
+
+    if parameter not in LOCK_TYPES and parameter != "all":
+        return await m.reply_text("Invalid argument; Visit help in section Admins")
+
+    permissions = await current_chat_permissions(chat_id)
+
+    if parameter in LOCK_TYPES:
+        await tg_lock(
+            m,
+            permissions,
+            LOCK_TYPES[parameter],
+            bool(state == "lock"),
+        )
+    elif parameter == "all" and state == "lock":
+        await c.set_chat_permissions(chat_id, ChatPermissions())
+        await m.reply_text(f"Locked Everything in {m.chat.title}")
+
+    elif parameter == "all" and state == "unlock":
+        await c.set_chat_permissions(
+            chat_id,
+            ChatPermissions(
+                can_send_messages=True,
+                can_send_media_messages=True,
+                can_send_other_messages=True,
+                can_add_web_page_previews=True,
+                can_send_polls=True,
+                can_change_info=False,
+                can_invite_users=True,
+                can_pin_messages=False,
+            ),
+        )
+        await m.reply(f"Unlocked Everything in {m.chat.title}")
+
+
+@WhiterX.on_message(filters.command("locks") & ~filters.private)
+async def locktypes(c: WhiterX, m: Message):
+    permissions = await current_chat_permissions(m.chat.id)
+
+    if not permissions:
+        return await m.reply_text("No Permissions.")
+
+    perms = ""
+    for i in permissions:
+        perms += f"__**{i}**__\n"
+
+    await m.reply_text(perms)
