@@ -6,7 +6,7 @@ from pyrogram.types import Message
 from typing import Optional
 
 from whiterkang import WhiterX, Config, db
-from whiterkang.helpers import is_dev, sw, tld, check_rights, is_self
+from whiterkang.helpers import is_dev, sw, tld, check_rights, check_bot_rights, is_self
 
 antispam_db = db["ANTISPAM_CHATS"]
 gban_db = db["GBAN"]
@@ -51,7 +51,7 @@ async def gban_user(m: Message, user_id: int, user_name: str, admin_name: str, r
                     await WhiterX.send_message(id_log, (await tld(id_log, "ANTISPAM_LOGGER_NEW_GBAN")).format(admin_name, user_name, user_id, reason, count))
                     return
                 except Exception as e:
-                    await asyncio.gather(megux.send_err(e))
+                    await asyncio.gather(WhiterX.send_err(e))
                     return
         else:
             if reason == None:
@@ -99,19 +99,19 @@ async def check_ban(m: Message, chat_id: int, user_id: int):
             if sw_response:
                 sw_reason = sw_response.reason
                 if await check_bot_rights(chat_id, "can_restrict_members"):
-                    await megux.ban_chat_member(chat_id, user_id)
+                    await WhiterX.ban_chat_member(chat_id, user_id)
                     await m.reply((await tld(chat_id, "ANTISPAM_SPAMWATCH_BANNED")).format(sw_reason))
                     return await m.stop_propagation()
                 else:
                     pass
             else:
-                gbaneed = await gban_db.find_one({"user_id": user_id})
+                gbanned = await gban_db.find_one({"user_id": user_id})
                 if gbanned:
                     usrreason = gbanned["reason"]
                     if usrreason:
                         if await check_bot_rights(chat_id, "can_restrict_members"):
                             await WhiterX.ban_chat_member(chat_id, user_id)
-                            await m.reply((await tld(chat_id, "ANTISPAM_CHECKBAN_USER_REMOVED")).format(reason))
+                            await m.reply((await tld(chat_id, "ANTISPAM_CHECKBAN_USER_REMOVED")).format(usrreason))
                             return await m.stop_propagation()
                         else:
                             pass
@@ -144,7 +144,7 @@ async def ungban_user(m: Message, user_id: int, user_name: str, admin_name: str,
                     if not await check_bot_rights(chat_id, "can_restrict_members"):
                         pass
                 
-                    await megux.unban_chat_member(chat_id, user_id)
+                    await WhiterX.unban_chat_member(chat_id, user_id)
                     count += 1
                 except Exception:
                     continue
@@ -162,7 +162,7 @@ async def ungban_user(m: Message, user_id: int, user_name: str, admin_name: str,
                     
 
 async def check_antispam(chat_id: int):
-    atspam = await db.find_one({"chat_id": chat_id, "status": True})
+    atspam = await antispam_db.find_one({"chat_id": chat_id, "status": True})
     if atspam:
         return True
     else:
