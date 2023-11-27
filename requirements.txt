@@ -25,11 +25,11 @@ h2==4.1.0
 heroku3
 hpack==4.0.0
 httpcore
-httpx[http2,socks]==0.25.1
+httpx[http2,socks]==0.25.2
 hachoir
 humanize==4.9.0
 hyperframe==6.0.1
-idna==3.4
+idna==3.6
 lxml==4.9.3
 multidict==6.0.4
 motor
