@@ -1073,7 +1073,7 @@ async def disble_cmd(c: WhiterX, m: Message):
 
     if not await is_admin(chat_id, check_admin):
         return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
-    if await check_rights(chat_id, check_admin, "can_change_info"):
+    if not await check_rights(chat_id, check_admin, "can_change_info"):
         return await m.reply(await tld(chat_id, "NO_CHANGEINFO_PERM"))
 
     if m.chat.type == ChatType.PRIVATE:
@@ -1098,7 +1098,7 @@ async def enable_cmd(c: WhiterX, m: Message):
 
     if not await is_admin(chat_id, check_admin):
         return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
-    if await check_rights(chat_id, check_admin, "can_change_info"):
+    if not await check_rights(chat_id, check_admin, "can_change_info"):
         return await m.reply(await tld(chat_id, "NO_CHANGEINFO_PERM"))
     
     if m.chat.type == ChatType.PRIVATE:
@@ -1122,7 +1122,7 @@ async def disableable(_, m: Message):
 
     if not await is_admin(chat_id, user_id):
         return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
-    if await check_rights(chat_id, user_id, "can_change_info"):
+    if not await check_rights(chat_id, user_id, "can_change_info"):
         return await m.reply(await tld(chat_id, "NO_CHANGEINFO_PERM"))
     
     text = await tld(chat_id, "DISABLEABLE_COMMANDS")
