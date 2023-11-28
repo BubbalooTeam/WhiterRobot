@@ -1134,7 +1134,7 @@ async def disble_cmd(c: WhiterX, m: Message):
 
     if not await is_admin(chat_id, check_admin):
         return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
-    if await check_rights(chat_id, check_admin, "can_change_info"):
+    if not await check_rights(chat_id, check_admin, "can_change_info"):
         return await m.reply(await tld(chat_id, "NO_CHANGEINFO_PERM"))
 
     if m.chat.type == ChatType.PRIVATE:
@@ -1159,7 +1159,7 @@ async def enable_cmd(c: WhiterX, m: Message):
 
     if not await is_admin(chat_id, check_admin):
         return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
-    if await check_rights(chat_id, check_admin, "can_change_info"):
+    if not await check_rights(chat_id, check_admin, "can_change_info"):
         return await m.reply(await tld(chat_id, "NO_CHANGEINFO_PERM"))
     
     if m.chat.type == ChatType.PRIVATE:
@@ -1183,7 +1183,7 @@ async def disableable(_, m: Message):
 
     if not await is_admin(chat_id, user_id):
         return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
-    if await check_rights(chat_id, user_id, "can_restrict_members"):
+    if not await check_rights(chat_id, user_id, "can_restrict_members"):
         return await m.reply(await tld(chat_id, "NO_BAN_BOT"))
     
     text = await tld(chat_id, "DISABLEABLE_COMMANDS")
@@ -1197,17 +1197,17 @@ async def locks_func(c: WhiterX, m: Message):
     check_admin = m.from_user.id
     if not await is_admin(chat_id, check_admin):
         return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
-    if await check_rights(chat_id, check_admin, "can_change_info"):
+    if not await check_rights(chat_id, check_admin, "can_change_info"):
         return await m.reply(await tld(chat_id, "NO_CHANGEINFO_PERM"))
     
     if len(m.command) != 2:
-        return await m.reply_text("Invalid argument; Visit help in section Admins")
+        return await m.reply_text("<i>Invalid argument; Visit help in section Admins</i>")
 
     parameter = m.text.strip().split(None, 1)[1].lower()
     state = m.command[0].lower()
 
     if parameter not in LOCK_TYPES and parameter != "all":
-        return await m.reply_text("Invalid argument; Visit help in section Admins")
+        return await m.reply_text("<i>Invalid argument; Visit help in section Admins</i>")
 
     permissions = await current_chat_permissions(chat_id)
 
@@ -1241,6 +1241,12 @@ async def locks_func(c: WhiterX, m: Message):
 
 @WhiterX.on_message(filters.command("locks") & ~filters.private)
 async def locktypes(c: WhiterX, m: Message):
+
+    if not await is_admin(chat_id, user_id):
+        return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
+    if not await check_rights(chat_id, user_id, "can_restrict_members"):
+        return await m.reply(await tld(chat_id, "NO_BAN_BOT"))
+    
     permissions = await current_chat_permissions(m.chat.id)
 
     if not permissions:
@@ -1248,6 +1254,6 @@ async def locktypes(c: WhiterX, m: Message):
 
     perms = ""
     for i in permissions:
-        perms += f"__**{i}**__\n"
+        perms += f"<i><b>{i}</b><i>\n"
 
     await m.reply_text(perms)
