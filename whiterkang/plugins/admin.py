@@ -1241,10 +1241,11 @@ async def locks_func(c: WhiterX, m: Message):
 
 @WhiterX.on_message(filters.command("locks") & ~filters.private)
 async def locktypes(c: WhiterX, m: Message):
-
-    if not await is_admin(chat_id, user_id):
+    chat_id + m.chat.id
+    check_admin = m.from_user.id
+    if not await is_admin(chat_id, check_admin):
         return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
-    if not await check_rights(chat_id, user_id, "can_restrict_members"):
+    if not await check_rights(chat_id, check_admin, "can_restrict_members"):
         return await m.reply(await tld(chat_id, "NO_BAN_BOT"))
     
     permissions = await current_chat_permissions(m.chat.id)
