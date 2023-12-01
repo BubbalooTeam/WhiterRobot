@@ -80,7 +80,6 @@ LOCK_TYPES = {
     "media": "can_send_media_messages",
     "games": "can_send_other_messages",
     "inline": "can_send_other_messages",
-    "url": "can_add_web_page_previews",
     "polls": "can_send_polls",
     "group_info": "can_change_info",
     "useradd": "can_invite_users",
@@ -1585,27 +1584,3 @@ async def locktypes(c: WhiterX, m: Message):
         perms += f"<i><b>{i}</b><i>\n"
 
     await m.reply_text(perms)
-
-@WhiterX.on_message(filters.text & ~filters.private, group=group_locks)
-async def url_detector(c: WhiterX, m: Message):
-    user = m.from_user
-    chat_id = m.chat.id
-    text = m.text.lower().strip()
-
-    if not text or not user:
-        return
-    mods = await is_admin(chat_id, user.id)
-    if mods:
-        return
-
-    check = get_urls_from_text(text)
-    if check:
-        permissions = await current_chat_permissions(chat_id)
-        if "can_add_web_page_previews" not in permissions:
-            try:
-                await m.delete()
-            except Exception:
-                await m.reply_text(
-                    "<b>This message contains a URL</b>, "
-                    + "<i><u>but i don't have enough permissions to delete it</i></u>"
-                )
