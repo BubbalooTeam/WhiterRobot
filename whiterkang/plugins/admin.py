@@ -1596,7 +1596,7 @@ async def url_detector(c: WhiterX, m: Message):
     if not text or not user:
         return
 
-    if not await is_admin(chat_id, user.id):
+    if await is_admin(chat_id, user.id):
         return
 
     check = get_urls_from_text(text)
