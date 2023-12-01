@@ -23,7 +23,7 @@ async def add_user(uid: int):
         if user.username:
             user_start += f"\n<b>Username:</b> @{user.username}"
         await asyncio.gather(
-            DB_USER.update_one({"_id": user.id}, {"$set": {"user": user.first_name}}, upsert=True),
+            USERS.update_one({"_id": user.id}, {"$set": {"user": user.first_name}}, upsert=True),
             WhiterX.send_log(user_start),
         )
     except Exception as e:
