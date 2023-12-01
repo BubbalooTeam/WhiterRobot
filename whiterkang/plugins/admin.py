@@ -1343,7 +1343,7 @@ async def clear_notes(c: WhiterX, m: Message):
 
 
 @WhiterX.on_message(
-    (filters.group | filters.private) & filters.text & filters.incoming, group=2
+    (filters.group | filters.private) & filters.text & filters.incoming, group=group_filter
 )
 async def serve_filter(c: WhiterX, m: Message):
     chat_id = m.chat.id
