@@ -63,10 +63,6 @@ DB_FILTERS = db["CHAT_FILTERS"]
 # Disable/enable
 DB_DISABLEABLE = db["DISABLED"]
 
-#FLOODS
-DB_FLOOD = db["FLOOD"]
-FLOODS_MSGS = {}
-
 
 SMART_OPEN = "“"
 SMART_CLOSE = "”"
@@ -144,10 +140,6 @@ def get_urls_from_text(text: str) -> bool:
                 ()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))""".strip()
     return [x[0] for x in re.findall(regex, str(text))]
 
-def reset_flood(chat_id, user_id=0):
-    for user in FLOODS_MSGS[chat_id].keys():
-        if user != user_id:
-            FLOODS_MSGS[chat_id][user] = 0
 
 def get_format_keys(string: str) -> List[str]:
     """Return a list of formatting keys present in string."""
@@ -1618,109 +1610,3 @@ async def url_detector(c: WhiterX, m: Message):
                     "<b>This message contains a URL</b>, "
                     + "<i><u>but i don't have enough permissions to delete it</i></u>"
                 )
-
-@WhiterX.on_message(
-    ~filters.service
-    & ~filters.me
-    & ~filters.private
-    & ~filters.channel
-    & ~filters.bot,
-    group=group_flood,
-)
-async def flood_control_func(c: WhiterX, m: Message):
-    if not m.chat:
-        return
-    chat_id = m.chat.id
-    if not await DB_FLOOD.find_one({"chat_id": chat_id, "status": "on"}):
-        return
-    # Initialize db if not already.
-    if chat_id not in FLOODS_MSGS:
-        FLOODS_MSGS[chat_id] = {}
-
-    if not m.from_user:
-        reset_flood(chat_id)
-        return
-
-    user_id = m.from_user.id
-    mention = m.from_user.mention
-
-    if user_id not in FLOODS_MSGS[chat_id]:
-        FLOODS_MSGS[chat_id][user_id] = 0
-
-    # Reset flood db of current chat if some other user sends a message
-    reset_flood(chat_id, user_id)
-
-    # Ignore devs and admins
-    mods = await is_admin(chat_id, user_id)
-    if mods:
-        return
-
-    # Mute if user sends more than 10 messages in a row
-    if FLOODS_MSGS[chat_id][user_id] >= 10:
-        FLOODS_MSGS[chat_id][user_id] = 0
-        try:
-            await m.chat.restrict_member(
-                user_id,
-                permissions=ChatPermissions(),
-            )
-        except Exception:
-            return
-        keyboard = InlineKeyboardMarkup(
-            [
-                [
-                    InlineKeyboardButton(
-                        text="🚨  Unmute  🚨",
-                        callback_data=f"unmute_{user_id}",
-                    )
-                ]
-            ]
-        )
-        m = await m.reply_text(
-            f"Imagine flooding the chat in front of me, Muted {mention}!",
-            reply_markup=keyboard,
-        )
-
-        async def delete():
-            await asyncio.sleep(3600)
-            try:
-                await m.delete()
-            except Exception:
-                pass
-
-        loop = asyncio.get_running_loop()
-        return loop.create_task(delete())
-    FLOODS_MSGS[chat_id][user_id] += 1
-
-
-@WhiterX.on_callback_query(filters.regex("unmute_"))
-async def flood_callback_func(c: WhiterX, cq: CallbackQuery):
-    from_user = cq.from_user
-    if await check_rights(cq.chat.id, from_user.id, "can_resrict_members"):
-        return await cq.answer(
-            "You don't have enough permissions to perform this action.\n"
-            + f"Permission needed: can_restrict_members",
-            show_alert=True,
-        )
-    user_id = cq.data.split("_")[1]
-    await cq.message.chat.unban_member(user_id)
-    text = cq.message.text.markdown
-    text = f"<b>{text}<b>\n\n"
-    text += f"<i>User unmuted by {from_user.mention}</i>"
-    await cq.message.edit(text)
-
-
-@WhiterX.on_message(filters.command("flood", Config.TRIGGER) & ~filters.private)
-async def flood_toggle(_, message: Message):
-    if len(message.command) != 2:
-        return await message.reply_text("Usage: /flood [ENABLE|DISABLE]")
-    status = message.text.split(None, 1)[1].strip()
-    status = status.lower()
-    chat_id = message.chat.id
-    if status == "enable":
-        await DB_FLOOD.update_one({"chat_id": chat_id}, {"$set": {"status": "on"}}, upsert=True)
-        await message.reply_text("Enabled Flood Checker.")
-    elif status == "disable":
-        await DB_FLOOD.update_one({"chat_id": chat_id}, {"$set": {"status": "off"}}, upsert=True)
-        await message.reply_text("Disabled Flood Checker.")
-    else:
-        await message.reply_text("Unknown Suffix, Use /flood [ENABLE|DISABLE]")
