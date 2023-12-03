@@ -6,11 +6,11 @@ import inspect
 import os.path
 
 
-from pyrogram import filters
-from pyrogram.errors import PeerIdInvalid, UserIdInvalid, UsernameInvalid, BadRequest
-from pyrogram.errors.exceptions.bad_request_400 import ChatNotModified
-from pyrogram.types import ChatPermissions, Message, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
-from pyrogram.enums import ChatMemberStatus, ChatMembersFilter, ChatType
+from hydrogram import filters
+from hydrogram.errors import PeerIdInvalid, UserIdInvalid, UsernameInvalid, BadRequest
+from hydrogram.errors.exceptions.bad_request_400 import ChatNotModified
+from hydrogram.types import ChatPermissions, Message, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
+from hydrogram.enums import ChatMemberStatus, ChatMembersFilter, ChatType
 
 from datetime import datetime, timedelta
 from functools import partial, wraps

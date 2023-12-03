@@ -9,8 +9,8 @@ from bs4 import BeautifulSoup
 from babel.dates import format_datetime
 from yaml import load, Loader
 
-from pyrogram import filters
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
+from hydrogram import filters
+from hydrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 
 from whiterkang import WhiterX, Config, db
 from whiterkang.helpers import disableable_dec, is_disabled, search_device, get_device, add_user, find_user, tld, gsmarena_tr_category, gsmarena_tr_info, input_str, humanbytes, http, add_device, find_device, del_device

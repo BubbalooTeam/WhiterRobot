@@ -11,9 +11,9 @@ import glob
 from typing import Union
 from importlib import import_module
 
-from pyrogram import filters
-from pyrogram.enums import ChatType
-from pyrogram.types import (
+from hydrogram import filters
+from hydrogram.enums import ChatType
+from hydrogram.types import (
     CallbackQuery,
     InlineKeyboardButton,
     InlineKeyboardMarkup,

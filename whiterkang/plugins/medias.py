@@ -14,12 +14,12 @@ from yt_dlp import YoutubeDL
 from urllib.parse import unquote
 from bs4 import BeautifulSoup
 
-from pyrogram import filters, enums
-from pyrogram.errors import BadRequest, FloodWait, Forbidden, MediaEmpty, MessageNotModified, UserNotParticipant
-from pyrogram.raw.types import InputMessageID
-from pyrogram.raw.functions import channels, messages
-from pyrogram.types import Message, CallbackQuery, InputMediaVideo, InputMediaPhoto, InlineKeyboardMarkup, InlineKeyboardButton
-from pyrogram.enums import ChatType, ChatAction 
+from hydrogram import filters, enums
+from hydrogram.errors import BadRequest, FloodWait, Forbidden, MediaEmpty, MessageNotModified, UserNotParticipant
+from hydrogram.raw.types import InputMessageID
+from hydrogram.raw.functions import channels, messages
+from hydrogram.types import Message, CallbackQuery, InputMediaVideo, InputMediaPhoto, InlineKeyboardMarkup, InlineKeyboardButton
+from hydrogram.enums import ChatType, ChatAction 
 
 
 from whiterkang import WhiterX, Config 

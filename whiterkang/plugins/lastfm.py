@@ -5,9 +5,9 @@ from wget import download
 from bs4 import BeautifulSoup as bs
 from telegraph import upload_file
 
-from pyrogram import filters
-from pyrogram.enums import ChatType
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, InlineQuery, InlineQueryResultArticle, InputTextMessageContent, InlineQueryResultPhoto
+from hydrogram import filters
+from hydrogram.enums import ChatType
+from hydrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, InlineQuery, InlineQueryResultArticle, InputTextMessageContent, InlineQueryResultPhoto
 
 from whiterkang import WhiterX, Config, db
 from whiterkang.helpers import disableable_dec, http, add_gp, find_user, add_user, find_gp, search_yt, draw_scrobble, tld, input_str, inline_handler

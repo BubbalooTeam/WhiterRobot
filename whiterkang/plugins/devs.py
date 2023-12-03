@@ -12,10 +12,10 @@ import io
 import sys
 import psutil
 
-from pyrogram import filters
-from pyrogram.enums import ParseMode  
-from pyrogram.errors import UserIsBlocked
-from pyrogram.types import Message
+from hydrogram import filters
+from hydrogram.enums import ParseMode  
+from hydrogram.errors import UserIsBlocked
+from hydrogram.types import Message
 
 from datetime import datetime
 from git import Repo

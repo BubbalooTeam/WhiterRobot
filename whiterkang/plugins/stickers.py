@@ -7,18 +7,18 @@ import filetype
 from whiterkang import WhiterX, Config
 from whiterkang.helpers import tld, disableable_dec, EMOJI_PATTERN, convert_video, resize_image, http
 
-from pyrogram import filters
-from pyrogram.errors import PeerIdInvalid, StickersetInvalid
-from pyrogram.raw.functions.messages import GetStickerSet, SendMedia
-from pyrogram.raw.functions.stickers import AddStickerToSet, CreateStickerSet
-from pyrogram.raw.types import (
+from hydrogram import filters
+from hydrogram.errors import PeerIdInvalid, StickersetInvalid
+from hydrogram.raw.functions.messages import GetStickerSet, SendMedia
+from hydrogram.raw.functions.stickers import AddStickerToSet, CreateStickerSet
+from hydrogram.raw.types import (
     DocumentAttributeFilename,
     InputDocument,
     InputMediaUploadedDocument,
     InputStickerSetItem,
     InputStickerSetShortName,
 )
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+from hydrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 
 
 SUPPORTED_TYPES = ["jpeg", "png", "webp"]

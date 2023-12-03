@@ -2,8 +2,8 @@ import random
 import re
 from zalgo_text import zalgo
 
-from pyrogram import filters
-from pyrogram.types import Message
+from hydrogram import filters
+from hydrogram.types import Message
 
 from whiterkang import WhiterX, Config
 from whiterkang.helpers import input_str, tld, disableable_dec

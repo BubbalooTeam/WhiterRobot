@@ -1,6 +1,6 @@
 # Copyright (C) 2023 BubbalooTeam
-from pyrogram import filters
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from hydrogram import filters
+from hydrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
 from whiterkang import WhiterX, Config
 from whiterkang.helpers import http, MANGA_QUERY, input_str, tld
