@@ -26,9 +26,9 @@ logging.basicConfig(level=logging.INFO,
                         logging.StreamHandler()
                     ])
 
-logging.getLogger("pyrogram").setLevel(logging.WARNING)
-logging.getLogger("pyrogram.parser.html").setLevel(logging.ERROR)
-logging.getLogger("pyrogram.session.session").setLevel(logging.ERROR)
+logging.getLogger("hydrogram").setLevel(logging.WARNING)
+logging.getLogger("hydrogram.parser.html").setLevel(logging.ERROR)
+logging.getLogger("hydrogram.session.session").setLevel(logging.ERROR)
 
 
 async def db_connect():
