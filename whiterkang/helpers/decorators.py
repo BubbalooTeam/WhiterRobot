@@ -12,7 +12,7 @@ import logging
 from typing import List, Optional
 
 from hydrogram import filters
-from pyrogram.types import Message
+from hydrogram.types import Message
 
 from whiterkang import WhiterX
 from whiterkang.helpers import is_disabled
