@@ -4,7 +4,7 @@
 
 from sys import version_info
 from subprocess import run
-from pyrogram import __version__
+from hydrogram import __version__
 
 def check_version():
     try:

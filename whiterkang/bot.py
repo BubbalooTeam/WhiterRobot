@@ -10,8 +10,8 @@ import time
 import logging
 
 from dotenv import load_dotenv
-from pyrogram import Client
-from pyrogram.enums import ParseMode
+from hydrogram import Client
+from hydrogram.enums import ParseMode
 
 from . import version, Config
 

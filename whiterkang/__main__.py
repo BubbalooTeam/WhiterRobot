@@ -8,7 +8,7 @@
 import asyncio
 import logging
 
-from pyrogram import idle
+from hydrogram import idle
 
 from logging.handlers import RotatingFileHandler
 from pymongo.errors import ConnectionFailure
