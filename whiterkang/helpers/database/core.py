@@ -1,5 +1,5 @@
 # Copiright (C) 2023 BubbalooTeam
-from pyrogram.types import Message
+from hydrogram.types import Message
 import asyncio
 import logging
 
