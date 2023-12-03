@@ -20,10 +20,10 @@ from PIL import Image, ImageOps
 from io import BytesIO
 
 
-from pyrogram import emoji
-from pyrogram.enums import ChatMemberStatus 
-from pyrogram.types import Message
-from pyrogram.enums import ChatType
+from hydrogram import emoji
+from hydrogram.enums import ChatMemberStatus 
+from hydrogram.types import Message
+from hydrogram.enums import ChatType
 
 from whiterkang import WhiterX, Config, db
 

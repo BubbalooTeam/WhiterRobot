@@ -1,7 +1,7 @@
 import html
 import asyncio
 
-from pyrogram.types import Message
+from hydrogram.types import Message
 
 from typing import Optional
 

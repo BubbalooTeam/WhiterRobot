@@ -11,7 +11,7 @@ import logging
 
 from typing import List, Optional
 
-from pyrogram import filters
+from hydrogram import filters
 from pyrogram.types import Message
 
 from whiterkang import WhiterX

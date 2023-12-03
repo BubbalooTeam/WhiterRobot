@@ -1,6 +1,6 @@
 import requests
 
-from pyrogram.types import InlineQueryResultPhoto
+from hydrogram.types import InlineQueryResultPhoto
 
 from whiterkang import Config
 
