@@ -28,6 +28,7 @@ httpcore
 httpx[http2,socks]==0.25.2
 hachoir
 humanize==4.9.0
+hydrogram
 hyperframe==6.0.1
 idna==3.6
 lxml==4.9.3
@@ -35,7 +36,6 @@ multidict==6.0.4
 motor
 Pillow==10.1.0
 pyaes==1.6.1
-pyrogram==2.0.106
 PyroMod
 stagger>=1.0.0
 PySocks==1.7.1
