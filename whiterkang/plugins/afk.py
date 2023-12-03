@@ -1,10 +1,10 @@
 import re
 import asyncio 
 
-from pyrogram import filters
-from pyrogram.enums import MessageEntityType
-from pyrogram.errors import FloodWait, UserNotParticipant, BadRequest, ChatWriteForbidden
-from pyrogram.types import Message
+from hydrogram import filters
+from hydrogram.enums import MessageEntityType
+from hydrogram.errors import FloodWait, UserNotParticipant, BadRequest, ChatWriteForbidden
+from hydrogram.types import Message
 
 from datetime import datetime
 
