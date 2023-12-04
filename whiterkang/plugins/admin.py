@@ -1586,7 +1586,7 @@ async def locktypes(c: WhiterX, m: Message):
 
 @WhiterX.on_message(filters.command(["cleanup", "zombies"], prefixes=["/", "!"]))
 @disableable_dec("zombies")
-async def cleanup(c: megux, m: Message):
+async def cleanup(c: WhiterX, m: Message):
     chat_id = m.chat.id
     if m.chat.type == ChatType.PRIVATE:
         await m.reply_text(await tld(chat_id, "ONLY_GROUPS"))
@@ -1608,7 +1608,7 @@ async def cleanup(c: megux, m: Message):
                     await m.reply_text(
                         f"<b>Erro:</b> <code>{e}</code>"
                     )
-                    return await c.send_err("<b>Error!!</b> {}".format(e))
+                    return await c.send_err("<b>Error!!</b> <code>{}</code>".format(e))
         if count:
             await sent.edit_text(
                 (await tld(chat_id, "ZOMBIES_BAN")).format(count, m.chat.title)
