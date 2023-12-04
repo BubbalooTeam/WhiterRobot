@@ -1583,3 +1583,37 @@ async def locktypes(c: WhiterX, m: Message):
         perms += f"<i><b>{i}</b><i>\n"
 
     await m.reply_text(perms)
+
+@WhiterX.on_message(filters.command(["cleanup", "zombies"], prefixes=["/", "!"]))
+@disableable_dec("zombies")
+async def cleanup(c: megux, m: Message):
+    chat_id = m.chat.id
+    if m.chat.type == ChatType.PRIVATE:
+        await m.reply_text(await tld(chat_id, "ONLY_GROUPS"))
+        return
+    if not await check_bot_rights(chat_id, "can_restrict_members"):
+        await m.reply(await tld(chat_id, "NO_BAN_BOT"))
+        return 
+    if await check_rights(chat_id, m.from_user.id, "can_restrict_members"): 
+        count = 0
+        sent = await m.reply_text(await tld(chat_id, "COM_1"))
+        async for t in c.get_chat_members(chat_id=chat_id):
+            if t.user.is_deleted:
+                try:
+                    await c.ban_chat_member(chat_id, t.user.id)
+                    count += 1
+                except BadRequest:
+                    pass
+                except Forbidden as e:
+                    await m.reply_text(
+                        f"<b>Erro:</b> <code>{e}</code>"
+                    )
+                    return await c.send_err("<b>Error!!</b> {}".format(e))
+        if count:
+            await sent.edit_text(
+                (await tld(chat_id, "ZOMBIES_BAN")).format(count, m.chat.title)
+            )
+        else:
+            await sent.edit_text(await tld(chat_id, "NO_ZOMBIES"))
+    else:
+        await m.reply_text(await tld(chat_id, "NO_RIGHTS_ZOMBIES"))
