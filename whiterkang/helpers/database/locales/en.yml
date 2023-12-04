@@ -40,6 +40,7 @@ help-plugin-medias: "— Commands for Downloading and subsequently sending media
 
 COM_1: "Cleaning up..."
 COM_2: "<i>Looking for...</i>"
+COM_3: "Analyzing..."
 NO_CHANGEINFO_PERM: "You do not have sufficient administrative rights to change this group's information!"
 USER_NO_ADMIN: "You are not an administrator!"
 
@@ -499,3 +500,11 @@ GPS_BNT: "🌎 Open in Google Maps"
 
 #welcome
 WELCOME_LOGGER: "<b>{}</b>\n#WELCOME\n<b>User</b>: <i>{}</i>\n<b>User Id</b>: <code>{}</code>"
+
+#RBG
+NO_API_RBG: "Error!! There is no RemoveBg API-KEY"
+DOWNLOAD_IMAGE_RBG: "<i>Downloading Image...</i>"
+IMAGE_SAVED_RBG: "<i>Image saved in <b>{} seconds</b>!</i>"
+IMAGE_UPLOADING_RBG: "<i>Uploading image...</i>"
+ERROR_RGB: "<b>API-KEY error!!</b>"
+NO_REPLIED_RBG: "<i>Reply to a photo to remove the background!</i>"

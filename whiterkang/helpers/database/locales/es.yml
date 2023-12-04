@@ -41,6 +41,7 @@ help-plugin-medias: "— Comandos para descargar y posteriormente enviar medios 
 
 COM_1: "Limpiando..."
 COM_2: "<i>Buscando...</i>"
+COM_3: "Analizando..."
 NO_CHANGEINFO_PERM: "¡No tienes suficientes derechos administrativos para cambiar la información de este grupo!"
 USER_NO_ADMIN: "¡No eres administrador!"
 
@@ -498,3 +499,11 @@ GPS_BNT: "🌍 Abrir en Google Maps"
 
 #welcome
 WELCOME_LOGGER: "<b>{}</b>\n#WELCOME\n<b>Usuario</b>: <i>{}</i>\n<b>ID de usuario</b>: <code>{}</code>"
+
+#RBG
+NO_API_RBG: "¡Error! No hay ninguna CLAVE API RemoveBg"
+DOWNLOAD_IMAGE_RBG: "<i>Descargando imagen...</i>"
+IMAGE_SAVED_RBG: "<i>¡Imagen guardada en <b>{} segundos</b>!</i>"
+IMAGE_UPLOADING_RBG: "<i>Subiendo imagen...</i>"
+ERROR_RGB: "<b>¡¡Error de CLAVE API!!</b>"
+NO_REPLIED_RBG: "<i>¡Responder a una foto para eliminar el fondo!</i>"
