@@ -214,7 +214,7 @@ async def remove_background(c: WhiterX, m: Message):
         )
         end_t = datetime.now()
         m_s = (end_t - start_t).seconds
-        await msg.edit((await tld(chat_id, "IMAGE_SAVED_RBG").format(m_s)))
+        await msg.edit((await tld(chat_id, "IMAGE_SAVED_RBG")).format(m_s))
         # Cooking Image
         try:
             await msg.edit(await tld(chat_id, "IMAGE_UPLOADING_RBG"))
