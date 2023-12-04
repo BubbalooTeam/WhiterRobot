@@ -230,7 +230,7 @@ async def remove_background(c: WhiterX, m: Message):
             await msg.delete()
             os.remove(IMG_PATH)
         except Exception:
-            await m.reply(await tld(chat_id, "ERROR_RBG"))
+            await msg.edit(await tld(chat_id, "ERROR_RBG"))
             os.remove(IMG_PATH)
             return
     else:
