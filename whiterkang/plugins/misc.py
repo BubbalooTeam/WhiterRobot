@@ -38,7 +38,8 @@ headers = {
     "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 13; M2012K11AG Build/SQ1D.211205.017)"
 }
 
-url_thumb = "https://telegra.ph/file/abf3e0a8dd7ebd33f74e1.png"
+weather_url_thumb = "https://telegra.ph/file/abf3e0a8dd7ebd33f74e1.png"
+translator_url_thumb = "https://telegra.ph/file/83402d7a4ca7b186a4281.jpg"
 
 status_emojis = {
     0: "⛈",
@@ -91,14 +92,56 @@ status_emojis = {
     47: "🌩",
 }
 
+tr = Translator()
+
+# See https://cloud.google.com/translate/docs/languages
+# fmt: off
+LANGUAGES = [
+    "af", "sq", "am", "ar", "hy",
+    "az", "eu", "be", "bn", "bs",
+    "bg", "ca", "ceb", "zh", "co",
+    "hr", "cs", "da", "nl", "en",
+    "eo", "et", "fi", "fr", "fy",
+    "gl", "ka", "de", "el", "gu",
+    "ht", "ha", "haw", "he", "iw",
+    "hi", "hmn", "hu", "is", "ig",
+    "id", "ga", "it", "ja", "jv",
+    "kn", "kk", "km", "rw", "ko",
+    "ku", "ky", "lo", "la", "lv",
+    "lt", "lb", "mk", "mg", "ms",
+    "ml", "mt", "mi", "mr", "mn",
+    "my", "ne", "no", "ny", "or",
+    "ps", "fa", "pl", "pt", "pa",
+    "ro", "ru", "sm", "gd", "sr",
+    "st", "sn", "sd", "si", "sk",
+    "sl", "so", "es", "su", "sw",
+    "sv", "tl", "tg", "ta", "tt",
+    "te", "th", "tr", "tk", "uk",
+    "ur", "ug", "uz", "vi", "cy",
+    "xh", "yi", "yo", "zu",
+]
+# fmt: on
+
+async def get_tr_lang(m, text):
+    chat_id = m.chat.id if isinstance(m, Message) else m.from_user.id
+    if len(text.split()) > 0:
+        lang = text.split()[0]
+        if lang.split("-")[0] not in LANGUAGES:
+            lang = await tld(chat_id, "language")
+        if len(lang.split("-")) > 1 and lang.split("-")[1] not in LANGUAGES:
+            lang = await tld(chat_id, "language")
+    else:
+        lang = await tld(chat_id, "language")
+    return lang
 
 def get_status_emoji(status_code: int) -> str:
     return status_emojis.get(status_code, "n/a")
 
 
 @WhiterX.on_message(filters.command(["cota"], Config.TRIGGER))
-async def cotas_money(_, message: Message):
-    obting_info = await message.reply(f"<i>Obtendo informações sobre as moedas...</i>")
+async def cotas_money(c: WhiterX, m: Message):
+    chat_id = m.chat.id
+    obting_info = await m.reply(await tld(chat_id, "COTA_PROGRESSING"))
 
     req = requests.get("https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,GBP-BRL,JPY-BRL,BTC-BRL,ETH-BRL,XRP-BRL,DOGE-BRL,ARS-BRL,RUB-BRL")
 
@@ -128,9 +171,9 @@ async def cotas_money(_, message: Message):
 
     await obting_info.delete()
 
-    result = "<b>Cotação das moedas:</b>\n\n💵 <b>Dólar:</b> R$ <code>{}</code>\n🗓 <b>Data:</b>  <code>{}</code>\n📊 <b>Variação:</b> <code>{}</code>\n\n💵 <b>Euro:</b> R$ <code>{}</code>\n🗓 <b>Data:</b>  <code>{}</code>\n📊 <b>Variação:</b> <code>{}</code>\n\n💵 <b>BTC:</b> R$ <code>{}</code>\n🗓 <b>Data:</b>  <code>{}</code>\n📊 <b>Variação:</b> <code>{}</code>\n\n💵 <b>DOGE:</b> R$ <code>{}</code>\n🗓 <b>Data:</b> <code>{}</code>\n📊 <b>Variação:</b> <code>{}</code>\n\n💵 <b>Iene:</b> R$ <code>{}</code>\n🗓 <b>Data:</b> <code>{}</code>\n📊 <b>Variação:</b> <code>{}</code>\n\n💵 <b>Peso Argentino:</b> R$ <code>{}</code>\n🗓 <b>Data:</b> <code>{}</code>\n📊 <b>Variação:</b> <code>{}</code>\n\n💵 <b>Ruplo Russo:</b> R$ <code>{}</code>\n🗓 <b>Data:</b> <code>{}</code>\n📊 <b>Variação:</b> <code>{}</code>"
+    result = (await tld(chat_id, "COTED"))
 
-    await message.reply_photo(photo="https://telegra.ph/file/d60e879db1cdba793a98c.jpg",
+    await m.reply_photo(photo="https://telegra.ph/file/d60e879db1cdba793a98c.jpg",
     caption=result.format(cotacao_dolar[:4], dat_dolar, var_dolar, cotacao_euro[:4], dat_euro, var_euro, cotacao_btc[:3], dat_btc, var_btc, cotacao_doge[:4], dat_doge, var_doge, cotacao_iene[:4], dat_iene, var_iene, cotacao_ars[:4], dat_ars, var_ars, cotacao_rub[:4], dat_rub, var_rub))
 
 @WhiterX.on_inline_query(group=group_apps)
@@ -229,14 +272,14 @@ async def remove_background(c: WhiterX, m: Message):
             )
             await msg.delete()
             os.remove(IMG_PATH)
-        except Exception:
-            await msg.edit(await tld(chat_id, "ERROR_RBG"))
+        except Exception as e:
+            await msg.edit(await tld(chat_id, "ERROR_RBG") + "\n\n{e}")
             os.remove(IMG_PATH)
             return
     else:
         await m.reply(await tld(chat_id, "NO_REPLIED_RBG"))
 
-@WhiterX.on_message(filters.command(["weather", "clima"], prefixes=["/", "!"]))
+@WhiterX.on_message(filters.command(["weather", "clima"], Config.TRIGGER))
 @WhiterX.on_inline_query(filters.regex(r"^(clima|weather)"))
 async def weather(c: WhiterX, m: Union[InlineQuery, Message]):
     text = m.text if isinstance(m, Message) else m.query
@@ -249,7 +292,7 @@ async def weather(c: WhiterX, m: Union[InlineQuery, Message]):
                 [
                     InlineQueryResultArticle(
                         title=await tld(chat_id, "WEATHER_INLINE_NO_ARGS"),
-                        thumb_url=url_thumb,
+                        thumb_url=weather_url_thumb,
                         input_message_content=InputTextMessageContent(
                             message_text=await tld(chat_id, "WEATHER_NO_ARGS"),
                         ),
@@ -279,7 +322,7 @@ async def weather(c: WhiterX, m: Union[InlineQuery, Message]):
                 [
                     InlineQueryResultArticle(
                         title=await tld(chat_id, "WEATHER_LOCATION_NOT_FOUND"),
-                        thumb_url=url_thumb,
+                        thumb_url=weather_url_thumb,
                         input_message_content=InputTextMessageContent(
                             message_text=await tld(chat_id, "WEATHER_LOCATION_NOT_FOUND"),
                         ),
@@ -322,7 +365,7 @@ async def weather(c: WhiterX, m: Union[InlineQuery, Message]):
                 [
                     InlineQueryResultArticle(
                         title=loc_json["location"]["address"][0],
-                        thumb_url=url_thumb,
+                        thumb_url=weather_url_thumb,
                         description=(await tld(chat_id, "WEATHER_INLINE_DETAILS")).format(
                             overview=f"{get_status_emoji(obs_dict['iconCode'])} {obs_dict['wxPhraseLong']}",
                             temperature=obs_dict["temperature"],
@@ -339,5 +382,73 @@ async def weather(c: WhiterX, m: Union[InlineQuery, Message]):
             )
     except BadRequest:
         return
+    
 
-inline_handler.add_cmd("weather <location>", "Get weather information for the given location or city.", url_thumb, aliases=["weather"])
+@WhiterX.on_message(filters.command("tr", Config.TRIGGER))
+async def translate(c: WhiterX, m: Message):
+    chat_id = m.chat.id
+    text = m.text[4:]
+    lang = await get_tr_lang(m, text)
+
+    text = text.replace(lang, "", 1).strip() if text.startswith(lang) else text
+
+    if not text and m.reply_to_message:
+        text = m.reply_to_message.text or m.reply_to_message.caption
+
+    if not text:
+        return await m.reply_text(await tld(chat_id, "NO_TEXT_TRANSLATE"))
+        
+
+    sent = await m.reply_text(await tld(chat_id, "TRANSLATING"))
+    try:
+        langs = {}
+
+        if len(lang.split("-")) > 1:
+            langs["sourcelang"] = lang.split("-")[0]
+            langs["targetlang"] = lang.split("-")[1]
+        else:
+            langs["targetlang"] = lang
+
+        trres = await tr.translate(text, **langs)
+        text = trres.text
+
+        res = html.escape(text)
+        await sent.edit_text("<b>Idioma:</b> {from_lang} -> {to_lang}\n<b>Tradução:</b> <code>{translation}</code>".format(
+                trres.lang, langs["targetlang"], res))
+    except BadRequest:
+        return await sent.delete()
+    except Exception as e:
+        await c.send_err(e)
+
+
+@WhiterX.on_inline_query(filters.regex(r"^tr|translate"))
+async def tr_inline(c: WhiterX, q: InlineQuery):
+    try:
+        uid = q.from_user.id
+        to_tr = q.query.split(None, 2)[2]
+        source_language = await tr.detect(q.query.split(None, 2)[2])
+        to_language = q.query.lower().split()[1]
+        translation = await tr(
+            to_tr, sourcelang=source_language, targetlang=to_language
+        )
+        await q.answer(
+            [
+                InlineQueryResultArticle(
+                    title=(await tld(uid, "LANG_TRANSLATE_INLINE")).format(
+                        source_language, to_language
+                    ),
+                    thumb_url=translator_url_thumb,
+                    description=f"{translation.text}",
+                    input_message_content=InputTextMessageContent(
+                        f"{translation.text}"
+                    ),
+                )
+            ]
+        )
+    except IndexError:
+        return
+
+inline_handler.add_cmd("weather <location>", "Get weather information for the given location or city.", weather_url_thumb, aliases=["weather"])
+inline_handler.add_cmd("tr <lang> <text>", "Translates text into the specified language.", translator_url_thumb, aliases=["translate", "tr"])
+
+__help__ = True

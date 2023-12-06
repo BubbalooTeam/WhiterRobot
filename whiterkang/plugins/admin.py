@@ -7,7 +7,7 @@ import os.path
 
 
 from hydrogram import filters
-from hydrogram.errors import PeerIdInvalid, UserIdInvalid, UsernameInvalid, BadRequest
+from hydrogram.errors import PeerIdInvalid, UserIdInvalid, UsernameInvalid, BadRequest, Forbidden 
 from hydrogram.errors.exceptions.bad_request_400 import ChatNotModified
 from hydrogram.types import ChatPermissions, Message, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 from hydrogram.enums import ChatMemberStatus, ChatMembersFilter, ChatType
@@ -34,6 +34,7 @@ from whiterkang.helpers import (
     add_user,
     find_user,
     add_gp,
+    find_gp,
     input_str,
     DISABLABLE_CMDS,
     group_locks,
@@ -1347,17 +1348,20 @@ async def clear_notes(c: WhiterX, m: Message):
 )
 async def serve_filter(c: WhiterX, m: Message):
     chat_id = m.chat.id
-    gp_title = m.chat.title
     
     if not m.chat.type == ChatType.PRIVATE:
         #Check if is GBANNED
-        if await check_antispam(m.chat.id):
-            await check_ban(m, m.chat.id, m.from_user.id)
+        if await check_antispam(chat_id):
+            await check_ban(m, chat_id, m.from_user.id)
+        if not await find_gp(chat_id):
+            await add_gp(m)
+        if not find_user(m.from_user.id):
+            await add_user(m.from_user.id)
         
     text = m.text
     target_msg = m.reply_to_message or m
 
-    all_filters = DB_FILTERS.find({"chat_id": m.chat.id})
+    all_filters = DB_FILTERS.find({"chat_id": chat_id})
     async for filter_s in all_filters:
         keyword = filter_s["name"]
         pattern = r"( |^|[^\w])" + re.escape(keyword) + r"( |$|[^\w])"
