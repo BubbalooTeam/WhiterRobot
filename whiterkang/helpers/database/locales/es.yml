@@ -46,9 +46,16 @@ help-plugin-misc: "— Varios comandos para entretener el chat.\n\n• /cota —
 COM_1: "Limpiando..."
 COM_2: "<i>Buscando...</i>"
 COM_3: "Analizando..."
-NO_CHANGEINFO_PERM: "¡No tienes suficientes derechos administrativos para cambiar la información de este grupo!"
-USER_NO_ADMIN: "¡No eres administrador!"
 
+#Permisos
+NO_CHANGEINFO_PERM: "¡No tienes suficientes derechos administrativos para cambiar la información de este grupo!"
+NO_DELETEMSGS_PERM: "¡No tienes suficientes derechos administrativos para eliminar mensajes!"
+NO_RESTRICT_PERM: "¡No tienes suficientes derechos administrativos para prohibir/desbancar usuarios!"
+NO_INVITEUSER_PERM: "¡No tienes suficientes derechos administrativos para invitar usuarios a través de un enlace!"
+NO_PINMSGS_PERM: "¡No tienes suficientes derechos administrativos para fijar/desanclar mensajes!"
+NO_MANAGEVIDEO_PERM: "¡No tienes suficientes derechos administrativos para administrar el Video Chat!"
+NO_PROMOTE_MEMBERS_PERM: "¡No tienes suficientes derechos administrativos para ascender/desgradar a alguien!"
+USER_NO_ADMIN: "¡No eres administrador!"
 
 #stickers 
  
@@ -100,7 +107,6 @@ AFK_LOOGER: "¡{} ya no está AFK!"
   
 #pin
 NO_PIN_BOT: "¡No puedo anclar mensajes aquí! Asegúrate de que soy administrador y puedo anclar mensajes."
-NO_PIN_USER: "¡No tiene suficientes derechos administrativos para anclar/desanclar mensajes!"
 PIN_NO_REPLY: "<i>Necesitas responder a un mensaje para fijarlo.</i>"
 PIN_SUCCESS: '<i>Fijéi <a href="{}">este mensaje</a>.</i>'
 UNPIN_ALL_SUCCESS: "<i>He desanclado todos los mensajes de chat.</i>"
@@ -130,7 +136,6 @@ BAN_MY_SELF: "No me desterraré, ¿estás loco?"
 BAN_SUCCESS: "El usuario {} fue prohibido por {} en el chat: <b>{}</b>\n<b>Motivo</b>: <code>{}</code>"
 BAN_LOADING: "<code>Prohibir usuario...</code>"
 NO_BAN_BOT: "¡No puedo restringir personas aquí! Asegúrate de que soy un administrador y puedo agregar nuevos administradores."
-NO_BAN_USER: "¡No tiene suficientes derechos administrativos para prohibir/desbanear usuarios!"
 BAN_LOGGER: "<b>{}:</b>\n#BAN\n<b>Administrador:</b> {}\n<b>Usuario:</b> {} (<code>{}</code>)\n<b>Motivo:</b> <code>{}</code>"
 TBAN_LOGGER: "<b>{}:</b>\n#TEMP_BANNED\n<b>Administrador:</b> {}\n<b>Usuario:</b> {} (<code>{}</code>)\n<b>Hora:</b> {}\n<b>Motivo:</b> <code>{}</code>"
 TBAN_SUCCESS: "{} fue suspendido temporalmente por <b>{}</b> en <b>{}</b>\n<b>Razón</b>: <code>{}</code>"
@@ -470,7 +475,6 @@ UPLOAD_DOWNLOAD_FINISHED: "<i>Descarga finalizada, Enviando...</i>"
 NOTES_SAVED: "🗒 <b>La nota</b> <code>{}</code> <b>¡se ha guardado correctamente!</b>"
 NOTES_NO_REPLY: "Responde algo para guardar."
 NOTES_NOT_NAME: "Necesitas escribir el nombre de la nota."
-NOTES_NO_PERM: "No tiene suficientes permisos para cambiar las notas del grupo."
 NOTES_LIST: "<b>Lista de notas para el chat {}:</b>\n\n"
 NOTES_NOT_FOUND: "Notas no encontradas para este chat"
 NOTES_SUB_LIST: "\n\n<i>Puede obtener estas notas escribiendo <code>/get notename</code>, o</i> <code>#notename</code>"

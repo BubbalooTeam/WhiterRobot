@@ -45,7 +45,15 @@ help-plugin-misc: "— Various commands to entertain the chat.\n\n• /cota — 
 COM_1: "Cleaning up..."
 COM_2: "<i>Looking for...</i>"
 COM_3: "Analyzing..."
+
+#Permissions
 NO_CHANGEINFO_PERM: "You do not have sufficient administrative rights to change this group's information!"
+NO_DELETEMSGS_PERM: "You do not have sufficient administrative rights to delete messages!"
+NO_RESTRICT_PERM: "You do not have sufficient administrative rights to ban/unban users!"
+NO_INVITEUSER_PERM: "You do not have sufficient administrative rights to invite users via Link!"
+NO_PINMSGS_PERM: "You do not have sufficient administrative rights to pin/unpin messages!"
+NO_MANAGEVIDEO_PERM: "You do not have sufficient administrative rights to manage Video Chat!"
+NO_PROMOTE_MEMBERS_PERM: "You do not have sufficient administrative rights to promote/demote someone!"
 USER_NO_ADMIN: "You are not an administrator!"
 
 
@@ -97,7 +105,6 @@ AFK_LOOGER: "{} is no longer AFK!"
 
 #pin
 NO_PIN_BOT: "Can't pin messages here!  Make sure I'm an admin and can pin messages."
-NO_PIN_USER: "You don't have sufficient administrative rights to pin/unpin messages!"
 PIN_NO_REPLY: "<i>You need to reply to a message to pin it.</i>"
 PIN_SUCCESS: '<i>I pinned <a href="{}">this message</a>.</i>'
 UNPIN_ALL_SUCCESS: "<i>I have unpinned all chat messages.</i>"
@@ -127,7 +134,6 @@ BAN_MY_SELF: "I won't banish myself, are you crazy?"
 BAN_SUCCESS: "User {} was banned for {} in chat: <b>{}</b>\n<b>Reason</b>: <code>{}</code>"
 BAN_LOADING: "<code>Baning user...</code>"
 NO_BAN_BOT: "I can't restrict people here!  Make sure I'm an admin and I can add new admins."
-NO_BAN_USER: "You don't have sufficient administrative rights to ban/unban users!"
 BAN_LOGGER: "<b>{}:</b>\n#BAN\n<b>Administrator:</b> {}\n<b>User:</b> {} (<code>{}</code>)\n<b>Reason:</b> <code>{}</code>"
 TBAN_LOGGER: "<b>{}:</b>\n#TEMP_BANNED\n<b>Admin:</b> {}\n<b>User:</b> {} (<code>{}</code>)\n<b>Time:</b> {}\n<b>Reason:</b> <code>{}</code>"
 TBAN_SUCCESS: "{} was temporarily banned for <b>{}</b> in <b>{}</b>\n<b>Reason</b>: <code>{}</code>"
@@ -219,8 +225,6 @@ LOGS_DEFINED_MESSAGE: 'The registration channel has been successfully establishe
 ZOMBIES_LOGGER: "<b>{}</b>:\n#ZOMBIES\n<b>Administrator:</b> {}\n<b>Number of accounts deleted:</b> {}"
 ZOMBIES_BAN: "I have removed all <b>{}</b> accounts deleted from the <b>{}</b> group!"
 NO_ZOMBIES: "There are no deleted accounts in the group!"
-NO_RIGHTS_ZOMBIES: "Balabachea! You do not have sufficient administrative rights to ban/unban users!"
-
 
 #android 
 MAGISK_STRING: "<b>Latest magisk releases</b>\n\n"
@@ -469,7 +473,6 @@ UPLOAD_DOWNLOAD_FINISHED: "<i>Download Finished, Uploading...</i>"
 NOTES_SAVED: "🗒 <b>The note</b> <code>{}</code> <b>has been saved successfully!</b>"
 NOTES_NO_REPLY: "Reply something to save."
 NOTES_NOT_NAME: "You need to write the note name."
-NOTES_NO_PERM: "You do not have sufficient permissions to change group notes."
 NOTES_LIST: "<b>List of notes for chat {}:</b>\n\n"
 NOTES_NOT_FOUND: "Notes found for this chat."
 NOTES_SUB_LIST: "\n\n<i>You can get these notes by typing <code>/get notename</code>, or</i> <code>#notename</code>"

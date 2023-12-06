@@ -45,7 +45,15 @@ help-plugin-misc: "— Diversos comandos para entreter o chat.\n\n• /cota — 
 COM_1: "Limpando..."
 COM_2: "<i>Procurando...</i>"
 COM_3: "Analisando..."
+
+#Permissions
 NO_CHANGEINFO_PERM: "Você não tem direitos administrativos suficientes para alterar as informações deste grupo!"
+NO_DELETEMSGS_PERM: "Você não tem direitos administrativos suficientes para apagar mensagens!"
+NO_RESTRICT_PERM: "Você não tem direitos administrativos suficientes para banir/desbanir usuários!"
+NO_INVITEUSER_PERM: "Você não tem direitos administrativos suficientes para convidar usuários via Link!"
+NO_PINMSGS_PERM: "Você não tem direitos administrativos suficientes para fazer fixar/desafixar mensagens!"
+NO_MANAGEVIDEO_PERM: "Você não tem direitos administrativos suficientes para gerenciar Chat de Vídeos!"
+NO_PROMOTE_MEMBERS_PERM: "Você não tem direitos administrativos suficientes para promover/rebaixar alguém!"
 USER_NO_ADMIN: "Você não é um administrador!"
 
 #stickers 
@@ -97,7 +105,6 @@ AFK_LOOGER: "{} não está mais AFK!"
 
 #pin
 NO_PIN_BOT: "Não consigo fixar mensagens aqui! Verifique se sou administrador e posso fixar mensagens."
-NO_PIN_USER: "Você não tem direitos administrativos suficientes para fazer fixar/desafixar mensagens!"
 PIN_NO_REPLY: "<i>Você precisa responder uma mensagem para fixa-la.</i>"
 PIN_SUCCESS: '<i>Eu fixei <a href="{}">esta mensagem</a>.</i>'
 UNPIN_ALL_SUCCESS: "<i>Eu desfixei todas mensagens do chat.</i>"
@@ -126,7 +133,6 @@ BAN_MY_SELF: "Eu não vou me banir, você está louco?"
 BAN_SUCCESS: "Usuário {} foi banido por {} no chat: <b>{}</b>\n<b>Motivo</b>: <code>{}</code>"
 BAN_LOADING: "<code>Banindo usuário...</code>"
 NO_BAN_BOT: "Não posso restringir as pessoas aqui! Certifique-se de que sou administrador e de que posso adicionar novos administradores."
-NO_BAN_USER: "Você não tem direitos administrativos suficientes para banir/desbanir usuários!"
 BAN_LOGGER: "<b>{}:</b>\n#BAN\n<b>Administrador:</b> {}\n<b>Usuário:</b> {} (<code>{}</code>)\n<b>Motivo:</b> <code>{}</code>" 
 TBAN_LOGGER: "<b>{}:</b>\n#TEMP_BANNED\n<b>Admin:</b> {}\n<b>Usuario:</b> {} (<code>{}</code>)\n<b>Tempo:</b> {}\n<b>Motivo:</b> <code>{}</code>"
 TBAN_SUCCESS: "{} foi banido(a) temporariamente por <b>{}</b> em <b>{}</b>\n<b>Motivo</b>: <code>{}</code>"
@@ -222,7 +228,6 @@ LOGS_DEFINED_MESSAGE: 'O canal de registro foi estabelecido com sucesso!'
 ZOMBIES_LOGGER: "<b>{}</b>:\n#ZOMBIES\n<b>Administrador:</b> {}\n<b>Número de contas apagadas:</b> {}"
 ZOMBIES_BAN: "Eu removi todas as <b>{}</b> contas excluídas do grupo <b>{}</b>!"
 NO_ZOMBIES: "Não há contas excluídas no grupo!"
-NO_RIGHTS_ZOMBIES: "Balabacheia! Você não tem direitos administrativos suficientes para banir/desbanir usuários!"
 
 
 #android
@@ -471,7 +476,6 @@ UPLOAD_DOWNLOAD_FINISHED: "<i>Download concluído, Enviando...</i>"
 NOTES_SAVED: "🗒 <b>A nota</b> <code>{}</code> <b>foi salva com sucesso!</b>"
 NOTES_NO_REPLY: "Dê reply em alguma coisa para salvar."
 NOTES_NOT_NAME: "Você precisa escrever o nome da nota."
-NOTES_NO_PERM: "Você não tem permissões suficientes para alterar as notas do grupo."
 NOTES_LIST: "<b>Lista das notas para o chat {}:</b>\n\n"
 NOTES_NOT_FOUND: "Notas não encontradas para esse chat."
 NOTES_SUB_LIST: "\n\n<i>Você pode obter essas notas digitando <code>/get nomedanota</code>, ou</i> <code>#nomedanota</code>"
