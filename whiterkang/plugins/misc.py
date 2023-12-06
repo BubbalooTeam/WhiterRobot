@@ -413,7 +413,7 @@ async def translate(c: WhiterX, m: Message):
         text = trres.text
 
         res = html.escape(text)
-        await sent.edit_text("<b>Idioma:</b> {from_lang} -> {to_lang}\n<b>Tradução:</b> <code>{translation}</code>".format(
+        await sent.edit_text((await tld(chat_id, "TRANSLATED")).format(
                 trres.lang, langs["targetlang"], res))
     except BadRequest:
         return await sent.delete()
