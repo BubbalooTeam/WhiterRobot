@@ -12,7 +12,7 @@ A modular Telegram Bot made with Pyrogram programming.
 
 Requirements
 ------------
-- Python 3.7+
+- Python 3.9+
 - An Ubuntu operating system (Windows not supported)
 
 
