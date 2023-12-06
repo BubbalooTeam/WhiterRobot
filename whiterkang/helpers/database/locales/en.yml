@@ -38,6 +38,10 @@ help-plugin-stickers: "— Commands dedicated to sticker information and plagiar
 help-name-medias: "Medias"
 help-plugin-medias: "— Commands for Downloading and subsequently sending media from <b>YouTube, Instagram, TikTok, Twitter, Thereads</b>. and among others.\n\n• /yt [title] — Searches for the first 20 videos in the YouTube.\n• /ytdl [title or url] — Download media from YouTube.\n• /dl | /mdl | /sdl [url] — Download media from Instagram, TikTok, Twitter, Thereads."
 
+# Misc help
+help-name-misc: "Misc"
+help-plugin-misc: "— Various commands to entertain the chat.\n\n• /quota — Prices currencies.\n• /climate [country/state/city/neighborhood] — Gets information about the climate of the specified locale.\n• /tr [language] [text(replied or after language)] — Translates text to the specified language.\n• /rbg [image(replied)] — Removes the background from an image."
+
 COM_1: "Cleaning up..."
 COM_2: "<i>Looking for...</i>"
 COM_3: "Analyzing..."
@@ -508,3 +512,13 @@ IMAGE_SAVED_RBG: "<i>Image saved in <b>{} seconds</b>!</i>"
 IMAGE_UPLOADING_RBG: "<i>Uploading image...</i>"
 ERROR_RGB: "<b>API-KEY error!!</b>"
 NO_REPLIED_RBG: "<i>Reply to a photo to remove the background!</i>"
+
+#translate
+NO_TEXT_TRANSLATE: "<code>Will I translate the wind??</b>"
+TRANSLATING: "<i>Translating...</i>"
+TRANSLATED: "<b>Language:</b> {} -> {}\n<b>Translation:</b> <code>{}</code>"
+LANG_TRANSLATE_INLINE: "Translate from {} to {}"
+
+#Cota
+COTA_PROGRESSING: "<i>Getting information about coins...</i>"
+COTED: "<b>Currency quotes:</b>\n\n💵 <b>Dollar:</b> R$ <code>{}</code>\n🗓 <b>Date:</b > <code>{}</code>\n📊 <b>Variation:</b> <code>{}</code>\n\n💵 <b>Euro:</b> R$ <code> {}</code>\n🗓 <b>Date:</b> <code>{}</code>\n📊 <b>Variation:</b> <code>{}</code>\n \n💵 <b>BTC:</b> R$ <code>{}</code>\n🗓 <b>Date:</b> <code>{}</code>\n📊 <b> Variation:</b> <code>{}</code>\n\n💵 <b>DOGE:</b> R$ <code>{}</code>\n🗓 <b>Date:</ b> <code>{}</code>\n📊 <b>Variation:</b> <code>{}</code>\n\n💵 <b>Yen:</b> R$ <code >{}</code>\n🗓 <b>Date:</b> <code>{}</code>\n📊 <b>Variation:</b> <code>{}</code>\ n\n💵 <b>Argentine Peso:</b> R$ <code>{}</code>\n🗓 <b>Date:</b> <code>{}</code>\n📊 < b>Variation:</b> <code>{}</code>\n\n💵 <b>Russian Ruple:</b> R$ <code>{}</code>\n🗓 <b>Date :</b> <code>{}</code>\n📊 <b>Variation:</b> <code>{}</code>"
