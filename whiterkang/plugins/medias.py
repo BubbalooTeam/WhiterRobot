@@ -23,7 +23,7 @@ from hydrogram.enums import ChatType, ChatAction
 
 
 from whiterkang import WhiterX, Config 
-from whiterkang.helpers import humanbytes, tld, csdl, cisdl, tsdl, tisdl, DownloadMedia, extract_info, http, is_admin, add_user, find_user, search_yt
+from whiterkang.helpers import humanbytes, tld, csdl, cisdl, tsdl, tisdl, DownloadMedia, extract_info, http, is_admin, add_user, find_user, search_yt, require_admin
 
 
 YOUTUBE_REGEX = re.compile(
