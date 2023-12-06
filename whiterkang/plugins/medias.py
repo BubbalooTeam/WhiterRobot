@@ -23,7 +23,7 @@ from hydrogram.enums import ChatType, ChatAction
 
 
 from whiterkang import WhiterX, Config 
-from whiterkang.helpers import humanbytes, tld, csdl, cisdl, tsdl, tisdl, DownloadMedia, extract_info, http, is_admin, check_rights, add_user, find_user, search_yt
+from whiterkang.helpers import humanbytes, tld, csdl, cisdl, tsdl, tisdl, DownloadMedia, extract_info, http, is_admin, add_user, find_user, search_yt
 
 
 YOUTUBE_REGEX = re.compile(
@@ -297,13 +297,9 @@ async def sdl(c: WhiterX, message: Message):
 
 
 @WhiterX.on_callback_query(filters.regex(r"^media_config"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def media_config(c: WhiterX, callback: CallbackQuery):
     chat = callback.message.chat
-    if chat.type != ChatType.PRIVATE:
-        if not await check_rights(chat.id, callback.from_user.id, "can_change_info"):
-            return await callback.answer(
-                await tld(chat.id, "NO_CHANGEINFO_PERM"), show_alert=True, cache_time=60
-            )
 
     state = ["☑️", "✅"]
     
@@ -339,19 +335,10 @@ async def media_config(c: WhiterX, callback: CallbackQuery):
 
 @WhiterX.on_callback_query(filters.regex(r"config"))
 @WhiterX.on_message(filters.command("config"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def config(c: WhiterX, union: Message | CallbackQuery):
     reply = union.edit_message_text if isinstance(union, CallbackQuery) else union.reply_text
     chat = union.message.chat if isinstance(union, CallbackQuery) else union.chat
-
-    if chat.type != ChatType.PRIVATE:
-        if not await check_rights(chat.id, union.from_user.id, "can_change_info"):
-            if isinstance(union, CallbackQuery):
-                await union.answer(await tld(chat.id, "NO_CHANGEINFO_PERM"), show_alert=True, cache_time=60)
-            else:
-                message = await reply(await tld(chat.id, "NO_CHANGEINFO_PERM"))
-                await asyncio.sleep(5.0)
-                await message.delete()
-            return
 
     keyboard = [
         [
