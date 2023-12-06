@@ -41,7 +41,7 @@ help-plugin-medias: "— Comandos para descargar y posteriormente enviar medios 
 
 #Misc help
 help-name-misc: "Varios"
-help-plugin-misc: "— Varios comandos para entretener el chat.\n\n• /quota — Monedas de precios.\n• /climate [país/estado/ciudad/vecindario] — Obtiene información sobre el clima de la localidad especificada .\n• /tr [idioma] [texto (marcado o después del idioma)] — Traduce el texto al idioma especificado.\n• /rbg [imagen (marcado)] — Elimina el fondo de una imagen."
+help-plugin-misc: "— Varios comandos para entretener el chat.\n\n• /cota — Monedas de precios.\n• /clima [país/estado/ciudad/vecindario] — Obtiene información sobre el clima de la localidad especificada .\n• /tr [idioma] [texto (marcado o después del idioma)] — Traduce el texto al idioma especificado.\n• /rbg [imagen (marcado)] — Elimina el fondo de una imagen."
 
 COM_1: "Limpiando..."
 COM_2: "<i>Buscando...</i>"

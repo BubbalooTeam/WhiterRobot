@@ -40,7 +40,7 @@ help-plugin-medias: "— Commands for Downloading and subsequently sending media
 
 # Misc help
 help-name-misc: "Misc"
-help-plugin-misc: "— Various commands to entertain the chat.\n\n• /quota — Prices currencies.\n• /climate [country/state/city/neighborhood] — Gets information about the climate of the specified locale.\n• /tr [language] [text(replied or after language)] — Translates text to the specified language.\n• /rbg [image(replied)] — Removes the background from an image."
+help-plugin-misc: "— Various commands to entertain the chat.\n\n• /cota — Prices currencies.\n• /weather [country/state/city/neighborhood] — Gets information about the climate of the specified locale.\n• /tr [language] [text(replied or after language)] — Translates text to the specified language.\n• /rbg [image(replied)] — Removes the background from an image."
 
 COM_1: "Cleaning up..."
 COM_2: "<i>Looking for...</i>"
