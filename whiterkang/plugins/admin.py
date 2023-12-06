@@ -644,7 +644,7 @@ async def enable_welcome_message(c: WhiterX, m: Message):
     
     
 @WhiterX.on_message(filters.command(["welcome off", "welcome false"], Config.TRIGGER) & filters.group)
-@require_admin(ChatPrivileges("can_change_info"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def disable_welcome_message(c: WhiterX, m: Message):
     if not await find_user(m.from_user.id):
         await add_user(m.from_user.id)
