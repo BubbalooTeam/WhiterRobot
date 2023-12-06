@@ -6,13 +6,13 @@ from .database.core import add_user, find_user, add_gp, del_gp, find_gp
 from .database.smartphones import add_device, find_device, del_device
 from .pexels import PexelsImagesAPI
 from .gsmarena import search_device, get_device
-from .decorators import disableable_dec, inline_handler, input_str, DISABLABLE_CMDS
+from .decorators import disableable_dec, inline_handler, input_str, DISABLABLE_CMDS, require_admin
 from .tools import (
     check_bot_rights,
-    check_rights,
+    check_perms,
     humanbytes,
-    is_admin,
     is_dev,
+    is_admin,
     is_self,
     time_formatter,
     http,

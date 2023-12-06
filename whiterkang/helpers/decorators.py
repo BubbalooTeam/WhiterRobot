@@ -9,13 +9,17 @@
 
 import logging
 
-from typing import List, Optional
+from typing import List, Optional, Union
 
 from hydrogram import filters
-from hydrogram.types import Message
+from hydrogram.types import Message, CallbackQuery, ChatPrivileges
+from hydrogram.enums import ChatMemberStatus, ChatType
+
+from functools import partial, wraps
+
 
 from whiterkang import WhiterX
-from whiterkang.helpers import is_disabled
+from whiterkang.helpers import is_disabled, check_perms
 
 DISABLABLE_CMDS: List[str] = []
 
@@ -75,5 +79,60 @@ class InlineHandler:
                 or any(query in alias for alias in cmd["aliases"])
             )
         ]
+    
+
+def require_admin(
+    permissions: Optional[ChatPrivileges] = None,
+    allow_in_private: bool = False,
+    complain_missing_perms: bool = True,
+):
+    """Decorator that checks if the user is an admin in the chat.
+
+    Parameters
+    ----------
+    permissions: ChatPrivileges
+        The permissions to check for.
+    allow_in_private: bool
+        Whether to allow the command in private chats or not.
+    complain_missing_perms: bool
+        Whether to complain about missing permissions or not, otherwise the
+        function will not be called and the user will not be notified.
+
+    Returns
+    -------
+    Callable
+        The decorated function.
+    """
+
+    def decorator(func):
+        @wraps(func)
+        async def wrapper(client: WhiterX, m: Union[CallbackQuery, Message], *args, **kwargs):
+            if isinstance(m, CallbackQuery):
+                sender = partial(m.answer, show_alert=True)
+                msg = m.message
+            elif isinstance(m, Message):
+                sender = m.reply_text
+                msg = m
+            else:
+                raise NotImplementedError(
+                    f"require_admin can't process updates with the type '{m.__name__}' yet."
+                )
+
+            # We don't actually check private and channel chats.
+            if msg.chat.type == ChatType.PRIVATE:
+                if allow_in_private:
+                    return await func(client, m, *args, *kwargs)
+                return await sender("<i>Isso é apenas para grupos!!</i>")
+            if msg.chat.type == ChatType.CHANNEL:
+                return await func(client, m, *args, *kwargs)
+            has_perms = await check_perms(m, permissions, complain_missing_perms)
+            if has_perms:
+                return await func(client, m, *args, *kwargs)
+            return None
+
+        return wrapper
+
+    return decorator
+
 
 inline_handler = InlineHandler()

@@ -13,7 +13,7 @@ import logging
 
 from datetime import datetime, timedelta
 from httpx import HTTPError
-from typing import Tuple, Callable
+from typing import Tuple, Callable, Union, Optional
 from functools import partial, wraps
 from math import floor
 from PIL import Image, ImageOps
@@ -21,11 +21,11 @@ from io import BytesIO
 
 
 from hydrogram import emoji
-from hydrogram.enums import ChatMemberStatus 
-from hydrogram.types import Message
-from hydrogram.enums import ChatType
+from hydrogram.enums import ChatMemberStatus, ChatType, MessageEntityType
+from hydrogram.types import Message, User, CallbackQuery, ChatPrivileges
 
 from whiterkang import WhiterX, Config, db
+from . import tld
 
 _BOT_ID = 0
 
@@ -265,6 +265,16 @@ query ($search: String, $page: Int) {
 }
 """
 
+PERMISSIONS_STRING = {
+    "can_change_info": "NO_CHANGEINFO_PERM",
+    "can_delete_messages": "NO_DELETEMSGS_PERM",
+    "can_restrict_members": "NO_RESTRICT_PERM",
+    "can_invite_users": "NO_INVITEUSER_PERM",
+    "can_pin_messages": "NO_PINMSGS_PERM",
+    "can_manage_video_chats": "NO_MANAGEVIDEO_PERM",
+    "can_promote_members": "NO_PROMOTE_MEMBERS_PERM",
+}
+
 
 def time_formatter(seconds: float) -> str:
     """tempo"""
@@ -279,18 +289,6 @@ def time_formatter(seconds: float) -> str:
     )
     return tmp[:-2]
 
-async def is_admin(chat_id: int, user_id: int, check_devs: bool = False) -> bool:
-    """checa admin no chat"""
-    if check_devs and is_dev(user_id):
-        return True
-    check_status = await WhiterX.get_chat_member(chat_id=chat_id, user_id=user_id)
-    admin_strings = [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER]
-    if check_status.status not in admin_strings:
-        return False
-    else:
-        return True
-
-
 
 def is_dev(user_id: int) -> bool:
     """retorna se é dev ou não"""
@@ -304,20 +302,16 @@ async def is_self(user_id: int) -> bool:
         _BOT_ID = (await WhiterX.get_me()).id
     return user_id == _BOT_ID
 
-
-async def check_rights(chat_id: int, user_id: int, rights: str) -> bool:
-    """check permissions from User"""
-    user = await WhiterX.get_chat_member(chat_id, user_id)
-    if user_id in Config.DEV_USERS:
+async def is_admin(chat_id: int, user_id: int, check_devs: bool = False) -> bool:
+    """checa admin no chat"""
+    if check_devs and is_dev(user_id):
         return True
-    elif user.status == ChatMemberStatus.OWNER:
-        return True
-    elif user.status == ChatMemberStatus.ADMINISTRATOR:
-        if getattr(user.privileges, rights, None):
-            return True
+    check_status = await WhiterX.get_chat_member(chat_id=chat_id, user_id=user_id)
+    admin_strings = [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER]
+    if check_status.status not in admin_strings:
         return False
-    return False
-
+    else:
+        return True
 
 async def check_bot_rights(chat_id: int, rights: str) -> bool:
     """check permissions WhiterX"""
@@ -558,3 +552,66 @@ else:
     except Exception:
         sw = None
         
+async def get_target_user(c: WhiterX, m: Message) -> User:
+    if m.reply_to_message:
+        return m.reply_to_message.from_user
+    msg_entities = m.entities[1] if m.text.startswith("/") else m.entities[0]
+    return await c.get_users(
+        msg_entities.user.id
+        if msg_entities.type == MessageEntityType.TEXT_MENTION
+        else int(m.command[1])
+        if m.command[1].isdecimal()
+        else m.command[1]
+    )
+
+async def get_reason_text(c: WhiterX, m: Message) -> Message:
+    reply = m.reply_to_message
+    spilt_text = m.text.split
+
+    if not reply and len(spilt_text()) >= 3:
+        return spilt_text(None, 2)[2]
+    if reply and len(spilt_text()) >= 2:
+        return spilt_text(None, 1)[1]
+
+    return None
+
+async def check_perms(
+    m: Union[CallbackQuery, Message],
+    permissions: Optional[ChatPrivileges] = None,
+    complain_missing_perms: bool = True,
+) -> bool:
+    if isinstance(m, CallbackQuery):
+        sender = partial(m.answer, show_alert=True)
+        chat = m.message.chat
+    else:
+        sender = m.reply_text
+        chat = m.chat
+    # TODO: Cache all admin permissions in db.
+    user = await chat.get_member(m.from_user.id)
+    if user.status == ChatMemberStatus.OWNER:
+        return True
+
+    # No permissions specified, accept being an admin.
+    if not permissions and user.status == ChatMemberStatus.ADMINISTRATOR:
+        return True
+    if user.status != ChatMemberStatus.ADMINISTRATOR:
+        if complain_missing_perms:
+            await sender(await tld(chat.id, "USER_NO_ADMIN"))
+        return False
+
+    missing_perms = [
+        perm
+        for perm, value in permissions.__dict__.items()
+        if value and not getattr(user.privileges, perm)
+    ]
+
+    if not missing_perms:
+        return True
+    if complain_missing_perms:
+        try:
+            string = PERMISSIONS_STRING[missing_perms]
+        except Exception as e:
+            await sender(e)
+        await sender((await tld(chat.id, string)).format(permissions=", ".join(missing_perms)))
+    return False
+
