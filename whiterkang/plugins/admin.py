@@ -9,7 +9,7 @@ import os.path
 from hydrogram import filters
 from hydrogram.errors import PeerIdInvalid, UserIdInvalid, UsernameInvalid, BadRequest, Forbidden 
 from hydrogram.errors.exceptions.bad_request_400 import ChatNotModified
-from hydrogram.types import ChatPermissions, Message, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
+from hydrogram.types import ChatPermissions, Message, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, ChatPrivileges
 from hydrogram.enums import ChatMemberStatus, ChatMembersFilter, ChatType
 
 from datetime import datetime, timedelta
@@ -21,9 +21,9 @@ from typing import Callable, List, Optional, Union
 from whiterkang import WhiterX, Config, db
 from whiterkang.helpers import (
     tld, 
+    require_admin,
     is_admin,
     check_bot_rights,
-    check_rights,
     is_dev,
     is_self,
     unwarn_bnt,
@@ -198,13 +198,9 @@ async def mentionadmins(c: WhiterX, m: Message):
 
 @WhiterX.on_message(filters.command("warn", Config.TRIGGER))
 @disableable_dec("warn")
+@require_admin(ChatPrivileges("can_restrict_members"))
 async def warn_users(c: WhiterX, m: Message):
     chat_id = m.chat.id
-    if not await is_admin(chat_id, m.from_user.id):
-        return await m.reply(await tld(m.chat.id, "USER_NO_ADMIN"))
-    if not await check_rights(chat_id, m.from_user.id, "can_restrict_members"):
-        await m.reply(await tld(chat_id, "NO_BAN_USER"))
-        return
     cmd = len(m.text)
     replied = m.reply_to_message
     reason = ""
@@ -279,14 +275,9 @@ async def warn_users(c: WhiterX, m: Message):
         
 @WhiterX.on_message(filters.command("unwarn", Config.TRIGGER))
 @disableable_dec("unwarn")
+@require_admin(ChatPrivileges("can_restrict_members"))
 async def unwarn_users(c: WhiterX, m: Message):
     chat_id = m.chat.id
-    if not await is_admin(chat_id, m.from_user.id):
-        return await m.reply(await tld(m.chat.id, "USER_NO_ADMIN"))
-    if not await check_rights(chat_id, m.from_user.id, "can_restrict_members"):
-        await m.reply(await tld(chat_id, "NO_BAN_USER"))
-        return
-
     cmd = len(m.text)
     replied = m.reply_to_message
     reason = ""
@@ -334,11 +325,8 @@ async def unwarn_users(c: WhiterX, m: Message):
         
         
 @WhiterX.on_message(filters.command(["setwarnslimit", "setwarnlimit"], Config.TRIGGER))
+@require_admin(ChatPrivileges("can_change_info"))
 async def set_warns_limit(c: WhiterX, m: Message):
-    if not await is_admin(m.chat.id, m.from_user.id):
-        return await m.reply(await tld(m.chat.id, "USER_NO_ADMIN"))
-    if not await check_rights(m.chat.id, m.from_user.id, "can_change_info"):
-        return
     if len(m.command) == 1:
         await m.reply("Eu preciso de um argumento.")
         return
@@ -351,12 +339,8 @@ async def set_warns_limit(c: WhiterX, m: Message):
 
     
 @WhiterX.on_message(filters.command(["setwarnmode", "setwarnaction"], Config.TRIGGER))
+@require_admin(ChatPrivileges("can_change_info"))
 async def set_warns_mode(c: WhiterX, m: Message):
-    if not await is_admin(m.chat.id, m.from_user.id):
-        return await m.reply(await tld(m.chat.id, "USER_NO_ADMIN"))
-    if not await check_rights(m.chat.id, m.from_user.id, "can_change_info"):
-        return
-    
     if len(m.text.split()) > 1:
         if not m.command[1] in ("ban", "mute", "kick"):
             return await m.reply_text("Esse argumento não é valido.")
@@ -380,13 +364,9 @@ async def set_warns_mode(c: WhiterX, m: Message):
 
 @WhiterX.on_message(filters.command("warns", Config.TRIGGER))
 @disableable_dec("warns")
+@require_admin(ChatPrivileges("can_restrict_members"))
 async def warns_from_users(c: WhiterX, m: Message):
     chat_id = m.chat.id
-    if not await is_admin(chat_id, m.from_user.id):
-        return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
-    if not await check_rights(chat_id, m.from_user.id, "can_restrict_members"):
-        return await m.reply(await tld(chat_id, "NO_BAN_USER"))
-    
     cmd = len(m.text)
     replied = m.reply_to_message
     reason = ""
@@ -451,15 +431,12 @@ async def warn_rules(c: WhiterX, cb: CallbackQuery):
 
     
 @WhiterX.on_callback_query(filters.regex(pattern=r"^rm_warn\|(.*)"))
+@require_admin(ChatPrivileges("can_change_info"))
 async def unwarn(c: WhiterX, cb: CallbackQuery):
     data, id_ = cb.data.split("|")
     chat_id = cb.message.chat.id
     mention_ = cb.from_user.mention
     uid = cb.from_user.id
-    if not await is_admin(chat_id, uid):
-        return await cb.answer(await tld(chat_id, "USER_NO_ADMIN"))
-    if not await check_rights(chat_id, uid, "can_restrict_members"):
-        return await cb.answer(await tld(chat_id, "NO_BAN_USER"), show_alert=True)
     try:
         user = await c.get_users(id_)
         user_id = user.id
@@ -476,9 +453,8 @@ async def unwarn(c: WhiterX, cb: CallbackQuery):
 ### Goodbyes
 
 @WhiterX.on_message(filters.command("setgoodbye", Config.TRIGGER))
+@require_admin(ChatPrivileges("can_change_info"))
 async def set_goodbye_message(c: WhiterX, m: Message):
-    if not await check_rights(m.chat.id, m.from_user.id, "can_change_info"):
-        return
     if len(m.text.split()) > 1:
         message = m.text.html.split(None, 1)[1]
         try:
@@ -518,25 +494,22 @@ async def set_goodbye_message(c: WhiterX, m: Message):
         )
 
 @WhiterX.on_message(filters.command("goodbye on", Config.TRIGGER) & filters.group)
+@require_admin(ChatPrivileges("can_change_info"))
 async def enable_welcome_message(c: WhiterX, m: Message):
-    if not await check_rights(m.chat.id, m.from_user.id, "can_change_info"):
-        return
     await GOODBYES_STATUS.update_one({"chat_id": m.chat.id}, {"$set": {"status": True}}, upsert=True)
     await m.reply_text("Mensagem de Despedida agora está Ativada.")
     
     
 @WhiterX.on_message(filters.command("goodbye off", Config.TRIGGER) & filters.group)
+@require_admin(ChatPrivileges("can_change_info"))
 async def disable_goodbye_message(c: WhiterX, m: Message):
-    if not await check_rights(m.chat.id, m.from_user.id, "can_change_info"):
-        return
     await GOODBYES_STATUS.update_one({"chat_id": m.chat.id}, {"$set": {"status": False}}, upsert=True)
     await m.reply_text("Mensagem de Despedida agora está Desativada.")
     
     
 @WhiterX.on_message(filters.command("goodbye", Config.TRIGGER) & filters.group)
+@require_admin(ChatPrivileges("can_change_info"))
 async def goodbye_status(c: WhiterX, m: Message):
-    if not await check_rights(m.chat.id, m.from_user.id, "can_change_info"):
-        return
     await m.reply_text("Dê um argumento exemplo: /goodbye on/off")
  
 
@@ -592,6 +565,7 @@ async def greet_left_members(c: WhiterX, m: Message):
 
             
 @WhiterX.on_message(filters.command("getgoodbye", Config.TRIGGER))
+@require_admin(ChatPrivileges("can_change_info"))
 async def get_welcome(c: WhiterX, m: Message):
     resp = await GOODBYES_DB.find_one({"chat_id": m.chat.id})
     if resp:
@@ -603,6 +577,7 @@ async def get_welcome(c: WhiterX, m: Message):
 
     
 @WhiterX.on_message(filters.command("resetgoodbye", Config.TRIGGER))
+@require_admin(ChatPrivileges("can_change_info"))
 async def rm_welcome(c: WhiterX, m: Message):
     r = await GOODBYES_DB.find_one({"chat_id": m.chat.id})
     if r:
@@ -615,11 +590,10 @@ async def rm_welcome(c: WhiterX, m: Message):
 ### Welcomes
 
 @WhiterX.on_message(filters.command("setwelcome", Config.TRIGGER))
+@require_admin(ChatPrivileges("can_change_info"))
 async def set_welcome_message(c: WhiterX, m: Message):
     if not await find_user(m.from_user.id):
         await add_user(m.from_user.id)
-    if not await check_rights(m.chat.id, m.from_user.id, "can_change_info"):
-        return
    
     if len(m.text.split()) > 1:
         message = m.text.html.split(None, 1)[1]
@@ -660,33 +634,31 @@ async def set_welcome_message(c: WhiterX, m: Message):
         )
 
 @WhiterX.on_message(filters.command(["welcome on", "welcome true"], Config.TRIGGER) & filters.group)
+@require_admin(ChatPrivileges("can_change_info"))
 async def enable_welcome_message(c: WhiterX, m: Message):
     if not await find_user(m.from_user.id):
         await add_user(m.from_user.id)
 
-    if not await check_rights(m.chat.id, m.from_user.id, "can_change_info"):
-        return
     await WELCOME_STATUS.update_one({"chat_id": m.chat.id}, {"$set": {"status": True}}, upsert=True)
     await m.reply_text("Boas Vindas agora está Ativadas.")
     
     
 @WhiterX.on_message(filters.command(["welcome off", "welcome false"], Config.TRIGGER) & filters.group)
+@require_admin(ChatPrivileges("can_change_info"))
 async def disable_welcome_message(c: WhiterX, m: Message):
     if not await find_user(m.from_user.id):
         await add_user(m.from_user.id)
     
-    if not await check_rights(m.chat.id, m.from_user.id, "can_change_info"):
-        return
     await WELCOME_STATUS.update_one({"chat_id": m.chat.id}, {"$set": {"status": False}}, upsert=True)
     await m.reply_text("Boas Vindas agora está Desativadas.")
     
     
 @WhiterX.on_message(filters.command("welcome", Config.TRIGGER) & filters.group)
+@require_admin(ChatPrivileges("can_change_info"))
 async def welcome_(c: WhiterX, m: Message):
     if not await find_user(m.from_user.id):
         await add_user(m.from_user.id)
-    if not await check_rights(m.chat.id, m.from_user.id, "can_change_info"):
-        return
+
     await m.reply_text("Dê um argumento exemplo: /welcome on/off/true/false")
  
 
@@ -866,70 +838,39 @@ async def warn_rules(c: WhiterX, cb: CallbackQuery):
 
     
 @WhiterX.on_message(filters.command("captcha on", Config.TRIGGER) & filters.group)
+@require_admin(ChatPrivileges("can_change_info"))
 async def enable_captcha(c: WhiterX, m: Message):
     chat_id = m.chat.id
     check_admin = m.from_user.id
 
-    if m.chat.type == ChatType.PRIVATE:
-        return await m.reply(await tld(chat_id, "ONLY_GROUPS"))
-
-    if not await is_admin(chat_id, check_admin):
-        return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
-    if not await check_rights(chat_id, check_admin, "can_change_info"):
-        return await m.reply(await tld(chat_id, "NO_CHANGEINFO_PERM"))
-    
     await CAPTCHA_DB.update_one({"chat_id": m.chat.id}, {"$set": {"status": True}}, upsert=True)
     await m.reply_text("Captcha agora está Ativado.")
 
     
 @WhiterX.on_message(filters.command("captcha off", Config.TRIGGER) & filters.group)
+@require_admin(ChatPrivileges("can_change_info"))
 async def disable_captcha(c: WhiterX, m: Message):
     chat_id = m.chat.id
     check_admin = m.from_user.id
-    
-    if m.chat.type == ChatType.PRIVATE:
-        return await m.reply(await tld(chat_id, "ONLY_GROUPS"))
-
-    if not await is_admin(chat_id, check_admin):
-        return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
-    if not await check_rights(chat_id, check_admin, "can_change_info"):
-        return await m.reply(await tld(chat_id, "NO_CHANGEINFO_PERM"))
     
     await CAPTCHA_DB.update_one({"chat_id": chat_id}, {"$set": {"status": False}}, upsert=True)
     await m.reply_text("Captcha agora está Desativado.")
     
 
 @WhiterX.on_message(filters.command("captcha", Config.TRIGGER) & filters.group)
+@require_admin(ChatPrivileges("can_change_info"))
 async def captcha(c: WhiterX, m: Message):
     chat_id = m.chat.id
     check_admin = m.from_user.id
-    
-    if m.chat.type == ChatType.PRIVATE:
-        return await m.reply(await tld(chat_id, "ONLY_GROUPS"))
-
-    if not await is_admin(chat_id, check_admin):
-        return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
-    if not await check_rights(chat_id, check_admin, "can_change_info"):
-        return await m.reply(await tld(chat_id, "NO_CHANGEINFO_PERM"))
     
     await m.reply_text("Dê um argumento exemplo: /captcha on/off")
  
 @WhiterX.on_message(filters.command(["save", "savenote", "note"], Config.TRIGGER))
 @disableable_dec("save")
+@require_admin(ChatPrivileges("can_change_info"))
 async def save_notes(c: WhiterX, m: Message):
     chat_id = m.chat.id
     user_id = m.from_user.id
-
-    if m.chat.type == ChatType.PRIVATE:
-        return await m.reply(await tld(chat_id, "ONLY_GROUPS"))
-
-    if not await is_admin(chat_id, user_id):
-        return await m.reply(await tld(chat_id, "USER_NO_ADMIN"), quote=True)
-    if not await check_rights(chat_id, user_id, "can_change_info"):
-        return await m.reply(await tld(chat_id, "NOTES_NO_PERM"), quote=True)
-    if m.reply_to_message is None and len(input_str(m)) < 2:
-        await m.reply_text(await tld(chat_id, "NOTES_NOT_NAME"), quote=True)
-        return
     
     args = m.text.html.split(maxsplit=1)
     split_text = f"{args[1]}"
@@ -1030,19 +971,12 @@ async def get_all_chat_note(c: WhiterX, m: Message):
 
 @WhiterX.on_message(filters.command(["rmnote", "delnote"]))
 @disableable_dec("delnote")
+@require_admin(ChatPrivileges("can_change_info"))
 async def rmnote(c: WhiterX, m: Message):
     args = m.text.html.split(maxsplit=1)
     trigger = args[1].lower()
     chat_id = m.chat.id
     check_admin = m.chat.id
-
-    if m.chat.type == ChatType.PRIVATE:
-        return await m.reply(await tld(chat_id, "ONLY_GROUPS"))
-
-    if not await is_admin(chat_id, check_admin):
-        return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
-    if not await check_rights(chat_id, check_admin, "can_change_info"):
-        return await m.reply(await tld(chat_id, "NOTES_NO_PERM"))
 
     check_note = await DB_NOTES.find_one({"chat_id": chat_id, "name": trigger})
     if check_note:
@@ -1058,17 +992,10 @@ async def rmnote(c: WhiterX, m: Message):
         
 @WhiterX.on_message(filters.command(["resetnotes", "clearnotes"]))
 @disableable_dec("resetnotes")
+@require_admin(ChatPrivileges("can_change_info"))
 async def clear_notes(c: WhiterX, m: Message):
     chat_id = m.chat.id
     check_admin = m.from_user.id
-
-    if m.chat.type == ChatType.PRIVATE:
-        return await m.reply(await tld(chat_id, "ONLY_GROUPS"))
-
-    if not await is_admin(chat_id, check_admin):
-        return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
-    if not await check_rights(chat_id, check_admin, "can_change_info"):
-        return await m.reply(await tld(chat_id, "NOTES_NO_PERM"))
 
     check_note = await DB_NOTES.find_one({"chat_id": chat_id})
     if check_note:
@@ -1180,13 +1107,11 @@ async def note_by_hashtag(c: WhiterX, m: Message):
 
 @WhiterX.on_message(filters.command(["filter", "savefilter", "addfilter"], Config.TRIGGER))
 @disableable_dec("filter")
+@require_admin(ChatPrivileges("can_change_info"))
 async def save_notes(c: WhiterX, m: Message):
     chat_id = m.chat.id
     user_id = m.from_user.id
 
-    if not await check_rights(chat_id, user_id, "can_change_info"):
-        return await m.reply(await tld(chat_id, "NO_CHANGEINFO_PERM"), quote=True)
-    
     if m.reply_to_message is None and len(input_str(m)) < 2:
         await m.reply_text("Você Precisa dar um nome ao filtro.", quote=True)
         return
@@ -1264,17 +1189,10 @@ async def save_notes(c: WhiterX, m: Message):
 
 @WhiterX.on_message(filters.command("filters", Config.TRIGGER) & filters.group)
 @disableable_dec("filters")
+@require_admin(ChatPrivileges("can_change_info"))
 async def get_all_chat_note(c: WhiterX, m: Message):
     chat_id = m.chat.id
     check_admin = m.from_user.id
-
-    if m.chat.type == ChatType.PRIVATE:
-        return await m.reply(await tld(chat_id, "ONLY_GROUPS"))
-
-    if not await is_admin(chat_id, check_admin):
-        return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
-    if not await check_rights(chat_id, check_admin, "can_change_info"):
-        return await m.reply(await tld(chat_id, "NO_CHANGEINFO_PERM"))
 
     reply_text = "<b>Lista de filtros em {}:</b>\n\n".format(m.chat.title)
     all_filters = DB_FILTERS.find({"chat_id": chat_id})          
@@ -1290,19 +1208,12 @@ async def get_all_chat_note(c: WhiterX, m: Message):
         
 @WhiterX.on_message(filters.command(["rmfilter", "delfilter", "stop"], Config.TRIGGER))
 @disableable_dec("stop")
+@require_admin(ChatPrivileges("can_change_info"))
 async def rmnote(c: WhiterX, m: Message):
     args = m.text.html.split(maxsplit=1)
     trigger = args[1].lower()
     chat_id = m.chat.id
     check_admin = m.from_user.id
-
-    if m.chat.type == ChatType.PRIVATE:
-        return await m.reply(await tld(chat_id, "ONLY_GROUPS"))
-
-    if not await is_admin(chat_id, check_admin):
-        return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
-    if not await check_rights(chat_id, check_admin, "can_change_info"):
-        return await m.reply(await tld(chat_id, "NO_CHANGEINFO_PERM"))
 
     check_note = await DB_FILTERS.find_one({"chat_id": chat_id, "name": trigger})
     if check_note:
@@ -1318,17 +1229,10 @@ async def rmnote(c: WhiterX, m: Message):
 
         
 @WhiterX.on_message(filters.command(["resetfilters", "clearfilters"]))
+@require_admin(ChatPrivileges("can_change_info"))
 async def clear_notes(c: WhiterX, m: Message):
     chat_id = m.chat.id
     check_admin = m.from_user.id
-
-    if m.chat.type == ChatType.PRIVATE:
-        return await m.reply(await tld(chat_id, "ONLY_GROUPS"))
-
-    if not await is_admin(chat_id, check_admin):
-        return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
-    if not await check_rights(chat_id, check_admin, "can_change_info"):
-        return await m.reply(await tld(chat_id, "NO_CHANGEINFO_PERM"))
     
     check_note = await DB_FILTERS.find_one({"chat_id": chat_id})
     if check_note:
@@ -1439,31 +1343,25 @@ async def serve_filter(c: WhiterX, m: Message):
 
 
 @WhiterX.on_message(filters.command("disable", Config.TRIGGER))
+@require_admin(ChatPrivileges("can_change_info"))
 async def disble_cmd(c: WhiterX, m: Message):
     chat_id = m.chat.id
     check_admin = m.from_user.id  
     query = input_str(m)
 
-    if m.chat.type == ChatType.PRIVATE:
-        return await m.reply(await tld(chat_id, "ONLY_GROUPS"))
-
-    if not await is_admin(chat_id, check_admin):
-        return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
-    if not await check_rights(chat_id, check_admin, "can_change_info"):
-        return await m.reply(await tld(chat_id, "NO_CHANGEINFO_PERM"))
+    if not query in DISABLABLE_CMDS:
+        return await m.reply(await tld(chat_id, "NO_DISABLE_COMMAND"))
     else:
-        if not query in DISABLABLE_CMDS:
-            return await m.reply(await tld(chat_id, "NO_DISABLE_COMMAND"))
+        found = await DB_DISABLEABLE.find_one({"chat_id": chat_id, "cmd": query})
+        if found:
+            return await m.reply(await tld(chat_id, "ALREADY_DISABLED_COMMAND"))
         else:
-            found = await DB_DISABLEABLE.find_one({"chat_id": chat_id, "cmd": query})
-            if found:
-                return await m.reply(await tld(chat_id, "ALREADY_DISABLED_COMMAND"))
-            else:
-                dis_cmd = await DB_DISABLEABLE.insert_one({"chat_id": chat_id, "cmd": query})
-                await m.reply((await tld(chat_id, "COMMAND_NOW_DISABLED")).format(query))
+            dis_cmd = await DB_DISABLEABLE.insert_one({"chat_id": chat_id, "cmd": query})
+            await m.reply((await tld(chat_id, "COMMAND_NOW_DISABLED")).format(query))
                 
 
 @WhiterX.on_message(filters.command("enable", Config.TRIGGER))
+@require_admin(ChatPrivileges("can_change_info"))
 async def enable_cmd(c: WhiterX, m: Message):
     chat_id = m.chat.id
     check_admin = m.from_user.id  
@@ -1472,34 +1370,23 @@ async def enable_cmd(c: WhiterX, m: Message):
     if m.chat.type == ChatType.PRIVATE:
         return await m.reply(await tld(chat_id, "ONLY_GROUPS"))
 
-    if not await is_admin(chat_id, check_admin):
-        return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
-    if not await check_rights(chat_id, check_admin, "can_change_info"):
-        return await m.reply(await tld(chat_id, "NO_CHANGEINFO_PERM")) 
+    
+    if not query in DISABLABLE_CMDS:
+        return await m.reply(await tld(chat_id, "NO_ENABLE_COMMAND")) 
     else:
-        if not query in DISABLABLE_CMDS:
-            return await m.reply(await tld(chat_id, "NO_ENABLE_COMMAND")) 
+        found = await DB_DISABLEABLE.find_one({"chat_id": chat_id, "cmd": query})
+        if found:
+            dis_cmd = await DB_DISABLEABLE.delete_one({"chat_id": chat_id, "cmd": query})
+            await m.reply((await tld(chat_id, "COMMAND_NOW_ENABLED")).format(query))
         else:
-            found = await DB_DISABLEABLE.find_one({"chat_id": chat_id, "cmd": query})
-            if found:
-                dis_cmd = await DB_DISABLEABLE.delete_one({"chat_id": chat_id, "cmd": query})
-                await m.reply((await tld(chat_id, "COMMAND_NOW_ENABLED")).format(query))
-            else:
-                return await m.reply(await tld(chat_id, "NO_DISABLED_COMMAND"))
+            return await m.reply(await tld(chat_id, "NO_DISABLED_COMMAND"))
                 
 
 @WhiterX.on_message(filters.command("disableable", Config.TRIGGER))
+@require_admin(ChatPrivileges("can_change_info"))
 async def disableable(_, m: Message):
     chat_id = m.chat.id
     user_id = m.from_user.id
-
-    if m.chat.type == ChatType.PRIVATE:
-        return await m.reply(await tld(chat_id, "ONLY_GROUPS"))
-
-    if not await is_admin(chat_id, user_id):
-        return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
-    if not await check_rights(chat_id, user_id, "can_restrict_members"):
-        return await m.reply(await tld(chat_id, "NO_BAN_BOT"))
     
     text = await tld(chat_id, "DISABLEABLE_COMMANDS")
     for command in sorted(DISABLABLE_CMDS):
@@ -1508,17 +1395,10 @@ async def disableable(_, m: Message):
 
 @WhiterX.on_message(filters.command(["lock", "unlock"], Config.TRIGGER))
 @disableable_dec("locks")
+@require_admin(ChatPrivileges("can_restrict_members"))
 async def locks_func(c: WhiterX, m: Message):
     chat_id = m.chat.id
     check_admin = m.from_user.id
-
-    if m.chat.type == ChatType.PRIVATE:
-        return await m.reply(await tld(chat_id, "ONLY_GROUPS"))
-
-    if not await is_admin(chat_id, check_admin):
-        return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
-    if not await check_rights(chat_id, check_admin, "can_change_info"):
-        return await m.reply(await tld(chat_id, "NO_CHANGEINFO_PERM"))
     
     if len(m.command) != 2:
         return await m.reply_text("<i>Invalid argument; Visit help in section Admins</i>")
@@ -1561,17 +1441,10 @@ async def locks_func(c: WhiterX, m: Message):
 
 @WhiterX.on_message(filters.command("locks", Config.TRIGGER))
 @disableable_dec("locktypes")
+@require_admin(ChatPrivileges("can_restrict_members"))
 async def locktypes(c: WhiterX, m: Message):
     chat_id = m.chat.id
     check_admin = m.from_user.id
-
-    if m.chat.type == ChatType.PRIVATE:
-        return await m.reply(await tld(chat_id, "ONLY_GROUPS"))
-
-    if not await is_admin(chat_id, check_admin):
-        return await m.reply(await tld(chat_id, "USER_NO_ADMIN"))
-    if not await check_rights(chat_id, check_admin, "can_restrict_members"):
-        return await m.reply(await tld(chat_id, "NO_BAN_BOT"))
     
     permissions = await current_chat_permissions(m.chat.id)
 
@@ -1586,34 +1459,26 @@ async def locktypes(c: WhiterX, m: Message):
 
 @WhiterX.on_message(filters.command(["cleanup", "zombies"], prefixes=["/", "!"]))
 @disableable_dec("zombies")
+@require_admin(ChatPrivileges("can_restrict_members"))
 async def cleanup(c: WhiterX, m: Message):
     chat_id = m.chat.id
-    if m.chat.type == ChatType.PRIVATE:
-        await m.reply_text(await tld(chat_id, "ONLY_GROUPS"))
-        return
-    if not await check_bot_rights(chat_id, "can_restrict_members"):
-        await m.reply(await tld(chat_id, "NO_BAN_BOT"))
-        return 
-    if await check_rights(chat_id, m.from_user.id, "can_restrict_members"): 
-        count = 0
-        sent = await m.reply_text(await tld(chat_id, "COM_1"))
-        async for t in c.get_chat_members(chat_id=chat_id):
-            if t.user.is_deleted:
-                try:
-                    await c.ban_chat_member(chat_id, t.user.id)
-                    count += 1
-                except BadRequest:
-                    pass
-                except Forbidden as e:
-                    await m.reply_text(
-                        f"<b>Erro:</b> <code>{e}</code>"
-                    )
-                    return await c.send_err("<b>Error!!</b> <code>{}</code>".format(e))
-        if count:
-            await sent.edit_text(
-                (await tld(chat_id, "ZOMBIES_BAN")).format(count, m.chat.title)
-            )
-        else:
-            await sent.edit_text(await tld(chat_id, "NO_ZOMBIES"))
+    count = 0
+    sent = await m.reply_text(await tld(chat_id, "COM_1"))
+    async for t in c.get_chat_members(chat_id=chat_id):
+        if t.user.is_deleted:
+            try:
+                await c.ban_chat_member(chat_id, t.user.id)
+                count += 1
+            except BadRequest:
+                pass
+            except Forbidden as e:
+                await m.reply_text(
+                    f"<b>Erro:</b> <code>{e}</code>"
+                )
+                return await c.send_err("<b>Error!!</b> <code>{}</code>".format(e))
+    if count:
+        await sent.edit_text(
+            (await tld(chat_id, "ZOMBIES_BAN")).format(count, m.chat.title)
+        )
     else:
-        await m.reply_text(await tld(chat_id, "NO_RIGHTS_ZOMBIES"))
+        await sent.edit_text(await tld(chat_id, "NO_ZOMBIES"))
