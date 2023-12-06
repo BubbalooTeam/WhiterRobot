@@ -18,7 +18,7 @@ from hydrogram import filters, enums
 from hydrogram.errors import BadRequest, FloodWait, Forbidden, MediaEmpty, MessageNotModified, UserNotParticipant
 from hydrogram.raw.types import InputMessageID
 from hydrogram.raw.functions import channels, messages
-from hydrogram.types import Message, CallbackQuery, InputMediaVideo, InputMediaPhoto, InlineKeyboardMarkup, InlineKeyboardButton
+from hydrogram.types import Message, CallbackQuery, InputMediaVideo, InputMediaPhoto, InlineKeyboardMarkup, InlineKeyboardButton, ChatPrivileges
 from hydrogram.enums import ChatType, ChatAction 
 
 
