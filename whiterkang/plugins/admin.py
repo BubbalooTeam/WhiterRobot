@@ -1353,11 +1353,7 @@ async def serve_filter(c: WhiterX, m: Message):
         #Check if is GBANNED
         if await check_antispam(chat_id):
             await check_ban(m, chat_id, m.from_user.id)
-        if not await find_gp(chat_id):
-            await add_gp(m)
-        if not await find_user(m.from_user.id):
-            await add_user(m.from_user.id)
-        
+            
     text = m.text
     target_msg = m.reply_to_message or m
 
