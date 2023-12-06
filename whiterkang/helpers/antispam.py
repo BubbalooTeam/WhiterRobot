@@ -6,7 +6,7 @@ from hydrogram.types import Message
 from typing import Optional
 
 from whiterkang import WhiterX, Config, db
-from whiterkang.helpers import is_dev, sw, tld, check_rights, check_bot_rights, is_self
+from whiterkang.helpers import is_dev, sw, tld, check_bot_rights, is_self
 
 antispam_db = db["ANTISPAM_CHATS"]
 gban_db = db["GBAN"]
