@@ -1,5 +1,4 @@
 # Copiright (C) 2023 BubbalooTeam
-from hydrogram.types import Message
 import asyncio
 import logging
 
@@ -31,7 +30,7 @@ async def add_user(uid: int):
         logging.error(f"An Error Occurred: {e}")
         pass
 
-async def add_gp(m: Message):
+async def add_gp(m):
     user = f"<a href='tg://user?id={m.from_user.id}'>{m.from_user.first_name}</a>"
     text_add = f"#WhiterKang #NEW_GROUP #LOGS\n\n<b>Grupo</b>: <i>{m.chat.title}</i>\n<b>ID</b>: <i>{m.chat.id}</i>\n<i>User</i>: <i>{user}</i>"
     if m.chat.username:
@@ -45,7 +44,7 @@ async def add_gp(m: Message):
         await WhiterX.send_err(e)
 
 
-async def del_gp(m: Message):
+async def del_gp(m):
     del_txt = f"#WhiterKang #LEFT_GROUP #LOGS\n\n<b>Group</b>: {m.chat.title}\n<b>ID</b>: {m.chat.id}"
     try:
         await GROUPS.delete_one({"chat_id": m.chat.id})
