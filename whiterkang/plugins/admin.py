@@ -198,7 +198,7 @@ async def mentionadmins(c: WhiterX, m: Message):
 
 @WhiterX.on_message(filters.command("warn", Config.TRIGGER))
 @disableable_dec("warn")
-@require_admin(ChatPrivileges("can_restrict_members"))
+@require_admin(ChatPrivileges(can_restrict_members=True))
 async def warn_users(c: WhiterX, m: Message):
     chat_id = m.chat.id
     cmd = len(m.text)
@@ -275,7 +275,7 @@ async def warn_users(c: WhiterX, m: Message):
         
 @WhiterX.on_message(filters.command("unwarn", Config.TRIGGER))
 @disableable_dec("unwarn")
-@require_admin(ChatPrivileges("can_restrict_members"))
+@require_admin(ChatPrivileges(can_restrict_members=True))
 async def unwarn_users(c: WhiterX, m: Message):
     chat_id = m.chat.id
     cmd = len(m.text)
@@ -325,7 +325,7 @@ async def unwarn_users(c: WhiterX, m: Message):
         
         
 @WhiterX.on_message(filters.command(["setwarnslimit", "setwarnlimit"], Config.TRIGGER))
-@require_admin(ChatPrivileges("can_change_info"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def set_warns_limit(c: WhiterX, m: Message):
     if len(m.command) == 1:
         await m.reply("Eu preciso de um argumento.")
@@ -339,7 +339,7 @@ async def set_warns_limit(c: WhiterX, m: Message):
 
     
 @WhiterX.on_message(filters.command(["setwarnmode", "setwarnaction"], Config.TRIGGER))
-@require_admin(ChatPrivileges("can_change_info"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def set_warns_mode(c: WhiterX, m: Message):
     if len(m.text.split()) > 1:
         if not m.command[1] in ("ban", "mute", "kick"):
@@ -364,7 +364,7 @@ async def set_warns_mode(c: WhiterX, m: Message):
 
 @WhiterX.on_message(filters.command("warns", Config.TRIGGER))
 @disableable_dec("warns")
-@require_admin(ChatPrivileges("can_restrict_members"))
+@require_admin(ChatPrivileges(can_restrict_members=True))
 async def warns_from_users(c: WhiterX, m: Message):
     chat_id = m.chat.id
     cmd = len(m.text)
@@ -431,7 +431,7 @@ async def warn_rules(c: WhiterX, cb: CallbackQuery):
 
     
 @WhiterX.on_callback_query(filters.regex(pattern=r"^rm_warn\|(.*)"))
-@require_admin(ChatPrivileges("can_change_info"))
+@require_admin(ChatPrivileges(can_restrict_members=True))
 async def unwarn(c: WhiterX, cb: CallbackQuery):
     data, id_ = cb.data.split("|")
     chat_id = cb.message.chat.id
@@ -453,7 +453,7 @@ async def unwarn(c: WhiterX, cb: CallbackQuery):
 ### Goodbyes
 
 @WhiterX.on_message(filters.command("setgoodbye", Config.TRIGGER))
-@require_admin(ChatPrivileges("can_change_info"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def set_goodbye_message(c: WhiterX, m: Message):
     if len(m.text.split()) > 1:
         message = m.text.html.split(None, 1)[1]
@@ -494,21 +494,21 @@ async def set_goodbye_message(c: WhiterX, m: Message):
         )
 
 @WhiterX.on_message(filters.command("goodbye on", Config.TRIGGER) & filters.group)
-@require_admin(ChatPrivileges("can_change_info"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def enable_welcome_message(c: WhiterX, m: Message):
     await GOODBYES_STATUS.update_one({"chat_id": m.chat.id}, {"$set": {"status": True}}, upsert=True)
     await m.reply_text("Mensagem de Despedida agora está Ativada.")
     
     
 @WhiterX.on_message(filters.command("goodbye off", Config.TRIGGER) & filters.group)
-@require_admin(ChatPrivileges("can_change_info"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def disable_goodbye_message(c: WhiterX, m: Message):
     await GOODBYES_STATUS.update_one({"chat_id": m.chat.id}, {"$set": {"status": False}}, upsert=True)
     await m.reply_text("Mensagem de Despedida agora está Desativada.")
     
     
 @WhiterX.on_message(filters.command("goodbye", Config.TRIGGER) & filters.group)
-@require_admin(ChatPrivileges("can_change_info"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def goodbye_status(c: WhiterX, m: Message):
     await m.reply_text("Dê um argumento exemplo: /goodbye on/off")
  
@@ -565,7 +565,7 @@ async def greet_left_members(c: WhiterX, m: Message):
 
             
 @WhiterX.on_message(filters.command("getgoodbye", Config.TRIGGER))
-@require_admin(ChatPrivileges("can_change_info"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def get_welcome(c: WhiterX, m: Message):
     resp = await GOODBYES_DB.find_one({"chat_id": m.chat.id})
     if resp:
@@ -577,7 +577,7 @@ async def get_welcome(c: WhiterX, m: Message):
 
     
 @WhiterX.on_message(filters.command("resetgoodbye", Config.TRIGGER))
-@require_admin(ChatPrivileges("can_change_info"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def rm_welcome(c: WhiterX, m: Message):
     r = await GOODBYES_DB.find_one({"chat_id": m.chat.id})
     if r:
@@ -590,7 +590,7 @@ async def rm_welcome(c: WhiterX, m: Message):
 ### Welcomes
 
 @WhiterX.on_message(filters.command("setwelcome", Config.TRIGGER))
-@require_admin(ChatPrivileges("can_change_info"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def set_welcome_message(c: WhiterX, m: Message):
     if not await find_user(m.from_user.id):
         await add_user(m.from_user.id)
@@ -634,7 +634,7 @@ async def set_welcome_message(c: WhiterX, m: Message):
         )
 
 @WhiterX.on_message(filters.command(["welcome on", "welcome true"], Config.TRIGGER) & filters.group)
-@require_admin(ChatPrivileges("can_change_info"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def enable_welcome_message(c: WhiterX, m: Message):
     if not await find_user(m.from_user.id):
         await add_user(m.from_user.id)
@@ -654,7 +654,7 @@ async def disable_welcome_message(c: WhiterX, m: Message):
     
     
 @WhiterX.on_message(filters.command("welcome", Config.TRIGGER) & filters.group)
-@require_admin(ChatPrivileges("can_change_info"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def welcome_(c: WhiterX, m: Message):
     if not await find_user(m.from_user.id):
         await add_user(m.from_user.id)
@@ -746,6 +746,7 @@ async def greet_new_members(c: WhiterX, m: Message):
 
     
 @WhiterX.on_message(filters.command("getwelcome", Config.TRIGGER))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def get_welcome(c: WhiterX, m: Message):
     if not await find_user(m.from_user.id):
         await add_user(m.from_user.id)
@@ -759,6 +760,7 @@ async def get_welcome(c: WhiterX, m: Message):
 
     
 @WhiterX.on_message(filters.command("resetwelcome", Config.TRIGGER))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def rm_welcome(c: WhiterX, m: Message):
     if not await find_user(m.from_user.id):
         await add_user(m.from_user.id)
@@ -838,7 +840,7 @@ async def warn_rules(c: WhiterX, cb: CallbackQuery):
 
     
 @WhiterX.on_message(filters.command("captcha on", Config.TRIGGER) & filters.group)
-@require_admin(ChatPrivileges("can_change_info"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def enable_captcha(c: WhiterX, m: Message):
     chat_id = m.chat.id
     check_admin = m.from_user.id
@@ -848,7 +850,7 @@ async def enable_captcha(c: WhiterX, m: Message):
 
     
 @WhiterX.on_message(filters.command("captcha off", Config.TRIGGER) & filters.group)
-@require_admin(ChatPrivileges("can_change_info"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def disable_captcha(c: WhiterX, m: Message):
     chat_id = m.chat.id
     check_admin = m.from_user.id
@@ -858,7 +860,7 @@ async def disable_captcha(c: WhiterX, m: Message):
     
 
 @WhiterX.on_message(filters.command("captcha", Config.TRIGGER) & filters.group)
-@require_admin(ChatPrivileges("can_change_info"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def captcha(c: WhiterX, m: Message):
     chat_id = m.chat.id
     check_admin = m.from_user.id
@@ -867,7 +869,7 @@ async def captcha(c: WhiterX, m: Message):
  
 @WhiterX.on_message(filters.command(["save", "savenote", "note"], Config.TRIGGER))
 @disableable_dec("save")
-@require_admin(ChatPrivileges("can_change_info"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def save_notes(c: WhiterX, m: Message):
     chat_id = m.chat.id
     user_id = m.from_user.id
@@ -971,7 +973,7 @@ async def get_all_chat_note(c: WhiterX, m: Message):
 
 @WhiterX.on_message(filters.command(["rmnote", "delnote"]))
 @disableable_dec("delnote")
-@require_admin(ChatPrivileges("can_change_info"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def rmnote(c: WhiterX, m: Message):
     args = m.text.html.split(maxsplit=1)
     trigger = args[1].lower()
@@ -992,7 +994,7 @@ async def rmnote(c: WhiterX, m: Message):
         
 @WhiterX.on_message(filters.command(["resetnotes", "clearnotes"]))
 @disableable_dec("resetnotes")
-@require_admin(ChatPrivileges("can_change_info"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def clear_notes(c: WhiterX, m: Message):
     chat_id = m.chat.id
     check_admin = m.from_user.id
@@ -1107,7 +1109,7 @@ async def note_by_hashtag(c: WhiterX, m: Message):
 
 @WhiterX.on_message(filters.command(["filter", "savefilter", "addfilter"], Config.TRIGGER))
 @disableable_dec("filter")
-@require_admin(ChatPrivileges("can_change_info"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def save_notes(c: WhiterX, m: Message):
     chat_id = m.chat.id
     user_id = m.from_user.id
@@ -1189,7 +1191,6 @@ async def save_notes(c: WhiterX, m: Message):
 
 @WhiterX.on_message(filters.command("filters", Config.TRIGGER) & filters.group)
 @disableable_dec("filters")
-@require_admin(ChatPrivileges("can_change_info"))
 async def get_all_chat_note(c: WhiterX, m: Message):
     chat_id = m.chat.id
     check_admin = m.from_user.id
@@ -1208,7 +1209,7 @@ async def get_all_chat_note(c: WhiterX, m: Message):
         
 @WhiterX.on_message(filters.command(["rmfilter", "delfilter", "stop"], Config.TRIGGER))
 @disableable_dec("stop")
-@require_admin(ChatPrivileges("can_change_info"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def rmnote(c: WhiterX, m: Message):
     args = m.text.html.split(maxsplit=1)
     trigger = args[1].lower()
@@ -1229,7 +1230,7 @@ async def rmnote(c: WhiterX, m: Message):
 
         
 @WhiterX.on_message(filters.command(["resetfilters", "clearfilters"]))
-@require_admin(ChatPrivileges("can_change_info"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def clear_notes(c: WhiterX, m: Message):
     chat_id = m.chat.id
     check_admin = m.from_user.id
@@ -1343,7 +1344,7 @@ async def serve_filter(c: WhiterX, m: Message):
 
 
 @WhiterX.on_message(filters.command("disable", Config.TRIGGER))
-@require_admin(ChatPrivileges("can_change_info"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def disble_cmd(c: WhiterX, m: Message):
     chat_id = m.chat.id
     check_admin = m.from_user.id  
@@ -1361,7 +1362,7 @@ async def disble_cmd(c: WhiterX, m: Message):
                 
 
 @WhiterX.on_message(filters.command("enable", Config.TRIGGER))
-@require_admin(ChatPrivileges("can_change_info"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def enable_cmd(c: WhiterX, m: Message):
     chat_id = m.chat.id
     check_admin = m.from_user.id  
@@ -1383,7 +1384,7 @@ async def enable_cmd(c: WhiterX, m: Message):
                 
 
 @WhiterX.on_message(filters.command("disableable", Config.TRIGGER))
-@require_admin(ChatPrivileges("can_change_info"))
+@require_admin(ChatPrivileges(can_change_info=True))
 async def disableable(_, m: Message):
     chat_id = m.chat.id
     user_id = m.from_user.id
@@ -1395,7 +1396,7 @@ async def disableable(_, m: Message):
 
 @WhiterX.on_message(filters.command(["lock", "unlock"], Config.TRIGGER))
 @disableable_dec("locks")
-@require_admin(ChatPrivileges("can_restrict_members"))
+@require_admin(ChatPrivileges(can_restrict_members=True))
 async def locks_func(c: WhiterX, m: Message):
     chat_id = m.chat.id
     check_admin = m.from_user.id
@@ -1441,7 +1442,7 @@ async def locks_func(c: WhiterX, m: Message):
 
 @WhiterX.on_message(filters.command("locks", Config.TRIGGER))
 @disableable_dec("locktypes")
-@require_admin(ChatPrivileges("can_restrict_members"))
+@require_admin(ChatPrivileges(can_restrict_members=True))
 async def locktypes(c: WhiterX, m: Message):
     chat_id = m.chat.id
     check_admin = m.from_user.id
@@ -1459,7 +1460,7 @@ async def locktypes(c: WhiterX, m: Message):
 
 @WhiterX.on_message(filters.command(["cleanup", "zombies"], prefixes=["/", "!"]))
 @disableable_dec("zombies")
-@require_admin(ChatPrivileges("can_restrict_members"))
+@require_admin(ChatPrivileges(can_restrict_members=True))
 async def cleanup(c: WhiterX, m: Message):
     chat_id = m.chat.id
     count = 0
