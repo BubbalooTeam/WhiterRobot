@@ -609,10 +609,10 @@ async def check_perms(
         return True
     if complain_missing_perms:
         try:
-            print(missing_perms)
-            string = PERMISSIONS_STRING[missing_perms]
+            strmap_perm = ''.join(c for c in missing_perm if c not in '[]')
+            string = PERMISSIONS_STRING[strmap_perm]
         except Exception as e:
             await sender(e)
-        await sender((await tld(chat.id, string)).format(permissions=", ".join(missing_perms)))
+        await sender((await tld(chat.id, string))
     return False
 
