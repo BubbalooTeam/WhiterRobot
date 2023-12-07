@@ -613,6 +613,6 @@ async def check_perms(
             string = PERMISSIONS_STRING[strmap_perm]
         except Exception as e:
             await sender(e)
-        await sender((await tld(chat.id, string))
+        await sender((await tld(chat.id, string)))
     return False
 
