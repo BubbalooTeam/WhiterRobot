@@ -609,7 +609,7 @@ async def check_perms(
         return True
     if complain_missing_perms:
         try:
-            strmap_perm = ''.join(c for c in missing_perm if c not in '[]')
+            strmap_perm = ''.join(c for c in missing_perms if c not in '[]')
             string = PERMISSIONS_STRING[strmap_perm]
         except Exception as e:
             await sender(e)
