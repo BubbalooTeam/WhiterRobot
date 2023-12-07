@@ -609,6 +609,7 @@ async def check_perms(
         return True
     if complain_missing_perms:
         try:
+            print(missing_perms)
             string = PERMISSIONS_STRING[missing_perms]
         except Exception as e:
             await sender(e)
