@@ -229,7 +229,7 @@ async def kang(c: WhiterX, m: Message):
                         [
                             [
                                 InlineKeyboardButton(
-                                    "/start", url=f"https://t.me/{c.me_username}?start"
+                                    "/start", url=f"https://t.me/{c.me.username}?start"
                                 )
                             ]
                         ]
