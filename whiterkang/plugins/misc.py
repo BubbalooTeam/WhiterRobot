@@ -481,8 +481,8 @@ async def virus_total(c: WhiterX, m: Message):
     
     await msg.edit((await tld(chat_id, "PROCESS_VT")).format(humanbytes(size_of_file)))
 
-    response = await scan_file(dls)
-    os.remove(dls)
+    response = await scan_file(dvt)
+    os.remove(dvt)
 
     if response is False:
         await msg.edit(await tld(chat_id, "VT_NO_SCAN"))
