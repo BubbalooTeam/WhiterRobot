@@ -477,7 +477,7 @@ async def virus_total(c: WhiterX, m: Message):
         message=replied,
         file_name=FILE_PATH,
     )
-    dvt = os.path.join(IMG_PATH, os.path.basename(dvt_loc))
+    dvt = os.path.join(FILE_PATH, os.path.basename(dvt_loc))
     
     await msg.edit((await tld(chat_id, "PROCESS_VT")).format(humanbytes(size_of_file)))
 
