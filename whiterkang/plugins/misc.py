@@ -502,7 +502,7 @@ async def virus_total(c: WhiterX, m: Message):
     que_msg = "Your resource is queued for analysis"
     viruslist = []
     reasons = []
-    response = get_report(sha1).json()
+    response = await get_report(sha1).json()
 
     keyboard = [
         [
