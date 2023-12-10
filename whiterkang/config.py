@@ -22,13 +22,11 @@ class Config:
         AUTH_CHATS.update(map(int, os.environ.get("AUTH_CHATS").split()))
     DEV_USERS = (  # lista de devs
         838926101,  # @fnixdev
-        1926812534, # @giovanYCringe
+        5374262463, # @junglivre
         1715384854,  # @DaviTudo 
-        5204291028, #TiltLesm
-        1318013863, #@DarkzinSHH
         1574959180, #@KlonoaSulista
+
     )
-    LOG_CHANNEL_ID = set([-1001569084822])
     ADMINS = {}
     LASTFM_API_KEY = os.environ.get("LASTFM_API_KEY")
     API_ID = int(os.environ.get("API_ID"))
@@ -46,6 +44,7 @@ class Config:
     OWNER = int(1715384854)
     DOWN_PATH = "whiterkang/xcache/"
     SW_API = os.environ.get("SW_API")
+    VT_API_KEY = os.environ.get("VT_API_KEY")
     PEXELS_API_KEY = os.environ.get("PEXELS_API_KEY")
     GBAN_LOGS = os.environ.get("GBAN_LOGS")
     BLACK_LIST = (
