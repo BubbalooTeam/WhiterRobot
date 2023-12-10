@@ -19,6 +19,7 @@ from hydrogram.types import (
     Message,
     InlineKeyboardMarkup,
     InlineKeyboardButton,
+    CallbackQuery,
     InlineQuery,
     InlineQueryResultArticle,
     InputTextMessageContent,
