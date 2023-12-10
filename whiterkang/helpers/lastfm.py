@@ -54,14 +54,14 @@ def draw_scrobble(
             canvas.paste(blur_, (0, -250))
 
             # original art
-            art_ori = art_ori.resize((200, 200), Image.ANTIALIAS)
+            art_ori = art_ori.resize((200, 200), Image.LANCZOS)
             canvas.paste(art_ori, (25, 25))
         except Exception as ex:
             logging.error(ex)
 
         # profile pic
         o_pfp = Image.open(pfp).convert("RGB")
-        o_pfp = o_pfp.resize((52, 52), Image.ANTIALIAS)
+        o_pfp = o_pfp.resize((52, 52), Image.LANCZOS)
         canvas.paste(o_pfp, (523, 25))
 
         # set font sizes
