@@ -42,9 +42,15 @@ help-plugin-medias: "— Comandos para Download e posteríormente o envio de mí
 help-name-misc: "Diversos"
 help-plugin-misc: "— Diversos comandos para entreter o chat.\n\n• /cota — Faz a cotação das moedas.\n• /clima [país/estado/cidade/bairro] — Obtém informações sobre o clima do local especificado.\n• /tr [idioma] [texto(marcado ou após o idioma)] — Traduz o texto para o idioma especificado.\n• /rbg [imagem(marcada)] — Remove o fundo de uma imagem."
 
+# LastFM
+help-name-lastfm: "LastFM"
+help-plugin-lastfm: "— Comandos para rastrear às músicas que você ouve via <b>LastFM</b>: Last.fm é um serviço on-line que oferece vários recursos relacionados à música. Você pode rastrear a música que você escuta em diferentes plataformas de streaming e assim criar um perfil de música personalizado. dando recomendações de músicas e artistas com base em seus gostos.\n\n• /set [Username] — Altera o seu nome de usuário LastFM\n• /duser — Exclui seu nome de usuário LastFM\n• /profile [Username] — Busca algumas informações do seu perfil LastFM\n• /lt | /lmu | /lastfm  — Rastreia a música que você ouve via LastFM\n• status — Faz o mesmo que o comando [/lt | /lmu | /lastfm] só que sem usar os prefixos ! e /"
+
 COM_1: "Limpando..."
 COM_2: "<i>Procurando...</i>"
 COM_3: "Analisando..."
+
+REASON: "\n<b>Motivo</b>: <code>{}</code>"
 
 #Permissions
 NO_CHANGEINFO_PERM: "Você não tem direitos administrativos suficientes para alterar as informações deste grupo!"
@@ -130,17 +136,17 @@ UNBAN_LOGGER: "<b>{}:</b>\n#UNBAN\n<b>Administrador:</b> {}\n<b>Usuario:</b> {} 
 BAN_IN_ADMIN: "Por que eu baniria um(a) administrador(a)? Parece uma ideia bem idiota."
 BAN_IN_DEV: "Por que eu baniria meu(minha) desenvolvedor(a)? Parece uma ideia bem idiota."
 BAN_MY_SELF: "Eu não vou me banir, você está louco?"
-BAN_SUCCESS: "Usuário {} foi banido por {} no chat: <b>{}</b>\n<b>Motivo</b>: <code>{}</code>"
+BAN_SUCCESS: "Usuário {} foi banido por {} no chat: <b>{}</b>"
 BAN_LOADING: "<code>Banindo usuário...</code>"
 NO_BAN_BOT: "Não posso restringir as pessoas aqui! Certifique-se de que sou administrador e de que posso adicionar novos administradores."
 BAN_LOGGER: "<b>{}:</b>\n#BAN\n<b>Administrador:</b> {}\n<b>Usuário:</b> {} (<code>{}</code>)\n<b>Motivo:</b> <code>{}</code>" 
 TBAN_LOGGER: "<b>{}:</b>\n#TEMP_BANNED\n<b>Admin:</b> {}\n<b>Usuario:</b> {} (<code>{}</code>)\n<b>Tempo:</b> {}\n<b>Motivo:</b> <code>{}</code>"
-TBAN_SUCCESS: "{} foi banido(a) temporariamente por <b>{}</b> em <b>{}</b>\n<b>Motivo</b>: <code>{}</code>"
+TBAN_SUCCESS: "{} foi banido(a) temporariamente por <b>{}</b> em <b>{}</b>"
 BANS_NOT_ESPECIFIED_USER: "<code>Nenhum user_id válido ou mensagem especificada.</code>"
 BANS_ID_INVALID: "<code>Nome de usuário ou ID de usuário inválido, tente novamente com informações válidas ⚠</code>"
 MUTE_IN_ADMIN: "Porque eu iria mutar um(a) administrador(a)? Isso me parece uma idéia bem idiota."
 MUTE_IN_MYSELF: "Eu não vou mutar!"
-MUTE_SUCESS: "{} está silenciado(mutado) em <b>{}</b>\n<b>Motivo:</b> <code>{}</code>"
+MUTE_SUCESS: "{} está silenciado(mutado) em <b>{}</b>"
 MUTING: "<code>Mutando Usuário...</code>"
 MUTE_IN_DEV: "Porque eu iria mutar meu desenvolvedor? Isso me parece uma idéia muito idiota."
 NO_MUTE_USER: "Você não tem direitos suficientes para silenciar usuários"
@@ -526,3 +532,16 @@ LANG_TRANSLATE_INLINE: "Traduzir de {} para {}"
 #Cota
 COTA_PROGRESSING: "<i>Obtendo informações sobre as moedas...</i>"
 COTED: "<b>Cotação das moedas:</b>\n\n💵 <b>Dólar:</b> R$ <code>{}</code>\n🗓 <b>Data:</b>  <code>{}</code>\n📊 <b>Variação:</b> <code>{}</code>\n\n💵 <b>Euro:</b> R$ <code>{}</code>\n🗓 <b>Data:</b>  <code>{}</code>\n📊 <b>Variação:</b> <code>{}</code>\n\n💵 <b>BTC:</b> R$ <code>{}</code>\n🗓 <b>Data:</b>  <code>{}</code>\n📊 <b>Variação:</b> <code>{}</code>\n\n💵 <b>DOGE:</b> R$ <code>{}</code>\n🗓 <b>Data:</b> <code>{}</code>\n📊 <b>Variação:</b> <code>{}</code>\n\n💵 <b>Iene:</b> R$ <code>{}</code>\n🗓 <b>Data:</b> <code>{}</code>\n📊 <b>Variação:</b> <code>{}</code>\n\n💵 <b>Peso Argentino:</b> R$ <code>{}</code>\n🗓 <b>Data:</b> <code>{}</code>\n📊 <b>Variação:</b> <code>{}</code>\n\n💵 <b>Ruplo Russo:</b> R$ <code>{}</code>\n🗓 <b>Data:</b> <code>{}</code>\n📊 <b>Variação:</b> <code>{}</code>"
+
+#VT
+NO_API_VT: "Erro!! Não há API-KEY do VirusTotal"
+VT_NO_REPLIED: "<i>Responda a um documento para verificar!</i>"
+VT_BIG_FILE: "<b>📦 O arquivo marcado é muito grande, você pode verificar arquivos de até 320 MB.</b>"
+VT_DOWNLOADING: "<i>Fazendo Download do Arquivo...</i>"
+PROCESS_VT: "<b>📦 Processando o arquivo...</b>\n\n<b>🗂 Tamanho do arquivo:</b> <i>{}</i>"
+VT_NO_SCAN: "<b>📦 Este arquivo não pode ser verificado!</b>"
+VT_SCAN_BUTTON: "🦠 Verificar"
+VT_EXIT: "🔒 Fechar"
+VT_INFO_FILE: "<b>🗄 Nome do arquivo:</b> <code>{}</code>\n\n<b>💿 Tamanho do arquivo:</b> </code>{}</code>"
+VT_THREATS: "☣️ <i>Ameaças foram detectadas!</i>\n\n<b>{}</b>\n<i>Descrição</i>\n<code>{}</code>\n<b><a href='{}'>Relatório Detalhado</b>"
+VT_FILE_IS_CLEAN: "O arquivo está limpo ✅"

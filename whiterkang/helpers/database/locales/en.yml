@@ -42,9 +42,15 @@ help-plugin-medias: "— Commands for Downloading and subsequently sending media
 help-name-misc: "Misc"
 help-plugin-misc: "— Various commands to entertain the chat.\n\n• /cota — Prices currencies.\n• /weather [country/state/city/neighborhood] — Gets information about the climate of the specified locale.\n• /tr [language] [text(replied or after language)] — Translates text to the specified language.\n• /rbg [image(replied)] — Removes the background from an image."
 
+# LastFM
+help-name-lastfm: "LastFM"
+help-plugin-lastfm: "— Commands to track the music you listen to via <b>LastFM</b>: Last.fm is an online service that offers various music-related features. You can track the music you listen on different streaming platforms and create a personalized music profile, giving song and artist recommendations based on your tastes.\n\n• /set [Username] — Changes your LastFM username\n• /duser — Deletes your LastFM username\n• /profile [Username] — Fetches some information from your LastFM profile\n• /lt | /lmu | /lastfm — Tracks the music you listen to via LastFM\n• status — Does the same as the command [/lt | /lmu | /lastfm] but without using the prefixes ! and /"
+
 COM_1: "Cleaning up..."
 COM_2: "<i>Looking for...</i>"
 COM_3: "Analyzing..."
+
+REASON: "\n<b>Reason</b>: <code>{}</code>"
 
 #Permissions
 NO_CHANGEINFO_PERM: "You do not have sufficient administrative rights to change this group's information!"
@@ -131,17 +137,17 @@ UNBAN_LOGGER: "<b>{}:</b>\n#UNBAN\n<b>Administrator:</b> {}\n<b>User:</b> {} (<c
 BAN_IN_ADMIN: "Why would I ban an admin?  Sounds like a pretty stupid idea."
 BAN_IN_DEV: "Why would I ban my developer?  Sounds like a pretty stupid idea."
 BAN_MY_SELF: "I won't banish myself, are you crazy?"
-BAN_SUCCESS: "User {} was banned for {} in chat: <b>{}</b>\n<b>Reason</b>: <code>{}</code>"
+BAN_SUCCESS: "User {} was banned for {} in chat: <b>{}</b>"
 BAN_LOADING: "<code>Baning user...</code>"
 NO_BAN_BOT: "I can't restrict people here!  Make sure I'm an admin and I can add new admins."
 BAN_LOGGER: "<b>{}:</b>\n#BAN\n<b>Administrator:</b> {}\n<b>User:</b> {} (<code>{}</code>)\n<b>Reason:</b> <code>{}</code>"
 TBAN_LOGGER: "<b>{}:</b>\n#TEMP_BANNED\n<b>Admin:</b> {}\n<b>User:</b> {} (<code>{}</code>)\n<b>Time:</b> {}\n<b>Reason:</b> <code>{}</code>"
-TBAN_SUCCESS: "{} was temporarily banned for <b>{}</b> in <b>{}</b>\n<b>Reason</b>: <code>{}</code>"
+TBAN_SUCCESS: "{} was temporarily banned for <b>{}</b> in <b>{}</b>"
 BANS_NOT_ESPECIFIED_USER: "<code>No valid user_id or message specified.</code>"
 BANS_ID_INVALID: "<code>Invalid username or userid, please try again with valid information ⚠</code>"
 MUTE_IN_ADMIN: "Why would I mutate an administrator? That seems like a pretty dumb idea to me."
 MUTE_IN_MYSELF: "I will not mutate!"
-MUTE_SUCESS: "{} is muted(mutated) on <b>{}</b>\n<b>Reason:</b> <code>{}</code>"
+MUTE_SUCESS: "{} is muted(mutated) on <b>{}</b>"
 MUTING: "<code>Muting User...</code>"
 MUTE_IN_DEV: "Why would I mutate my developer? That seems like a really stupid idea to me."
 NO_MUTE_USER: "You do not have sufficient rights to mute users"
@@ -525,3 +531,16 @@ LANG_TRANSLATE_INLINE: "Translate from {} to {}"
 #Cota
 COTA_PROGRESSING: "<i>Getting information about coins...</i>"
 COTED: "<b>Currency quotes:</b>\n\n💵 <b>Dollar:</b> R$ <code>{}</code>\n🗓 <b>Date:</b > <code>{}</code>\n📊 <b>Variation:</b> <code>{}</code>\n\n💵 <b>Euro:</b> R$ <code> {}</code>\n🗓 <b>Date:</b> <code>{}</code>\n📊 <b>Variation:</b> <code>{}</code>\n \n💵 <b>BTC:</b> R$ <code>{}</code>\n🗓 <b>Date:</b> <code>{}</code>\n📊 <b> Variation:</b> <code>{}</code>\n\n💵 <b>DOGE:</b> R$ <code>{}</code>\n🗓 <b>Date:</ b> <code>{}</code>\n📊 <b>Variation:</b> <code>{}</code>\n\n💵 <b>Yen:</b> R$ <code >{}</code>\n🗓 <b>Date:</b> <code>{}</code>\n📊 <b>Variation:</b> <code>{}</code>\ n\n💵 <b>Argentine Peso:</b> R$ <code>{}</code>\n🗓 <b>Date:</b> <code>{}</code>\n📊 < b>Variation:</b> <code>{}</code>\n\n💵 <b>Russian Ruple:</b> R$ <code>{}</code>\n🗓 <b>Date :</b> <code>{}</code>\n📊 <b>Variation:</b> <code>{}</code>"
+
+#VT
+NO_API_VT: "Error!! There is no VirusTotal API-KEY"
+VT_NO_REPLIED: "<i>Reply to a document to verify!</i>"
+VT_BIG_FILE: "<b>📦 The marked file is too large, you can check files up to 320 MB.</b>"
+VT_DOWNLOADING: "<i>Downloading File...</i>"
+PROCESS_VT: "<b>📦 Processing the file...</b>\n\n<b>🗂 File size:</b> <i>{}</i>"
+VT_NO_SCAN: "<b>📦 This file cannot be scanned!</b>"
+VT_SCAN_BUTTON: "🦠 Scan"
+VT_EXIT: "🔒 Close"
+VT_INFO_FILE: "<b>🗄 File name:</b> <code>{}</code>\n\n<b>💿 File size:</b> </code>{}</code> "
+VT_THREATS: "☣️ <i>Threats have been detected!</i>\n\n<b>{}</b>\n<i>Description</i>\n<code>{}</code>\ n<b><a href='{}'>Detailed Report</b>"
+VT_FILE_IS_CLEAN: "The file is clean ✅"

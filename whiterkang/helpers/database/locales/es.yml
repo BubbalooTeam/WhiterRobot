@@ -43,9 +43,15 @@ help-plugin-medias: "— Comandos para descargar y posteriormente enviar medios 
 help-name-misc: "Varios"
 help-plugin-misc: "— Varios comandos para entretener el chat.\n\n• /cota — Monedas de precios.\n• /clima [país/estado/ciudad/vecindario] — Obtiene información sobre el clima de la localidad especificada .\n• /tr [idioma] [texto (marcado o después del idioma)] — Traduce el texto al idioma especificado.\n• /rbg [imagen (marcado)] — Elimina el fondo de una imagen."
 
+#LastFM
+help-name-lastfm: "LastFM"
+help-plugin-lastfm: "— Comandos para rastrear la música que escuchas a través de <b>LastFM</b>: Last.fm es un servicio en línea que ofrece varias funciones relacionadas con la música. Puedes rastrear la música que escuchas en diferentes plataformas de transmisión y cree un perfil de música personalizado, brindando recomendaciones de canciones y artistas según sus gustos.\n\n• /set [Nombre de usuario]: cambia su nombre de usuario de LastFM\n• /duser: elimina su nombre de usuario de LastFM\n• /profile [ Nombre de usuario] — Obtiene información de su perfil de LastFM\n• /lt | /lmu | /lastfm — Sigue la música que escucha a través de LastFM\n• status — Hace lo mismo que el comando [/lt | /lmu | /lastfm ] pero sin utilizar los prefijos ! y /"
+
 COM_1: "Limpiando..."
 COM_2: "<i>Buscando...</i>"
 COM_3: "Analizando..."
+
+REASON: "\n<b>Razón</b>: <code>{}</code>"
 
 #Permisos
 NO_CHANGEINFO_PERM: "¡No tienes suficientes derechos administrativos para cambiar la información de este grupo!"
@@ -133,17 +139,17 @@ UNBAN_LOGGER: "<b>{}:</b>\n#UNBAN\n<b>Administrador:</b> {}\n<b>Usuario:</b> {} 
 BAN_IN_ADMIN: "¿Por qué prohibiría a un administrador? Suena como una idea bastante tonta."
 BAN_IN_DEV: "¿Por qué prohibiría a mi desarrollador? Suena como una idea bastante tonta."
 BAN_MY_SELF: "No me desterraré, ¿estás loco?"
-BAN_SUCCESS: "El usuario {} fue prohibido por {} en el chat: <b>{}</b>\n<b>Motivo</b>: <code>{}</code>"
+BAN_SUCCESS: "El usuario {} fue prohibido por {} en el chat: <b>{}</b>"
 BAN_LOADING: "<code>Prohibir usuario...</code>"
 NO_BAN_BOT: "¡No puedo restringir personas aquí! Asegúrate de que soy un administrador y puedo agregar nuevos administradores."
 BAN_LOGGER: "<b>{}:</b>\n#BAN\n<b>Administrador:</b> {}\n<b>Usuario:</b> {} (<code>{}</code>)\n<b>Motivo:</b> <code>{}</code>"
 TBAN_LOGGER: "<b>{}:</b>\n#TEMP_BANNED\n<b>Administrador:</b> {}\n<b>Usuario:</b> {} (<code>{}</code>)\n<b>Hora:</b> {}\n<b>Motivo:</b> <code>{}</code>"
-TBAN_SUCCESS: "{} fue suspendido temporalmente por <b>{}</b> en <b>{}</b>\n<b>Razón</b>: <code>{}</code>"
+TBAN_SUCCESS: "{} fue suspendido temporalmente por <b>{}</b> en <b>{}</b>"
 BANS_NOT_SPECIFIED_USER: "<code>No se especificó un ID de usuario o mensaje válido.</code>"
 BANS_ID_INVALID: "<code>Nombre de usuario o ID de usuario no válido, intente nuevamente con información válida ⚠</code>"
 MUTE_IN_ADMIN: "¿Por qué mutaría a un administrador? Me parece una idea bastante tonta."
 MUTE_IN_MYSELF: "¡No mutaré!"
-MUTE_SUCESS: "{} esta apagado (mutado) en <b>{}</b>\n<b>Razón:</b> <code>{}</code>"
+MUTE_SUCESS: "{} esta apagado (mutado) en <b>{}</b>"
 MUTING: "<code>Usuario silenciando...</code>"
 MUTE_IN_DEV: "¿Por qué mutaría a mi desarrollador? Me parece una idea realmente estúpida."
 NO_MUTE_USER: "No tiene suficientes derechos para silenciar usuarios"
@@ -524,4 +530,17 @@ LANG_TRANSLATE_INLINE: "Traducir de {} a {}"
 
 #Cota
 COTA_PROGRESSING: "<i>Obteniendo información sobre monedas...</i>"
-COTED: "<b>Cotizaciones de divisas:</b>\n\n💵 <b>Dólar:</b> R$ <code>{}</code>\n🗓 <b>Fecha:</b > <code>{}</code>\n📊 <b>Variación:</b> <code>{}</code>\n\n💵 <b>Euro:</b> R$ <code> { }</code>\n🗓 <b>Fecha:</b> <code>{}</code>\n📊 <b>Variación:</b> <code>{}</code>\n \ n💵 <b>BTC:</b> R$ <code>{}</code>\n🗓 <b>Fecha:</b> <code>{}</code>\n📊 <b> Variación :</b> <code>{}</code>\n\n💵 <b>DOGE:</b> R$ <code>{}</code>\n🗓 <b>Fecha:</ b > <code>{}</code>\n📊 <b>Variación:</b> <code>{}</code>\n\n💵 <b>Yen:</b> R$ <code> {}</code>\n🗓 <b>Fecha:</b> <code>{}</code>\n📊 <b>Variación:</b> <code>{}</code>\ n \n💵 <b>Peso argentino:</b> R$ <code>{}</code>\n🗓 <b>Fecha:</b> <code>{}</code>\n📊 < b >Variación:</b> <code>{}</code>\n\n💵 <b>Rupla rusa:</b> R$ <code>{}</code>\n🗓 <b>Fecha: </b> <code>{}</code>\n📊 <b>Variación:</b> <code>{}</code>"
+COTED: "<b>Cotizaciones de divisas:</b>\n\n💵 <b>Dólar:</b> R$ <code>{}</code>\n🗓 <b>Fecha:</b > <code>{}</code>\n📊 <b>Variación:</b> <code>{}</code>\n\n💵 <b>Euro:</b> R$ <code> { }</code>\n🗓 <b>Fecha:</b> <code>{}</code>\n📊 <b>Variación:</b> <code>{}</code>\n \ n💵 <b>BTC:</b> R$ <code>{}</code>\n🗓 <b>Fecha:</b> <code>{}</code>\n📊 <b> Variación :</b> <code>{}</code>\n\n💵 <b>DOGE:</b> R$ <code>{}</code>\n🗓 <b>Fecha:</ b > <code>{}</code>\n📊 <b>Variación:</b> <code>{}</code>\n\n💵 <b>Yen:</b> R$ <code> {}</code>\n🗓 <b>Fecha:</b> <code>{}</code>\n📊 <b>Variación:</b> <code>{}</code>\ n \n💵 <b>Peso argentino:</b> R$ <code>{}</code>\n🗓 <b>Fecha:</b> <code>{}</code>\n📊 <b>Variación:</b> <code>{}</code>\n\n💵 <b>Rupla rusa:</b> R$ <code>{}</code>\n🗓 <b>Fecha: </b> <code>{}</code>\n📊 <b>Variación:</b> <code>{}</code>"
+
+#VT
+NO_API_VT: "¡Error! No hay ninguna CLAVE API de VirusTotal"
+VT_NO_REPLIED: "<i>¡Responder a un documento para verificar!</i>"
+VT_BIG_FILE: "<b>📦 El archivo marcado es demasiado grande, puede verificar archivos de hasta 320 MB.</b>"
+VT_DOWNLOADING: "<i>Descargando archivo...</i>"
+PROCESS_VT: "<b>📦 Procesando el archivo...</b>\n\n<b>🗂 Tamaño del archivo:</b> <i>{}</i>"
+VT_NO_SCAN: "<b>📦 ¡Este archivo no se puede escanear!</b>"
+VT_SCAN_BUTTON: "🦠 Escanear"
+VT_EXIT: "🔒 Cerrar"
+VT_INFO_FILE: "<b>🗄 Nombre de archivo:</b> <code>{}</code>\n\n<b>💿 Tamaño de archivo:</b> </code>{}</code> "
+VT_THREATS: "☣️ <i>¡Se han detectado amenazas!</i>\n\n<b>{}</b>\n<i>Descripción</i>\n<code>{}</code> \ n<b><a href='{}'>Informe detallado</b>"
+VT_FILE_IS_CLEAN: "El archivo está limpio ✅"
