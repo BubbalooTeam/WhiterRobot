@@ -536,7 +536,7 @@ COTED: "<b>Cotação das moedas:</b>\n\n💵 <b>Dólar:</b> R$ <code>{}</code>\n
 #VT
 NO_API_VT: "Erro!! Não há API-KEY do VirusTotal"
 VT_NO_REPLIED: "<i>Responda a um documento para verificar!</i>"
-VT_BIG_FILE: "<b>📦 O arquivo marcado é muito grande, você pode verificar arquivos de até 320 MB.</b>"
+VT_BIG_FILE: "<b>📦 O arquivo marcado é muito grande, você pode verificar arquivos de até 32 MB.</b>"
 VT_DOWNLOADING: "<i>Fazendo Download do Arquivo...</i>"
 PROCESS_VT: "<b>📦 Processando o arquivo...</b>\n\n<b>🗂 Tamanho do arquivo:</b> <i>{}</i>"
 VT_NO_SCAN: "<b>📦 Este arquivo não pode ser verificado!</b>"
