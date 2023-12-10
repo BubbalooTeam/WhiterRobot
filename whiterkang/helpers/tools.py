@@ -10,6 +10,7 @@ import requests
 import asyncio
 import spamwatch
 import logging
+import json
 
 from datetime import datetime, timedelta
 from httpx import HTTPError
@@ -444,7 +445,7 @@ def gsmarena_tr_info(info: str, lang: str):
 
 def resize_image(file: str) -> BytesIO:
     im = Image.open(file)
-    im = ImageOps.contain(im, (512, 512), method=Image.ANTIALIAS)
+    im = ImageOps.contain(im, (512, 512), method=Image.LANCZOS)
     image = BytesIO()
     image.name = "sticker.png"
     im.save(image, "PNG")
@@ -616,3 +617,22 @@ async def check_perms(
         await sender((await tld(chat.id, string)))
     return False
 
+async def scan_file(path: str) -> requests.Response:
+    """ scan file """
+    url = 'https://www.virustotal.com/vtapi/v2/file/scan'
+    path_name = path.split('/')[-1]
+
+    params = {'apikey': Config.VT_API_KEY}
+    files = {
+        'file': (path_name, open(path, 'rb'))  # skipcq
+    }
+    return requests.post(url, files=files, params=params)
+
+
+async def get_report(sha1: str) -> requests.Response:
+    """ get report of files """
+    url = 'https://www.virustotal.com/vtapi/v2/file/report'
+    params = {
+        'apikey': Config.VT_API_KEY, 'resource': sha1, 'allinfo': 'False'
+    }
+    return requests.get(url, params=params)

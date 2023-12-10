@@ -9,6 +9,8 @@ from .gsmarena import search_device, get_device
 from .tools import (
     check_bot_rights,
     check_perms,
+    get_target_user,
+    get_reason_text,
     humanbytes,
     is_dev,
     is_admin,
@@ -30,7 +32,9 @@ from .tools import (
     resize_image,
     convert_video,
     aexec,
-    search_yt
+    search_yt,
+    scan_file,
+    get_report,
 )
 from .decorators import disableable_dec, inline_handler, input_str, DISABLABLE_CMDS, require_admin
 from .antispam import gban_user, check_ban, ungban_user, check_antispam #não mecher
