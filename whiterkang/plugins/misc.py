@@ -5,6 +5,8 @@ import os
 
 import requests
 import html
+import asyncio
+import json
 
 from gpytranslate import Translator
 from covid import Covid
@@ -468,7 +470,7 @@ async def virus_total(c: WhiterX, m: Message):
     msg = await m.reply(await tld(chat_id, "COM_3"))
 
     size_of_file = replied.document.file_size
-    if size_of_file > 320 * 1024 * 1024:
+    if size_of_file > 32 * 1024 * 1024:
         await msg.edit(await tld(chat_id, "VT_BIG_FILE"))
         return
     
@@ -491,42 +493,28 @@ async def virus_total(c: WhiterX, m: Message):
     await msg.edit(f"<code>{response.json()['verbose_msg']}</code>")
     sha1 = response.json()['resource']
 
-    keyboard = [
-        [
-            InlineKeyboardButton(await tld(chat_id, "VT_SCAN_BUTTON"), callback_data="vt.{}|{}".format(sha1, user_id)),
-            InlineKeyboardButton(await tld(chat_id, "VT_EXIT"), callback_data="vt.exit|{}".format(user_id))
-        ]
-    ]
-
     text = (await tld(chat_id, "VT_INFO_FILE")).format(dvt, humanbytes(size_of_file))
 
-    await msg.edit(text, reply_markup=InlineKeyboardMarkup(keyboard))
+    await msg.edit(text)
 
-@WhiterX.on_callback_query(filters.regex(pattern=r"^vt\.(.*?)\|(.*?)$"))
-async def vt_actions(c: WhiterX, cb: CallbackQuery):
-    try:
-        sha1, user_id = cb.data.split('|')
-    except ValueError:
-        return print(cb.data)
-    
-    if cb.from_user.id != int(user_id):
-        return await cb.answer(await tld(cb.message.chat.id, "NO_FOR_YOU"), show_alert=True)
-    
-    if sha1 == "exit":
-        await c.delete_messages(cb.message.chat.id, cb.message.id)
-        return
-    
-    await cb.edit_message_text(await tld(cb.message.chat.id, "COM_3"))
-    
+    await asyncio.sleep(1)
+
     que_msg = "Your resource is queued for analysis"
     viruslist = []
     reasons = []
     response = get_report(sha1).json()
+
+    keyboard = [
+        [
+            InlineKeyboardButton(await tld(chat_id, "VT_EXIT"), callback_data="vt.exit|{}".format(user_id))
+        ]
+    ]
+
     if "Invalid resource" in response.get('verbose_msg'):
-        await cb.edit_message_text(response.get('verbose_msg'))
+        await msg.edit(response.get('verbose_msg'))
         return
     if response.get('verbose_msg') == que_msg:
-        await cb.edit_message_text(f"<code>{que_msg}</code>")
+        await msg.edit(f"<code>{que_msg}</code>")
         while response.get('verbose_msg') == que_msg:
             await asyncio.sleep(3)
             try:
@@ -537,7 +525,7 @@ async def vt_actions(c: WhiterX, cb: CallbackQuery):
         report = response['scans']
         link = response['permalink']
     except Exception as e:
-        await cb.edit_message_text(e)
+        await msg.edit(e)
         return
     for i in report:
         if report[i]['detected'] is True:
@@ -546,9 +534,22 @@ async def vt_actions(c: WhiterX, cb: CallbackQuery):
     if len(viruslist) > 0:
         names = ' , '.join(viruslist)
         reason = '\n'.join(reasons)
-        await cb.edit_message_text((await tld(cb.message.chat.id, "VT_THREATS")).format(names, reason, link))
+        await msg.edit((await tld(chat_id, "VT_THREATS")).format(names, reason, link), reply_markup=InlineKeyboardMarkup(keyboard))
     else:
-        await msg.edit(await tld(cb.message.chat.id, "VT_FILE_IS_CLEAN"))
+        await msg.edit(await tld(chat_id, "VT_FILE_IS_CLEAN"), reply_markup=InlineKeyboardMarkup(keyboard))
+
+@WhiterX.on_callback_query(filters.regex(pattern=r"vt\.exit\|\{\}"))
+async def vt_actions(c: WhiterX, cb: CallbackQuery):
+    try:
+        user_id = cb.data.split('|')
+    except ValueError:
+        return print(cb.data)
+    
+    if cb.from_user.id != int(user_id):
+        return await cb.answer(await tld(cb.message.chat.id, "NO_FOR_YOU"), show_alert=True)
+    
+    await c.delete_messages(cb.message.chat.id, cb.message.id)
+    
 
 
 inline_handler.add_cmd("weather <location>", "Get weather information for the given location or city.", weather_url_thumb, aliases=["weather"])

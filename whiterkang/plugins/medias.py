@@ -297,7 +297,7 @@ async def sdl(c: WhiterX, message: Message):
 
 
 @WhiterX.on_callback_query(filters.regex(r"^media_config"))
-@require_admin(ChatPrivileges(can_change_info=True))
+@require_admin(ChatPrivileges(can_change_info=True), allow_in_private=True)
 async def media_config(c: WhiterX, callback: CallbackQuery):
     chat = callback.message.chat
 
