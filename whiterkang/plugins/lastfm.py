@@ -420,3 +420,5 @@ async def now_play(c: WhiterX, cb: InlineQuery):
         )
 
 inline_handler.add_cmd("status", "Share the music you are listening to with your friends.", "https://telegra.ph/file/d9e8a2572131b2f5205ae.jpg", aliases=["lastfm", "lt"])
+
+__help__ = True

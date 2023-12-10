@@ -22,6 +22,8 @@ from whiterkang import WhiterX, Config, db
 from whiterkang.helpers import (
     tld, 
     require_admin,
+    get_target_user,
+    get_reason_text,
     is_admin,
     check_bot_rights,
     is_dev,
@@ -1483,3 +1485,27 @@ async def cleanup(c: WhiterX, m: Message):
         )
     else:
         await sent.edit_text(await tld(chat_id, "NO_ZOMBIES"))
+
+@WhiterX.on_message(filters.command("ban", Config.TRIGGER))
+@disableable_dec("ban")
+@require_admin(ChatPrivileges(can_restrict_members=True))
+async def ban(c: WhiterX, m: Message):
+    chat_id = m.chat.id
+    target_user = await get_target_user(c, m)
+    reason = await get_reason_text(c, m)
+    check_admin = await m.chat.get_member(target_user.id)
+    if not check_bot_rights(chat_id, "can_restrict_members"):
+        return await m.reply(await tld(chat_id, "NO_BAN_BOT"))
+    if await is_admin(chat_id, check_admin.id):
+        await m.reply_text(await tld(chat_id, "BAN_IN_ADMIN"))
+        return
+
+    await m.chat.ban_member(target_user.id)
+    text = (await tld(chat_id, "BAN_SUCCESS")).format(
+        user=target_user.mention,
+        admin=m.from_user.mention,
+    )
+    if reason:
+        await m.reply_text(text + (await tld(chat_id, "REASON")).format(reason_text=reason))
+    else:
+        await m.reply_text(text)

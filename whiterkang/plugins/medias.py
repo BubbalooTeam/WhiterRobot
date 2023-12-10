@@ -214,7 +214,7 @@ async def cli_ytdl(c: WhiterX, cq: CallbackQuery):
 
 
     
-@WhiterX.on_message(filters.command(["dl", "sdl", "mdl"]) | filters.regex(SDL_REGEX_LINKS))
+@WhiterX.on_message(filters.command(["dl", "sdl", "mdl"], Config.TRIGGER) | filters.regex(SDL_REGEX_LINKS))
 async def sdl(c: WhiterX, message: Message):
     if message.matches:
         if (
@@ -323,8 +323,8 @@ async def media_config(c: WhiterX, callback: CallbackQuery):
 
         keyboard += [
             [
-                (await tld(chat.id, "AUTO_DOWNLOAD_BNT"), "media_config"),
-                (state[(await csdl(chat.id))], "media_config-"),
+                    InlineKeyboardButton(await tld(chat.id, "AUTO_DOWNLOAD_BNT"), "media_config"),
+                    InlineKeyboardButton(state[(await csdl(chat.id))], "media_config-"),
             ]
         ]
 
@@ -334,7 +334,7 @@ async def media_config(c: WhiterX, callback: CallbackQuery):
     )
 
 @WhiterX.on_callback_query(filters.regex(r"config"))
-@WhiterX.on_message(filters.command("config"))
+@WhiterX.on_message(filters.command("config", Config.TRIGGER))
 @require_admin(ChatPrivileges(can_change_info=True))
 async def config(c: WhiterX, union: Message | CallbackQuery):
     reply = union.edit_message_text if isinstance(union, CallbackQuery) else union.reply_text
@@ -351,7 +351,7 @@ async def config(c: WhiterX, union: Message | CallbackQuery):
 
     await reply(await tld(chat.id, "CONFIG_TEXT"), reply_markup=InlineKeyboardMarkup(keyboard))
 
-@WhiterX.on_message(filters.command("yt", prefixes=["/", "!"]))
+@WhiterX.on_message(filters.command("yt", Config.TRIGGER))
 async def yt_search_cmd(c: WhiterX, m: Message):
     vids = [
         '{}: <a href="{}">{}</a>'.format(num + 1, i["url"], i["title"])

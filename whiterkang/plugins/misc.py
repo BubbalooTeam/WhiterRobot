@@ -26,7 +26,7 @@ from hydrogram.types import (
 from hydrogram.errors import BadRequest
 
 from whiterkang import WhiterX, Config
-from whiterkang.helpers import tld, inline_handler, group_apps, weather_apikey, disableable_dec
+from whiterkang.helpers import tld, inline_handler, group_apps, weather_apikey, disableable_dec, scan_file, get_report, humanbytes
 
 IMG_PATH = Config.DOWN_PATH + "WhiterOS-RemoveBG.png"
 
@@ -447,6 +447,108 @@ async def tr_inline(c: WhiterX, q: InlineQuery):
         )
     except IndexError:
         return
+    
+@WhiterX.on_message(filters.command("vt", Config.TRIGGER))
+@disableable_dec("vt")
+async def virus_total(c: WhiterX, m: Message):
+    chat_id = m.chat.id
+    user_id = m.from_user.id
+    FILE_PATH = f"{Config.DOWN_PATH}/virustotal/"
+    if not Config.VT_API_KEY:
+        await m.reply(
+            await tld(chat_id, "NO_API_VT"),
+            disable_web_page_preview=True,
+        )
+        return await c.send_err("<i>You have to sign up on <code>virustotal.com</code> and get <code>API_KEY</code> and paste in <b>VT_API_KEY</b> var.")
+    replied = m.reply_to_message
+    if not (replied and replied.document):
+        return await m.reply(await tld(chat_id, "VT_NO_REPLIED"))
+    
+    msg = await m.reply(await tld(chat_id, "COM_3"))
+
+    size_of_file = replied.document.file_size
+    if size_of_file > 320 * 1024 * 1024:
+        await msg.edit(await tld(chat_id, "VT_BIG_FILE"))
+        return
+    
+    await msg.edit(await tld(chat_id, "VT_DOWNLOADING"))
+    dvt_loc = await c.download_media(
+        message=replied,
+        file_name=FILE_PATH,
+    )
+    dvt = os.path.join(IMG_PATH, os.path.basename(dvt_loc))
+    
+    await msg.edit((await tld(chat_id, "PROCESS_VT")).format(humanbytes(size_of_file)))
+
+    response = await scan_file(dls)
+    os.remove(dls)
+
+    if response is False:
+        await msg.edit(await tld(chat_id, "VT_NO_SCAN"))
+        return
+    
+    await msg.edit(f"<code>{response.json()['verbose_msg']}</code>")
+    sha1 = response.json()['resource']
+
+    keyboard = [
+        [
+            InlineKeyboardButton(await tld(chat_id, "VT_SCAN_BUTTON"), callback_data="vt.{}|{}".format(sha1, user_id)),
+            InlineKeyboardButton(await tld(chat_id, "VT_EXIT"), callback_data="vt.exit|{}".format(user_id))
+        ]
+    ]
+
+    text = (await tld(chat_id, "VT_INFO_FILE")).format(dvt, humanbytes(size_of_file))
+
+    await msg.edit(text, reply_markup=InlineKeyboardMarkup(keyboard))
+
+@WhiterX.on_callback_query(filters.regex(pattern=r"^vt\.(.*?)\|(.*?)$"))
+async def vt_actions(c: WhiterX, cb: CallbackQuery):
+    try:
+        sha1, user_id = cb.data.split('|')
+    except ValueError:
+        return print(cb.data)
+    
+    if cb.from_user.id != int(user_id):
+        return await cb.answer(await tld(cb.message.chat.id, "NO_FOR_YOU"), show_alert=True)
+    
+    if sha1 == "exit":
+        await c.delete_messages(cb.message.chat.id, cb.message.id)
+        return
+    
+    await cb.edit_message_text(await tld(cb.message.chat.id, "COM_3"))
+    
+    que_msg = "Your resource is queued for analysis"
+    viruslist = []
+    reasons = []
+    response = get_report(sha1).json()
+    if "Invalid resource" in response.get('verbose_msg'):
+        await cb.edit_message_text(response.get('verbose_msg'))
+        return
+    if response.get('verbose_msg') == que_msg:
+        await cb.edit_message_text(f"<code>{que_msg}</code>")
+        while response.get('verbose_msg') == que_msg:
+            await asyncio.sleep(3)
+            try:
+                response = await get_report(sha1).json()
+            except json.decoder.JSONDecodeError:
+                await asyncio.sleep(3)
+    try:
+        report = response['scans']
+        link = response['permalink']
+    except Exception as e:
+        await cb.edit_message_text(e)
+        return
+    for i in report:
+        if report[i]['detected'] is True:
+            viruslist.append(i)
+            reasons.append('â¤ ' + report[i]['result'])
+    if len(viruslist) > 0:
+        names = ' , '.join(viruslist)
+        reason = '\n'.join(reasons)
+        await cb.edit_message_text((await tld(cb.message.chat.id, "VT_THREATS")).format(names, reason, link))
+    else:
+        await msg.edit(await tld(cb.message.chat.id, "VT_FILE_IS_CLEAN"))
+
 
 inline_handler.add_cmd("weather <location>", "Get weather information for the given location or city.", weather_url_thumb, aliases=["weather"])
 inline_handler.add_cmd("tr <lang> <text>", "Translates text into the specified language.", translator_url_thumb, aliases=["translate", "tr"])
