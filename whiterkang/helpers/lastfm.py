@@ -20,7 +20,7 @@ class Fonts:
 
 def truncate(text, font, limit):
     edited = True if font.getsize(text)[0] > limit else False
-    while font.getsize(text)[0] > limit:
+    while font.get_metrics(text)[0] > limit:
         text = text[:-1]
     if edited:
         return(text.strip() + '..')
