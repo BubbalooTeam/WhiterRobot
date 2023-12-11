@@ -626,7 +626,7 @@ async def scan_file(path: str) -> requests.Response:
     files = {
         'file': (path_name, open(path, 'rb'))  # skipcq
     }
-    return requests.post(url, files=files, params=params)
+    return await http.post(url, files=files, params=params)
 
 
 async def get_report(sha1: str) -> requests.Response:
@@ -635,4 +635,4 @@ async def get_report(sha1: str) -> requests.Response:
     params = {
         'apikey': Config.VT_API_KEY, 'resource': sha1, 'allinfo': 'False'
     }
-    return requests.get(url, params=params)
+    return await http.get(url, params=params)
