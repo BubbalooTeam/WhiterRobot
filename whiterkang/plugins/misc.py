@@ -456,7 +456,7 @@ async def tr_inline(c: WhiterX, q: InlineQuery):
 async def virus_total(c: WhiterX, m: Message):
     chat_id = m.chat.id
     user_id = m.from_user.id
-    FILE_PATH = f"{Config.DOWN_PATH}/virustotal/"
+    FILE_PATH = f"{Config.DOWN_PATH}virustotal/"
     if not Config.VT_API_KEY:
         await m.reply(
             await tld(chat_id, "NO_API_VT"),
@@ -531,16 +531,16 @@ async def virus_total(c: WhiterX, m: Message):
         return
     for i in report:
         if report[i]['detected'] is True:
-            viruslist.append(i)
+            viruslist.append("⛔️" + i)
             reasons.append('â¤ ' + report[i]['result'])
     if len(viruslist) > 0:
-        names = ' , '.join(viruslist)
+        names = '\n'.join(viruslist)
         reason = '\n'.join(reasons)
-        await msg.edit((await tld(chat_id, "VT_THREATS")).format(names, reason, link), reply_markup=InlineKeyboardMarkup(keyboard))
+        await msg.edit((await tld(chat_id, "VT_THREATS")).format(len(viruslist), names, reason, link), reply_markup=InlineKeyboardMarkup(keyboard))
     else:
         await msg.edit(await tld(chat_id, "VT_FILE_IS_CLEAN"), reply_markup=InlineKeyboardMarkup(keyboard))
 
-@WhiterX.on_callback_query(filters.regex(pattern=r"vt\.exit\|\{\}"))
+@WhiterX.on_callback_query(filters.regex(pattern=r"vt\.exit|\d+"))
 async def vt_actions(c: WhiterX, cb: CallbackQuery):
     try:
         user_id = cb.data.split('|')
