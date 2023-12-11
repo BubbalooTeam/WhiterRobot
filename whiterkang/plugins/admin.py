@@ -1494,7 +1494,7 @@ async def ban(c: WhiterX, m: Message):
     target_user = await get_target_user(c, m)
     reason = await get_reason_text(c, m)
     check_admin = await m.chat.get_member(target_user.id)
-    if not check_bot_rights(chat_id, "can_restrict_members"):
+    if not await check_bot_rights(chat_id, "can_restrict_members"):
         return await m.reply(await tld(chat_id, "NO_BAN_BOT"))
     if await is_admin(chat_id, target_user.id):
         await m.reply_text(await tld(chat_id, "BAN_IN_ADMIN"))
@@ -1504,6 +1504,7 @@ async def ban(c: WhiterX, m: Message):
     text = (await tld(chat_id, "BAN_SUCCESS")).format(
         target_user.mention,
         m.from_user.mention,
+        m.chat.title
     )
     if reason:
         await m.reply_text(text + (await tld(chat_id, "REASON")).format(reason))

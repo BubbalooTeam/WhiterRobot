@@ -139,7 +139,7 @@ UNBAN_LOGGER: "<b>{}:</b>\n#UNBAN\n<b>Administrador:</b> {}\n<b>Usuario:</b> {} 
 BAN_IN_ADMIN: "¿Por qué prohibiría a un administrador? Suena como una idea bastante tonta."
 BAN_IN_DEV: "¿Por qué prohibiría a mi desarrollador? Suena como una idea bastante tonta."
 BAN_MY_SELF: "No me desterraré, ¿estás loco?"
-BAN_SUCCESS: "El usuario {} fue prohibido por {} en el chat: <b>{}</b>"
+BAN_SUCCESS: "El usuario {} fue prohibido por {} en el chat <b>{}</b>"
 BAN_LOADING: "<code>Prohibir usuario...</code>"
 NO_BAN_BOT: "¡No puedo restringir personas aquí! Asegúrate de que soy un administrador y puedo agregar nuevos administradores."
 BAN_LOGGER: "<b>{}:</b>\n#BAN\n<b>Administrador:</b> {}\n<b>Usuario:</b> {} (<code>{}</code>)\n<b>Motivo:</b> <code>{}</code>"
