@@ -47,9 +47,7 @@ class Config:
     VT_API_KEY = os.environ.get("VT_API_KEY")
     PEXELS_API_KEY = os.environ.get("PEXELS_API_KEY")
     GBAN_LOGS = os.environ.get("GBAN_LOGS")
-    BLACK_LIST = (
-      123456789,
-)
+    
     HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY")
     HEROKU_API_NAME = os.environ.get("HEROKU_API_NAME")
 
