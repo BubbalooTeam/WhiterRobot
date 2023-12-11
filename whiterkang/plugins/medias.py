@@ -23,7 +23,7 @@ from hydrogram.enums import ChatType, ChatAction
 
 
 from whiterkang import WhiterX, Config 
-from whiterkang.helpers import humanbytes, tld, csdl, cisdl, tsdl, tisdl, DownloadMedia, extract_info, http, is_admin, add_user, find_user, search_yt, require_admin
+from whiterkang.helpers import humanbytes, tld, csdl, cisdl, tsdl, tisdl, DownloadMedia, extract_info, http, is_admin, add_user, find_user, search_yt, require_admin, disableable_dec
 
 
 YOUTUBE_REGEX = re.compile(
@@ -38,6 +38,7 @@ MAX_FILESIZE = 2000000000
 
 
 @WhiterX.on_message(filters.command("ytdl", Config.TRIGGER))
+@disableable_dec("ytdl")
 async def ytdlcmd(c: WhiterX, m: Message):
     user = m.from_user.id
 
