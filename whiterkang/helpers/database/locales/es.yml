@@ -541,6 +541,6 @@ PROCESS_VT: "<b>📦 Procesando el archivo...</b>\n\n<b>🗂 Tamaño del archivo
 VT_NO_SCAN: "<b>📦 ¡Este archivo no se puede escanear!</b>"
 VT_SCAN_BUTTON: "🦠 Escanear"
 VT_EXIT: "🔒 Cerrar"
-VT_INFO_FILE: "<b>🗄 Nombre de archivo:</b> <code>{}</code>\n\n<b>💿 Tamaño de archivo:</b> </code>{}</code> "
-VT_THREATS: "☣️ <i>¡Se han detectado amenazas!</i>\n\n<b>{}</b>\n<i>Descripción</i>\n<code>{}</code> \ n<b><a href='{}'>Informe detallado</b>"
+VT_INFO_FILE: "<b>🗄 Nombre de archivo:</b> <code>{}</code>\n\n<b>💿 Tamaño de archivo:</b> </code>{}</code>"
+VT_THREATS: "☣️ <i>{} ¡Se han detectado amenazas!</i>\n\n<b>{}</b>\n\n<i>Descripción</i>\n<código  > {}</code>\n\n<b><a href='{}'>Informe detallado</b>"
 VT_FILE_IS_CLEAN: "El archivo está limpio ✅"
