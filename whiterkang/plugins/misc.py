@@ -502,7 +502,8 @@ async def virus_total(c: WhiterX, m: Message):
     que_msg = "Your resource is queued for analysis"
     viruslist = []
     reasons = []
-    response = await get_report(sha1).json()
+    pre_response = await get_report(sha1)
+    response = pre_response.json()
 
     keyboard = [
         [
@@ -518,7 +519,8 @@ async def virus_total(c: WhiterX, m: Message):
         while response.get('verbose_msg') == que_msg:
             await asyncio.sleep(3)
             try:
-                response = await get_report(sha1).json()
+                pre_response = await get_report(sha1)
+                response = pre_response.json()
             except json.decoder.JSONDecodeError:
                 await asyncio.sleep(3)
     try:
