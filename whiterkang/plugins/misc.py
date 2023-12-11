@@ -507,7 +507,7 @@ async def virus_total(c: WhiterX, m: Message):
 
     keyboard = [
         [
-            InlineKeyboardButton(await tld(chat_id, "VT_EXIT"), callback_data="vt.exit|{}".format(user_id))
+            InlineKeyboardButton(await tld(chat_id, "VT_EXIT"), callback_data=f"vt.exit|{user_id}")
         ]
     ]
 
