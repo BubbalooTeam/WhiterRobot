@@ -1502,10 +1502,10 @@ async def ban(c: WhiterX, m: Message):
 
     await m.chat.ban_member(target_user.id)
     text = (await tld(chat_id, "BAN_SUCCESS")).format(
-        user=target_user.mention,
-        admin=m.from_user.mention,
+        target_user.mention,
+        m.from_user.mention,
     )
     if reason:
-        await m.reply_text(text + (await tld(chat_id, "REASON")).format(reason_text=reason))
+        await m.reply_text(text + (await tld(chat_id, "REASON")).format(reason))
     else:
         await m.reply_text(text)
