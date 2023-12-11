@@ -505,12 +505,6 @@ async def virus_total(c: WhiterX, m: Message):
     pre_response = await get_report(sha1)
     response = pre_response.json()
 
-    keyboard = [
-        [
-            InlineKeyboardButton(await tld(chat_id, "VT_EXIT"), callback_data=f"vt.exit|{user_id}")
-        ]
-    ]
-
     if "Invalid resource" in response.get('verbose_msg'):
         await msg.edit(response.get('verbose_msg'))
         return
@@ -536,22 +530,9 @@ async def virus_total(c: WhiterX, m: Message):
     if len(viruslist) > 0:
         names = '\n'.join(viruslist)
         reason = '\n'.join(reasons)
-        await msg.edit((await tld(chat_id, "VT_THREATS")).format(len(viruslist), names, reason, link), reply_markup=InlineKeyboardMarkup(keyboard))
+        await msg.edit((await tld(chat_id, "VT_THREATS")).format(len(viruslist), names, reason, link))
     else:
-        await msg.edit(await tld(chat_id, "VT_FILE_IS_CLEAN"), reply_markup=InlineKeyboardMarkup(keyboard))
-
-@WhiterX.on_callback_query(filters.regex(pattern=r"vt\.exit|\d+"))
-async def vt_actions(c: WhiterX, cb: CallbackQuery):
-    try:
-        user_id = cb.data.split('|')
-    except ValueError:
-        return print(cb.data)
-    
-    if cb.from_user.id != int(user_id):
-        return await cb.answer(await tld(cb.message.chat.id, "NO_FOR_YOU"), show_alert=True)
-    
-    await c.delete_messages(cb.message.chat.id, cb.message.id)
-    
+        await msg.edit(await tld(chat_id, "VT_FILE_IS_CLEAN"))
 
 
 inline_handler.add_cmd("weather <location>", "Get weather information for the given location or city.", weather_url_thumb, aliases=["weather"])
