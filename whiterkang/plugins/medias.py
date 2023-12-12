@@ -108,8 +108,7 @@ async def ytdlcmd(c: WhiterX, m: Message):
         # Save urls
         video = await search_yt(title)
         for i in range(20): # usa o tamanho da lista como parâmetro
-            var = YT_VAR[key_search][str(i)]
-            var.append(video["url"])
+            var = YT_VAR[key_search][str(i)] = video["url"]
 
 
         #Add a scroll buttons
