@@ -200,7 +200,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
             ),
         ],
     ]
-    if len(page) >= 2:
+    if page >= 2:
         keyboard += [
             [
                 InlineKeyboardButton(
