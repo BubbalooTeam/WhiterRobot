@@ -79,10 +79,16 @@ async def ytdlcmd(c: WhiterX, m: Message):
 
     key_search = rand_key()
 
+    if " - " in yt["title"]:
+        performer, title = yt["title"].rsplit(" - ", 1)
+    else:
+        performer = yt.get("creator") or yt.get("uploader")
+        title = yt["title"]
+
     keyboard = [
         [
             InlineKeyboardButton(
-                f"1/{len(yt['result'])}",
+                f"1/{len(await search_yt(title))}",
                 callback_data=f'yt_scrool.{user}|{key_search}|1'
             ),
         ],
@@ -97,12 +103,6 @@ async def ytdlcmd(c: WhiterX, m: Message):
             ),
         ]
     ]
-
-    if " - " in yt["title"]:
-        performer, title = yt["title"].rsplit(" - ", 1)
-    else:
-        performer = yt.get("creator") or yt.get("uploader")
-        title = yt["title"]
 
     thumb_ = await get_ytthumb(yt["id"])
 
