@@ -142,11 +142,17 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     key_search = re.sub(r"^yt_scroll\.", "", key_search)
     pages = int(pages)
 
+    if page == 1:
+        if len(await search_yt(title)) == 1:
+            return await cq.answer("That's the end of list", show_alert=True)
+        
+
     query = YT_VAR[key_search]
 
     yt_search = await search_yt(query)
     url = yt_search[pages]["url"]
     page = int(pages+1)
+    back_page = (pages-1)
     rege = YOUTUBE_REGEX.match(url)
 
     t = TIME_REGEX.search(url)
@@ -194,6 +200,10 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
             InlineKeyboardButton(
                 f"{page}/{len(await search_yt(query))}",
                 callback_data=f'yt_scroll.{key_search}|{user}|{page}'
+            ),
+            InlineKeyboardButton(
+                await tld(chat.id, "BACK_BNT"), 
+                callback_data=f"ytdl_scroll|{search_key}|{back_page}"
             ),
         ],
     ]
