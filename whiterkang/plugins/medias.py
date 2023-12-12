@@ -109,7 +109,7 @@ async def ytdlcmd(c: WhiterX, m: Message):
         i = await search_yt(title)
         num = 1
         for i in range(20):
-            YT_VAR[key_search][num] = i["url"]
+            YT_VAR[key_search][f"{num}"] = i["url"]
             num += 1
 
         #Add a scroll buttons
@@ -153,7 +153,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
 
     page = int(pages+1)
     urls = YT_VAR[key_search]
-    url = urls[pages]
+    url = urls[f"{pages}"]
     back_page = (pages-1)
     rege = YOUTUBE_REGEX.match(url)
 
