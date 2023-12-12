@@ -145,6 +145,9 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
 
     query = YT_VAR[key_search]
 
+    if pages == 0:
+        pages = int(pages+1)
+
     if pages == 1:
         if len(await search_yt(query)) == 1:
             return await cq.answer("That's the end of list", show_alert=True)
