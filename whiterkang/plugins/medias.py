@@ -188,9 +188,6 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
         performer = yt.get("creator") or yt.get("uploader")
         title = yt["title"]
 
-    #Generate a  random code
-    key_search = rand_key()
-
     #Add a scroll buttons
     keyboard += [
         [
