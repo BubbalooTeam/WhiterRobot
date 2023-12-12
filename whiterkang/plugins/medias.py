@@ -139,14 +139,14 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     
     ydl = YoutubeDL({"noplaylist": True})
 
+    query = YT_VAR[key_search]
+    yt_search = await search_yt(query)
+    url = yt_search[page+1]["url"]
+
     rege = YOUTUBE_REGEX.match(url)
 
     t = TIME_REGEX.search(url)
     temp = t.group(1) if t else 0
-
-    query = YT_VAR[key_search]
-    yt_search = await search_yt(query)
-    url = yt_search[page+1]["url"]
 
     yt = await extract_info(ydl, rege.group(), download=False)
 
