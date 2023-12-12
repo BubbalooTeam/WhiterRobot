@@ -108,7 +108,8 @@ async def ytdlcmd(c: WhiterX, m: Message):
         # Save urls
         video = await search_yt(title)
         for i in range(20): # usa o tamanho da lista como parâmetro
-            YT_VAR[key_search].append(video["url"])
+            var = YT_VAR[key_search][str(i)]
+            var.append(video["url"])
 
 
         #Add a scroll buttons
@@ -144,7 +145,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     ydl = YoutubeDL({"noplaylist": True})
 
     key_search = re.sub(r"^yt_scroll\.", "", key_search)
-    pages = int(pages)
+    pages = int(pages+1)
 
     urls = YT_VAR[key_search]
 
@@ -152,7 +153,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
         if len(urls) == 1:
             return await cq.answer("That's the end of list", show_alert=True)
 
-    url = urls["url"]
+    url = urls[str(pages)]["url"]
     
     rege = YOUTUBE_REGEX.match(url)
 
@@ -193,8 +194,8 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     keyboard += [
         [
             InlineKeyboardButton(
-                f"{pages+1}/{len(urls)}",
-                callback_data=f'yt_scroll.{key_search}|{user}|{pages+1}'
+                f"{pages}/{len(urls)}",
+                callback_data=f'yt_scroll.{key_search}|{user}|{pages}'
             ),
         ],
     ]
