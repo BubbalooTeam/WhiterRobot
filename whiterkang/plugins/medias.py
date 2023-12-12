@@ -105,13 +105,18 @@ async def ytdlcmd(c: WhiterX, m: Message):
     if scroll == True:
         #Generate a  random code
         key_search = rand_key()
-        # Save title
-        YT_VAR[key_search] = title
+        # Save urls
+        i = await search_yt(title)
+        num = 1
+        for i in range(20):
+            YT_VAR[key_search][num] = i["url"]
+            num += 1
+
         #Add a scroll buttons
         keyboard += [
             [
                 InlineKeyboardButton(
-                    f"1/{len(await search_yt(title))}",
+                    f"1/{num}",
                     callback_data=f'yt_scroll.{key_search}|{user}|1'
                 ),
             ],
@@ -141,17 +146,14 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
 
     key_search = re.sub(r"^yt_scroll\.", "", key_search)
     pages = int(pages)
-        
-
-    query = YT_VAR[key_search]
 
     if pages == 1:
         if len(await search_yt(query)) == 1:
             return await cq.answer("That's the end of list", show_alert=True)
 
-    yt_search = await search_yt(query)
-    url = yt_search[pages]["url"]
     page = int(pages+1)
+    urls = YT_VAR[key_search]
+    url = urls[pages]
     back_page = (pages-1)
     rege = YOUTUBE_REGEX.match(url)
 
@@ -192,12 +194,12 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     keyboard += [
         [
             InlineKeyboardButton(
-                f"{page}/{len(await search_yt(query))}",
+                f"{page}/{len(urls)}",
                 callback_data=f'yt_scroll.{key_search}|{user}|{page}'
             ),
         ],
     ]
-    if page >= 2:
+    if pages >= 2:
         keyboard += [
             [
                 InlineKeyboardButton(
@@ -208,8 +210,6 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
         ]
 
     thumb_ = await get_ytthumb(yt["id"])
-
-    YT_VAR[key_search] = f"{performer} {title}"
 
     text = f"🎧 <b>{performer}</b> - <i>{title}</i>\n"
     text += f"💾 <code>{humanbytes(afsize)}</code> (audio) / <code>{humanbytes(int(vfsize))}</code> (video)\n"
