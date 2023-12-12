@@ -36,6 +36,7 @@ TIME_REGEX = re.compile(r"[?&]t=([0-9]+)")
 
 MAX_FILESIZE = 2000000000
 
+YT_VAR = {}
 
 @WhiterX.on_message(filters.command("ytdl", Config.TRIGGER))
 @disableable_dec("ytdl")
@@ -85,11 +86,13 @@ async def ytdlcmd(c: WhiterX, m: Message):
         performer = yt.get("creator") or yt.get("uploader")
         title = yt["title"]
 
+    YT_DB[search_key] = title
+
     keyboard = [
         [
             InlineKeyboardButton(
                 f"1/{len(await search_yt(title))}",
-                callback_data=f'yt_scrool.{user}|{key_search}|1'
+                callback_data=f'yt_scroll.{user}|{key_search}|1'
             ),
         ],
         [
@@ -112,7 +115,9 @@ async def ytdlcmd(c: WhiterX, m: Message):
 
     await m.reply_photo(photo=thumb_, caption=text, reply_markup=InlineKeyboardMarkup(keyboard))
 
-
+@WhiterX.on_callback_query(filters.regex("^yt_scroll\|([A-Z0-9]+)\|(\d+)$"))
+async def scroll_ytdl(c: WhiterX, cb: CallbackQuery):
+    await cb.answer("Comming soon...", show_alert=True)
 
 @WhiterX.on_callback_query(filters.regex("^(_(vid|aud))"))
 async def cli_ytdl(c: WhiterX, cq: CallbackQuery):
