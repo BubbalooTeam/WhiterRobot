@@ -23,7 +23,7 @@ from hydrogram.enums import ChatType, ChatAction
 
 
 from whiterkang import WhiterX, Config 
-from whiterkang.helpers import humanbytes, tld, csdl, cisdl, tsdl, tisdl, DownloadMedia, extract_info, http, is_admin, add_user, find_user, search_yt, require_admin, disableable_dec
+from whiterkang.helpers import humanbytes, tld, csdl, cisdl, tsdl, tisdl, DownloadMedia, extract_info, http, is_admin, add_user, find_user, search_yt, require_admin, disableable_dec, get_ytthumb
 
 
 YOUTUBE_REGEX = re.compile(
@@ -96,11 +96,13 @@ async def ytdlcmd(c: WhiterX, m: Message):
         performer = yt.get("creator") or yt.get("uploader")
         title = yt["title"]
 
+    thumb_ = await get_ytthumb(yt["id"])
+
     text = f"🎧 <b>{performer}</b> - <i>{title}</i>\n"
     text += f"💾 <code>{humanbytes(afsize)}</code> (audio) / <code>{humanbytes(int(vfsize))}</code> (video)\n"
     text += f"⏳ <code>{datetime.timedelta(seconds=yt.get('duration'))}</code>"
 
-    await m.reply_text(text, reply_markup=InlineKeyboardMarkup(keyboard))
+    await m.reply_photo(photo=thumb_, caption=text, reply_markup=InlineKeyboardMarkup(keyboard))
 
 
 

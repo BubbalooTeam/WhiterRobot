@@ -33,6 +33,7 @@ from .tools import (
     convert_video,
     aexec,
     search_yt,
+    get_ytthumb,
     scan_file,
     get_report,
 )

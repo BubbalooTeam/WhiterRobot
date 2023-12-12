@@ -539,6 +539,22 @@ async def search_yt(query):
             }
             list_videos.append(dic)
     return list_videos
+
+async def get_ytthumb(videoid: str):
+    thumb_quality = [
+        "maxresdefault.jpg",  # Best quality
+        "hqdefault.jpg",
+        "sddefault.jpg",
+        "mqdefault.jpg",
+        "default.jpg",  # Worst quality
+    ]
+    thumb_link = "https://i.imgur.com/4LwPLai.png"
+    for qualiy in thumb_quality:
+        link = f"https://i.ytimg.com/vi/{videoid}/{qualiy}"
+        if requests.get(link).status_code == 200:
+            thumb_link = link
+            break
+    return thumb_link
     
 
 EMOJI_PATTERN = get_emoji_regex()
