@@ -49,9 +49,9 @@ async def broadcasting_(c: WhiterX, m: Message):
     user_id = m.from_user.id
     if not is_dev(user_id):
         return
-    if not input_str(message):
+    if not input_str(m):
         return await m.reply("<i>I need text to broadcasting.</i>")
-    query = message.text.split(None, 1)[1]
+    query = m.text.split(None, 1)[1]
     msg = await m.reply("<i>Broadcasting ...</i>")
     web_preview = False
     sucess_br = 0
