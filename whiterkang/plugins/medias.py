@@ -108,7 +108,7 @@ async def ytdlcmd(c: WhiterX, m: Message):
         # Save urls
         video = await search_yt(title)
         for i in range(20): # usa o tamanho da lista como parâmetro
-            var = YT_VAR[key_search][str(i)] = video["url"]
+            var = YT_VAR[int(user)][int(i)] = video["url"]
 
 
         #Add a scroll buttons
@@ -146,13 +146,13 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     key_search = re.sub(r"^yt_scroll\.", "", key_search)
     pages = int(pages+1)
 
-    urls = YT_VAR[key_search]
+    urls = YT_VAR[int(user)]
 
     if pages == 1:
         if len(urls) == 1:
             return await cq.answer("That's the end of list", show_alert=True)
 
-    url = urls[str(pages)]["url"]
+    url = urls[int(pages)]["url"]
     
     rege = YOUTUBE_REGEX.match(url)
 
