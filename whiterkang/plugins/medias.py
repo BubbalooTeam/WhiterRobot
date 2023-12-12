@@ -139,7 +139,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     
     ydl = YoutubeDL({"noplaylist": True})
 
-    key_search = re.sub(r"^yt_scroll\.", "", data)
+    key_search = re.sub(r"^yt_scroll\.", "", key_search)
 
     query = YT_VAR[key_search]
     yt_search = await search_yt(query)
