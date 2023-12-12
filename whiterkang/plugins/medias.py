@@ -107,10 +107,11 @@ async def ytdlcmd(c: WhiterX, m: Message):
         key_search = rand_key()
         # Save urls
         video = await search_yt(title)
-        num = 1
-        for i in range(20):
+        num = 0
+        for i in range(len(YT_VAR[key_search])): # usa o tamanho da lista como parâmetro
             YT_VAR[key_search][num] = video["url"]
             num += 1
+
 
 
         #Add a scroll buttons
@@ -148,15 +149,14 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     key_search = re.sub(r"^yt_scroll\.", "", key_search)
     pages = int(pages)
 
-    page = int(pages+1)
     urls = YT_VAR[key_search]
 
     if pages == 1:
         if len(urls) == 1:
             return await cq.answer("That's the end of list", show_alert=True)
 
-    url = urls[page]
-    back_page = (pages-1)
+    url = urls[pages]
+    
     rege = YOUTUBE_REGEX.match(url)
 
     t = TIME_REGEX.search(url)
@@ -196,8 +196,8 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     keyboard += [
         [
             InlineKeyboardButton(
-                f"{page}/{len(urls)}",
-                callback_data=f'yt_scroll.{key_search}|{user}|{page}'
+                f"{page+1}/{len(urls)}",
+                callback_data=f'yt_scroll.{key_search}|{user}|{page+1}'
             ),
         ],
     ]
@@ -206,7 +206,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
             [
                 InlineKeyboardButton(
                     await tld(chat.id, "BACK_BNT"), 
-                    callback_data=f"yt_scroll.{key_search}|{user}|{back_page}"
+                    callback_data=f"yt_scroll.{key_search}|{user}|{page-1}"
                 ),
             ]
         ]
