@@ -128,7 +128,7 @@ async def ytdlcmd(c: WhiterX, m: Message):
 @WhiterX.on_callback_query(filters.regex("^yt_scroll\.\w{8}\|\d+\|[1-9]$"))
 async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     try:
-        key_search, user, page = cq.data.split("|")
+        key_search, user, pages = cq.data.split("|")
     except ValueError:
         return await c.send_log("Scroll ValueError in: {cq.data}")
     
@@ -140,11 +140,13 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     ydl = YoutubeDL({"noplaylist": True})
 
     key_search = re.sub(r"^yt_scroll\.", "", key_search)
+    pages = int(pages)
 
     query = YT_VAR[key_search]
+
     yt_search = await search_yt(query)
     url = yt_search[page+1]["url"]
-
+    page = int(pages+1)
     rege = YOUTUBE_REGEX.match(url)
 
     t = TIME_REGEX.search(url)
@@ -188,8 +190,8 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     keyboard += [
         [
             InlineKeyboardButton(
-                f"{page+1}/{len(await search_yt(query))}",
-                callback_data=f'yt_scroll.{key_search}|{user}|{page+1}'
+                f"{page}/{len(await search_yt(query))}",
+                callback_data=f'yt_scroll.{key_search}|{user}|{page}'
             ),
         ],
     ]
