@@ -204,6 +204,8 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
 
     thumb_ = await get_ytthumb(yt["id"])
 
+    YT_VAR[key_search] = query
+
     text = f"🎧 <b>{performer}</b> - <i>{title}</i>\n"
     text += f"💾 <code>{humanbytes(afsize)}</code> (audio) / <code>{humanbytes(int(vfsize))}</code> (video)\n"
     text += f"⏳ <code>{datetime.timedelta(seconds=yt.get('duration'))}</code>"
