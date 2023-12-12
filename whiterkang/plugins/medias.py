@@ -109,8 +109,7 @@ async def ytdlcmd(c: WhiterX, m: Message):
         video = await search_yt(title)
         num = 1
         for i in range(20):
-            str_pages = str(num)
-            YT_VAR[key_search][str_pages] = video["url"]
+            YT_VAR[key_search][num] = video["url"]
             num += 1
 
 
@@ -156,8 +155,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
         if len(urls) == 1:
             return await cq.answer("That's the end of list", show_alert=True)
 
-    str_page = str(page)
-    url = urls[str_page]
+    url = urls[page]
     back_page = (pages-1)
     rege = YOUTUBE_REGEX.match(url)
 
