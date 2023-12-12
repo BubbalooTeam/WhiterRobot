@@ -42,6 +42,7 @@ YT_VAR = {}
 @disableable_dec("ytdl")
 async def ytdlcmd(c: WhiterX, m: Message):
     user = m.from_user.id
+    scroll = False
 
     if not await find_user(user):
         await add_user(user)
@@ -63,12 +64,14 @@ async def ytdlcmd(c: WhiterX, m: Message):
 
     if not rege:
         yt = await extract_info(ydl, f"ytsearch:{url}", download=False)
+        scroll = True
         try:
             yt = yt["entries"][0]
         except IndexError:
             return
     else:
         yt = await extract_info(ydl, rege.group(), download=False)
+        scroll = False
         
     for f in yt["formats"]:
         with contextlib.suppress(KeyError):
@@ -78,23 +81,7 @@ async def ytdlcmd(c: WhiterX, m: Message):
                 vfsize = f["filesize"] or 0
                 vformat = f["format_id"]
 
-    key_search = rand_key()
-
-    if " - " in yt["title"]:
-        performer, title = yt["title"].rsplit(" - ", 1)
-    else:
-        performer = yt.get("creator") or yt.get("uploader")
-        title = yt["title"]
-
-    YT_VAR[key_search] = title
-
     keyboard = [
-        [
-            InlineKeyboardButton(
-                f"1/{len(await search_yt(title))}",
-                callback_data=f'yt_scroll.{user}|{key_search}|1'
-            ),
-        ],
         [
             InlineKeyboardButton(
                 await tld(m.chat.id, "SONG_BNT"),
@@ -107,6 +94,29 @@ async def ytdlcmd(c: WhiterX, m: Message):
         ]
     ]
 
+    
+    if " - " in yt["title"]:
+        performer, title = yt["title"].rsplit(" - ", 1)
+    else:
+        performer = yt.get("creator") or yt.get("uploader")
+        title = yt["title"]
+
+
+    if scroll == True:
+        #Generate a  random code
+        key_search = rand_key()
+        # Save title
+        YT_VAR[key_search] = title
+        #Add a scroll buttons
+        keyboard += [
+            [
+                InlineKeyboardButton(
+                    f"1/{len(await search_yt(title))}",
+                    callback_data=f'yt_scroll.{user}|{key_search}|1'
+                ),
+            ],
+        ]
+
     thumb_ = await get_ytthumb(yt["id"])
 
     text = f"🎧 <b>{performer}</b> - <i>{title}</i>\n"
@@ -115,9 +125,81 @@ async def ytdlcmd(c: WhiterX, m: Message):
 
     await m.reply_photo(photo=thumb_, caption=text, reply_markup=InlineKeyboardMarkup(keyboard))
 
-@WhiterX.on_callback_query(filters.regex("^yt_scroll\|([A-Z0-9]+)\|(\d+)$"))
-async def scroll_ytdl(c: WhiterX, cb: CallbackQuery):
-    await cb.answer("Comming soon...", show_alert=True)
+@WhiterX.on_callback_query(filters.regex("^yt_scroll\.\d+\|\w+\|\d+$"))
+async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
+    try:
+        user, key_search, page = cq.data.split("|")
+    except ValueError:
+        return print(cq.data)
+    
+    chat = cq.message.chat
+    
+    if cq.from_user.id != int(user):
+        return await cq.answer(await tld(chat.id, "NO_FOR_YOU"), show_alert=True)
+    
+    ydl = YoutubeDL({"noplaylist": True})
+
+    rege = YOUTUBE_REGEX.match(url)
+
+    t = TIME_REGEX.search(url)
+    temp = t.group(1) if t else 0
+
+    query = YT_VAR[key_search]
+    yt_search = await search_yt(query)
+    url = yt_search[page+1]["url"]
+
+    yt = await extract_info(ydl, rege.group(), download=False)
+
+    for f in yt["formats"]:
+        with contextlib.suppress(KeyError):
+            if f["format_id"] == "140":
+                afsize = f["filesize"] or 0
+            if f["ext"] == "mp4" and f["filesize"] is not None:
+                vfsize = f["filesize"] or 0
+                vformat = f["format_id"]
+
+    keyboard = [
+        [
+            InlineKeyboardButton(
+                await tld(chat.id, "SONG_BNT"),
+                callback_data=f'_aud.{yt["id"]}|{afsize}|{vformat}|{temp}|{user}|{cq.message.id}'
+            ),
+            InlineKeyboardButton(
+                await tld(chat.id, "VID_BNT"),
+                callback_data=f'_vid.{yt["id"]}|{vfsize}|{vformat}|{temp}|{user}|{cq.message.id}'
+            ),
+        ]
+    ]
+
+    
+    if " - " in yt["title"]:
+        performer, title = yt["title"].rsplit(" - ", 1)
+    else:
+        performer = yt.get("creator") or yt.get("uploader")
+        title = yt["title"]
+
+
+    #Generate a  random code
+    key_search = rand_key()
+
+    #Add a scroll buttons
+    keyboard += [
+        [
+            InlineKeyboardButton(
+                f"1/{len(await search_yt(query))}",
+                callback_data=f'yt_scroll.{user}|{key_search}|{page+1}'
+            ),
+        ],
+    ]
+
+    thumb_ = await get_ytthumb(yt["id"])
+
+    text = f"🎧 <b>{performer}</b> - <i>{title}</i>\n"
+    text += f"💾 <code>{humanbytes(afsize)}</code> (audio) / <code>{humanbytes(int(vfsize))}</code> (video)\n"
+    text += f"⏳ <code>{datetime.timedelta(seconds=yt.get('duration'))}</code>"
+
+    await cq.edit_message_media(InputMediaPhoto(thumb_, caption=text), reply_markup=InlineKeyboardMarkup(keyboard))
+
 
 @WhiterX.on_callback_query(filters.regex("^(_(vid|aud))"))
 async def cli_ytdl(c: WhiterX, cq: CallbackQuery):
