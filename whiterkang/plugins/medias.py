@@ -106,12 +106,13 @@ async def ytdlcmd(c: WhiterX, m: Message):
         #Generate a  random code
         key_search = rand_key()
         # Save urls
-        i = await search_yt(title)
+        video = await search_yt(title)
         num = 1
         for i in range(20):
             str_pages = str(num)
-            YT_VAR[key_search][str_pages] = i["url"]
+            YT_VAR[key_search][str_pages] = video["url"]
             num += 1
+
 
         #Add a scroll buttons
         keyboard += [
