@@ -145,7 +145,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     query = YT_VAR[key_search]
 
     yt_search = await search_yt(query)
-    url = yt_search[page+1]["url"]
+    url = yt_search[pages]["url"]
     page = int(pages+1)
     rege = YOUTUBE_REGEX.match(url)
 
