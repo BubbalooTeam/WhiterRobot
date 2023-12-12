@@ -198,12 +198,17 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
                 f"{page}/{len(await search_yt(query))}",
                 callback_data=f'yt_scroll.{key_search}|{user}|{page}'
             ),
-            InlineKeyboardButton(
-                await tld(chat.id, "BACK_BNT"), 
-                callback_data=f"yt_scroll.{key_search}|{user}|{back_page}"
-            ),
         ],
     ]
+    if len(page) >= 2:
+        keyboard += [
+            [
+                InlineKeyboardButton(
+                    await tld(chat.id, "BACK_BNT"), 
+                    callback_data=f"yt_scroll.{key_search}|{user}|{back_page}"
+                ),
+            ]
+        ]
 
     thumb_ = await get_ytthumb(yt["id"])
 
