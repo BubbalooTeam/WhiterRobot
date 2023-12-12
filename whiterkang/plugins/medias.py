@@ -141,13 +141,13 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
 
     key_search = re.sub(r"^yt_scroll\.", "", key_search)
     pages = int(pages)
-
-    if pages == 1:
-        if len(await search_yt(title)) == 1:
-            return await cq.answer("That's the end of list", show_alert=True)
         
 
     query = YT_VAR[key_search]
+
+    if pages == 1:
+        if len(await search_yt(query)) == 1:
+            return await cq.answer("That's the end of list", show_alert=True)
 
     yt_search = await search_yt(query)
     url = yt_search[pages]["url"]
@@ -187,7 +187,6 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     else:
         performer = yt.get("creator") or yt.get("uploader")
         title = yt["title"]
-
 
     #Generate a  random code
     key_search = rand_key()
