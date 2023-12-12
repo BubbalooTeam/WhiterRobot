@@ -108,7 +108,7 @@ async def ytdlcmd(c: WhiterX, m: Message):
         # Save urls
         video = await search_yt(title)
         for i in range(20): # usa o tamanho da lista como parâmetro
-            YT_VAR[key_search][int(i)] = video["url"]
+            YT_VAR[key_search][i] = video["url"]
 
 
 
