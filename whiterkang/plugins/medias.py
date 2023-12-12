@@ -86,7 +86,7 @@ async def ytdlcmd(c: WhiterX, m: Message):
         performer = yt.get("creator") or yt.get("uploader")
         title = yt["title"]
 
-    YT_DB[search_key] = title
+    YT_VAR[search_key] = title
 
     keyboard = [
         [
