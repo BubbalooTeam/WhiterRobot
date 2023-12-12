@@ -556,6 +556,9 @@ async def get_ytthumb(videoid: str):
             break
     return thumb_link
     
+    def rand_key():
+        return str(uuid4())[:8]
+
 
 EMOJI_PATTERN = get_emoji_regex()
 

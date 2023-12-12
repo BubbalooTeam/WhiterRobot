@@ -23,7 +23,7 @@ from hydrogram.enums import ChatType, ChatAction
 
 
 from whiterkang import WhiterX, Config 
-from whiterkang.helpers import humanbytes, tld, csdl, cisdl, tsdl, tisdl, DownloadMedia, extract_info, http, is_admin, add_user, find_user, search_yt, require_admin, disableable_dec, get_ytthumb
+from whiterkang.helpers import humanbytes, tld, csdl, cisdl, tsdl, tisdl, DownloadMedia, extract_info, http, is_admin, add_user, find_user, search_yt, require_admin, disableable_dec, get_ytthumb, rand_key
 
 
 YOUTUBE_REGEX = re.compile(
@@ -77,7 +77,15 @@ async def ytdlcmd(c: WhiterX, m: Message):
                 vfsize = f["filesize"] or 0
                 vformat = f["format_id"]
 
+    key_search = rand_key()
+
     keyboard = [
+        [
+            InlineKeyboardButton(
+                f"1/{len(yt['result'])}",
+                callback_data=f'yt_scrool.{user}|{key_search}|1'
+            ),
+        ],
         [
             InlineKeyboardButton(
                 await tld(m.chat.id, "SONG_BNT"),

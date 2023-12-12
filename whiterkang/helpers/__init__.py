@@ -34,6 +34,7 @@ from .tools import (
     aexec,
     search_yt,
     get_ytthumb,
+    rand_key,
     scan_file,
     get_report,
 )
