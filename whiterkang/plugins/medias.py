@@ -186,6 +186,8 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     #Generate a  random code
     key_search = rand_key()
 
+    YT_VAR[key_search] = title
+
     #Add a scroll buttons
     keyboard += [
         [
