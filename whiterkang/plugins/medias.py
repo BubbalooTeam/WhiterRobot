@@ -116,7 +116,7 @@ async def ytdlcmd(c: WhiterX, m: Message):
         keyboard += [
             [
                 InlineKeyboardButton(
-                    f"1/{num}",
+                    f"1/{len(YT_VAR[key_search])}",
                     callback_data=f'yt_scroll.{key_search}|{user}|1'
                 ),
             ],
@@ -194,8 +194,8 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     keyboard += [
         [
             InlineKeyboardButton(
-                f"{page+1}/{len(urls)}",
-                callback_data=f'yt_scroll.{key_search}|{user}|{page+1}'
+                f"{pages+1}/{len(urls)}",
+                callback_data=f'yt_scroll.{key_search}|{user}|{pages+1}'
             ),
         ],
     ]
@@ -204,7 +204,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
             [
                 InlineKeyboardButton(
                     await tld(chat.id, "BACK_BNT"), 
-                    callback_data=f"yt_scroll.{key_search}|{user}|{page-1}"
+                    callback_data=f"yt_scroll.{key_search}|{user}|{pages-1}"
                 ),
             ]
         ]
