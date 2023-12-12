@@ -112,7 +112,7 @@ async def ytdlcmd(c: WhiterX, m: Message):
             [
                 InlineKeyboardButton(
                     f"1/{len(await search_yt(title))}",
-                    callback_data=f'yt_scroll.{user}|{key_search}|1'
+                    callback_data=f'yt_scroll.{key_search}|1|{user}'
                 ),
             ],
         ]
@@ -125,12 +125,12 @@ async def ytdlcmd(c: WhiterX, m: Message):
 
     await m.reply_photo(photo=thumb_, caption=text, reply_markup=InlineKeyboardMarkup(keyboard))
 
-@WhiterX.on_callback_query(filters.regex("^yt_scroll\.\d+\|\w+\|\d+$"))
+@WhiterX.on_callback_query(filters.regex("^yt_scroll\.([\w\d]{1,8})\|(\d+)\|([1-9]|1\d|20)$"))
 async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     try:
-        user, key_search, page = cq.data.split("|")
+        key_search, user, page, = cq.data.split("|")
     except ValueError:
-        return print(cq.data)
+        return await c.send_log("Scroll ValueError in: {cq.data}")
     
     chat = cq.message.chat
     
@@ -186,8 +186,8 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     keyboard += [
         [
             InlineKeyboardButton(
-                f"1/{len(await search_yt(query))}",
-                callback_data=f'yt_scroll.{user}|{key_search}|{page+1}'
+                f"{page+1}/{len(await search_yt(query))}",
+                callback_data=f'yt_scroll.{key_search}|{user}|{page+1}'
             ),
         ],
     ]
