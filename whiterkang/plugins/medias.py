@@ -150,7 +150,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
         if pages == 1:
             if len(infos) == 1:
                 return await cq.answer("That's the end of list", show_alert=True)
-            elif pages > len(infos):
+            elif pages >= len(infos):
                 return await cq.answer("That's the end of list", show_alert=True)
 
 
