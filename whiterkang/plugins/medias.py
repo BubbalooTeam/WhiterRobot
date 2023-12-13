@@ -37,7 +37,6 @@ TIME_REGEX = re.compile(r"[?&]t=([0-9]+)")
 MAX_FILESIZE = 2000000000
 
 YT_VAR = {}
-YT_KEY = {}
 
 @WhiterX.on_message(filters.command("ytdl", Config.TRIGGER))
 @disableable_dec("ytdl")
@@ -106,27 +105,13 @@ async def ytdlcmd(c: WhiterX, m: Message):
     if scroll == True:
         #Generate a  random code
         key_search = rand_key()
-<<<<<<< HEAD
-        # Save urls
-        video = await search_yt(title)
-        for i, v in enumerate(video): 
-            YT_VAR[key_search] = {"page": i, "url": v["url"]}
-
-
-
-=======
         # Save title
         YT_VAR[key_search] = title
->>>>>>> 0e8e71a4144c0572944127641288075f6f07b053
         #Add a scroll buttons
         keyboard += [
             [
                 InlineKeyboardButton(
-<<<<<<< HEAD
-                    f"1/{len(video)}",
-=======
                     f"1/{len(await search_yt(title))}",
->>>>>>> 0e8e71a4144c0572944127641288075f6f07b053
                     callback_data=f'yt_scroll.{key_search}|{user}|1'
                 ),
             ],
@@ -158,28 +143,19 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     pages = int(pages)
         
 
-<<<<<<< HEAD
-    urls = YT_VAR[key_search][pages]
-=======
     query = YT_VAR[key_search]
 
     if pages == 0:
         pages = int(pages+1)
->>>>>>> 0e8e71a4144c0572944127641288075f6f07b053
 
     if pages == 1:
         if len(await search_yt(query)) == 1:
             return await cq.answer("That's the end of list", show_alert=True)
 
-<<<<<<< HEAD
-    url = urls["url"]
-    
-=======
     yt_search = await search_yt(query)
     url = yt_search[pages]["url"]
     page = int(pages+1)
     back_page = (pages-1)
->>>>>>> 0e8e71a4144c0572944127641288075f6f07b053
     rege = YOUTUBE_REGEX.match(url)
 
     t = TIME_REGEX.search(url)
