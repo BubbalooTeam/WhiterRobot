@@ -105,13 +105,15 @@ async def ytdlcmd(c: WhiterX, m: Message):
     if scroll == True:
         #Generate a  random code
         key_search = rand_key()
-        # Save title
-        YT_VAR[key_search] = title
+        #Getting infos
+        inf = await search_yt(title)
+        # Save infos
+        YT_VAR[key_search] = inf
         #Add a scroll buttons
         keyboard += [
             [
                 InlineKeyboardButton(
-                    f"1/{len(await search_yt(title))}",
+                    f"1/{len(inf)}",
                     callback_data=f'yt_scroll.{key_search}|{user}|1'
                 ),
             ],
@@ -140,21 +142,15 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     ydl = YoutubeDL({"noplaylist": True})
 
     key_search = re.sub(r"^yt_scroll\.", "", key_search)
-    pages = int(pages)
-        
+    pages = int(pages+1)
 
-    query = YT_VAR[key_search]
-
-    if pages == 0:
-        pages = int(pages+1)
+    infos = YT_VAR
 
     if pages == 1:
-        if len(await search_yt(query)) == 1:
+        if len(infos) == 1:
             return await cq.answer("That's the end of list", show_alert=True)
 
-    yt_search = await search_yt(query)
-    url = yt_search[pages]["url"]
-    page = int(pages+1)
+    url = infos[pages]["url"]
     back_page = (pages-1)
     rege = YOUTUBE_REGEX.match(url)
 
@@ -195,12 +191,12 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     keyboard += [
         [
             InlineKeyboardButton(
-                f"{page}/{len(await search_yt(query))}",
-                callback_data=f'yt_scroll.{key_search}|{user}|{page}'
+                f"{pages}/{len(infos)}",
+                callback_data=f'yt_scroll.{key_search}|{user}|{pages}'
             ),
         ],
     ]
-    if page >= 2:
+    if pages >= 2:
         keyboard += [
             [
                 InlineKeyboardButton(
