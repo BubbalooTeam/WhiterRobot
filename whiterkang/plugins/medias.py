@@ -145,16 +145,19 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     pages = int(pages)
 
     infos = YT_VAR[key_search]
+    l_infos(len(infos))
+    len_infos = (l_infos-1)
 
     if pages:
         if pages == 1:
-            if len(infos) == 1:
+            if len_infos == 1:
                 return await cq.answer("That's the end of list", show_alert=True)
-            elif pages >= len(infos):
+            elif pages >= len_infos:
                 return await cq.answer("That's the end of list", show_alert=True)
 
 
     page = (pages+1)
+    skip_page = (pages+5)
     back_page = (pages-1)
     print(key_search)
     print(page)
@@ -198,7 +201,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     keyboard += [
         [
             InlineKeyboardButton(
-                f"{page}/{len(infos)}",
+                f"{page}/{len_infos}",
                 callback_data=f'yt_scroll.{key_search}|{user}|{page}'
             ),
         ],
@@ -209,6 +212,10 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
                 InlineKeyboardButton(
                     await tld(chat.id, "BACK_BNT"), 
                     callback_data=f"yt_scroll.{key_search}|{user}|{back_page}"
+                ),
+                InlineKeyboardButton(
+                    "⏭️ 5️",
+                    callback_data=f"yt_scroll.{key_search}|{user}|{skip_page}"
                 ),
             ]
         ]
