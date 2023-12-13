@@ -106,13 +106,9 @@ async def ytdlcmd(c: WhiterX, m: Message):
         #Generate a  random code
         key_search = rand_key()
         #Getting infos
-        inf = await search_yt(title)
+        inf = await search_yt(query)
         # Save infos
         YT_VAR[key_search] = inf
-
-        print(key_search)
-        print(YT_VAR[key_search])
-
         #Add a scroll buttons
         keyboard += [
             [
@@ -214,8 +210,6 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
         ]
 
     thumb_ = await get_ytthumb(yt["id"])
-
-    YT_VAR[key_search] = f"{performer} {title}"
 
     text = f"🎧 <b>{performer}</b> - <i>{title}</i>\n"
     text += f"💾 <code>{humanbytes(afsize)}</code> (audio) / <code>{humanbytes(int(vfsize))}</code> (video)\n"
