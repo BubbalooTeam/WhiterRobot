@@ -105,20 +105,13 @@ async def ytdlcmd(c: WhiterX, m: Message):
     if scroll == True:
         #Generate a  random code
         key_search = rand_key()
-        # Save urls
-        video = await search_yt(title)
-        num = 0
-        for i in range(len(YT_VAR[key_search])): # usa o tamanho da lista como parâmetro
-            YT_VAR[key_search][num] = video["url"]
-            num += 1
-
-
-
+        # Save title
+        YT_VAR[key_search] = title
         #Add a scroll buttons
         keyboard += [
             [
                 InlineKeyboardButton(
-                    f"1/{num}",
+                    f"1/{len(await search_yt(title))}",
                     callback_data=f'yt_scroll.{key_search}|{user}|1'
                 ),
             ],
@@ -148,15 +141,21 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
 
     key_search = re.sub(r"^yt_scroll\.", "", key_search)
     pages = int(pages)
+        
 
-    urls = YT_VAR[key_search]
+    query = YT_VAR[key_search]
+
+    if pages == 0:
+        pages = int(pages+1)
 
     if pages == 1:
-        if len(urls) == 1:
+        if len(await search_yt(query)) == 1:
             return await cq.answer("That's the end of list", show_alert=True)
 
-    url = urls[pages]
-    
+    yt_search = await search_yt(query)
+    url = yt_search[pages]["url"]
+    page = int(pages+1)
+    back_page = (pages-1)
     rege = YOUTUBE_REGEX.match(url)
 
     t = TIME_REGEX.search(url)
@@ -196,22 +195,24 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     keyboard += [
         [
             InlineKeyboardButton(
-                f"{page+1}/{len(urls)}",
-                callback_data=f'yt_scroll.{key_search}|{user}|{page+1}'
+                f"{page}/{len(await search_yt(query))}",
+                callback_data=f'yt_scroll.{key_search}|{user}|{page}'
             ),
         ],
     ]
-    if pages >= 2:
+    if page >= 2:
         keyboard += [
             [
                 InlineKeyboardButton(
                     await tld(chat.id, "BACK_BNT"), 
-                    callback_data=f"yt_scroll.{key_search}|{user}|{page-1}"
+                    callback_data=f"yt_scroll.{key_search}|{user}|{back_page}"
                 ),
             ]
         ]
 
     thumb_ = await get_ytthumb(yt["id"])
+
+    YT_VAR[key_search] = f"{performer} {title}"
 
     text = f"🎧 <b>{performer}</b> - <i>{title}</i>\n"
     text += f"💾 <code>{humanbytes(afsize)}</code> (audio) / <code>{humanbytes(int(vfsize))}</code> (video)\n"
