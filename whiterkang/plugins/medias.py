@@ -127,7 +127,7 @@ async def ytdlcmd(c: WhiterX, m: Message):
 
     await m.reply_photo(photo=thumb_, caption=text, reply_markup=InlineKeyboardMarkup(keyboard))
 
-@WhiterX.on_callback_query(filters.regex("^yt_scroll\.\w{8}\|\d+\|[0-20]$"))
+@WhiterX.on_callback_query(filters.regex("^yt_scroll\.\w{8}\|\d+\|[0-9]{1,3}$"))
 async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     try:
         key_search, user, pages = cq.data.split("|")
