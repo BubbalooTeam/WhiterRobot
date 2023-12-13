@@ -106,7 +106,7 @@ async def ytdlcmd(c: WhiterX, m: Message):
         #Generate a  random code
         key_search = rand_key()
         #Getting infos
-        inf = await search_yt(query)
+        inf = await search_yt(url)
         # Save infos
         YT_VAR[key_search] = inf
         #Add a scroll buttons
