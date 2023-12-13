@@ -142,7 +142,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     ydl = YoutubeDL({"noplaylist": True})
 
     key_search = re.sub(r"^yt_scroll\.", "", key_search)
-    pages = int(pages+1)
+    pages = int(pages)
 
     infos = YT_VAR
 
@@ -151,6 +151,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
             return await cq.answer("That's the end of list", show_alert=True)
 
     url = infos[pages]["url"]
+    page = (pages+1)
     back_page = (pages-1)
     rege = YOUTUBE_REGEX.match(url)
 
@@ -191,12 +192,12 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     keyboard += [
         [
             InlineKeyboardButton(
-                f"{pages}/{len(infos)}",
-                callback_data=f'yt_scroll.{key_search}|{user}|{pages}'
+                f"{page}/{len(infos)}",
+                callback_data=f'yt_scroll.{key_search}|{user}|{page}'
             ),
         ],
     ]
-    if pages >= 2:
+    if page >= 2:
         keyboard += [
             [
                 InlineKeyboardButton(
