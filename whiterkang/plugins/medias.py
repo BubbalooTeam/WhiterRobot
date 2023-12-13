@@ -107,15 +107,18 @@ async def ytdlcmd(c: WhiterX, m: Message):
         key_search = rand_key()
         # Save urls
         video = await search_yt(title)
-        for i in range(20): # usa o tamanho da lista como parâmetro
-            var = YT_VAR[int(user)][int(i)] = video["url"]
+        num = 0
+        for i in range(len(YT_VAR[key_search])): # usa o tamanho da lista como parâmetro
+            YT_VAR[key_search][num] = video["url"]
+            num += 1
+
 
 
         #Add a scroll buttons
         keyboard += [
             [
                 InlineKeyboardButton(
-                    f"1/{len(YT_VAR[key_search])}",
+                    f"1/{num}",
                     callback_data=f'yt_scroll.{key_search}|{user}|1'
                 ),
             ],
@@ -144,15 +147,15 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     ydl = YoutubeDL({"noplaylist": True})
 
     key_search = re.sub(r"^yt_scroll\.", "", key_search)
-    pages = int(pages+1)
+    pages = int(pages)
 
-    urls = YT_VAR[int(user)]
+    urls = YT_VAR[key_search]
 
     if pages == 1:
         if len(urls) == 1:
             return await cq.answer("That's the end of list", show_alert=True)
 
-    url = urls[int(pages)]["url"]
+    url = urls[pages]
     
     rege = YOUTUBE_REGEX.match(url)
 
@@ -193,8 +196,8 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     keyboard += [
         [
             InlineKeyboardButton(
-                f"{pages}/{len(urls)}",
-                callback_data=f'yt_scroll.{key_search}|{user}|{pages}'
+                f"{page+1}/{len(urls)}",
+                callback_data=f'yt_scroll.{key_search}|{user}|{page+1}'
             ),
         ],
     ]
@@ -203,7 +206,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
             [
                 InlineKeyboardButton(
                     await tld(chat.id, "BACK_BNT"), 
-                    callback_data=f"yt_scroll.{key_search}|{user}|{pages-1}"
+                    callback_data=f"yt_scroll.{key_search}|{user}|{page-1}"
                 ),
             ]
         ]
