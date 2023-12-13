@@ -144,15 +144,15 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     key_search = re.sub(r"^yt_scroll\.", "", key_search)
     pages = int(pages)
 
-    infos = YT_VAR
+    infos = YT_VAR[key_search]
 
     if pages == 1:
         if len(infos) == 1:
             return await cq.answer("That's the end of list", show_alert=True)
 
-    url = infos[pages]["url"]
     page = (pages+1)
     back_page = (pages-1)
+    url = infos[page]["url"]
     rege = YOUTUBE_REGEX.match(url)
 
     t = TIME_REGEX.search(url)
