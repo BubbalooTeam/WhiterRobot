@@ -145,7 +145,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     pages = int(pages)
 
     infos = YT_VAR[key_search]
-    l_infos(len(infos))
+    l_infos = (len(infos))
     len_infos = (l_infos-1)
 
     if pages:
