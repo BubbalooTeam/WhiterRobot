@@ -107,9 +107,10 @@ async def ytdlcmd(c: WhiterX, m: Message):
         key_search = rand_key()
         #Getting infos
         inf = await search_yt(title)
-        print(inf)
-        # Save infos
-        YT_VAR[key_search] = inf
+        for infos in inf:
+            # Save infos
+            YT_VAR[key_search] = infos
+            print(infos)
         #Add a scroll buttons
         keyboard += [
             [
