@@ -152,6 +152,8 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
 
     page = (pages+1)
     back_page = (pages-1)
+    print(key_search)
+    print(page)
     url = infos[page]["url"]
     rege = YOUTUBE_REGEX.match(url)
 
