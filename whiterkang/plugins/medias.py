@@ -32,8 +32,6 @@ YOUTUBE_REGEX = re.compile(
 
 SDL_REGEX_LINKS = r"(?:htt.+?//)?(?:.+?)?(?:instagram|twitter|x|tiktok|threads).(com|net)\/(?:\S*)"
 
-TIME_REGEX = re.compile(r"[?&]t=([0-9]+)")
-
 MAX_FILESIZE = 2000000000
 
 YT_VAR = {}
@@ -58,9 +56,6 @@ async def ytdlcmd(c: WhiterX, m: Message):
     ydl = YoutubeDL({"noplaylist": True})
 
     rege = YOUTUBE_REGEX.match(url)
-
-    t = TIME_REGEX.search(url)
-    temp = t.group(1) if t else 0
 
     if not rege:
         yt = await extract_info(ydl, f"ytsearch:{url}", download=False)
@@ -152,9 +147,6 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     print(page)
     url = infos[page]["url"]
     rege = YOUTUBE_REGEX.match(url)
-
-    t = TIME_REGEX.search(url)
-    temp = t.group(1) if t else 0
 
     yt = await extract_info(ydl, rege.group(), download=False)
 
@@ -291,7 +283,7 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
     await c.send_chat_action(cq.message.chat.id, enums.ChatAction.UPLOAD_VIDEO)
 
     filename = yt.get("requested_downloads")[0]["filepath"]
-    
+
     thumb = io.BytesIO((await http.get(yt["thumbnail"])).content)
     thumb.name = "thumbnail.png"
     views = 0
