@@ -252,6 +252,12 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
                 "nocheckcertificate": True,
                 "outtmpl": os.path.join(path, "%(title)s-%(format)s.%(ext)s"),
                 "format": frmt_id,
+                "prefer_ffmpeg": True,
+                "postprocessors": [
+                    {
+                        "key": "FFmpegMetadata"
+                    },
+                ]
             }
         )
     else:
@@ -263,6 +269,7 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
                 "nocheckcertificate": True,
                 "postprocessors": [                    
                     {
+                        "key": "FFmpegExtractAudio",
                         "preferredcodec": "mp3",
                         "preferredquality": frmt_id,
                     },
