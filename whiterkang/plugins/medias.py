@@ -18,7 +18,7 @@ from hydrogram import filters, enums
 from hydrogram.errors import BadRequest, FloodWait, Forbidden, MediaEmpty, MessageNotModified, UserNotParticipant
 from hydrogram.raw.types import InputMessageID
 from hydrogram.raw.functions import channels, messages
-from hydrogram.types import Message, CallbackQuery, InputMediaVideo, InputMediaPhoto, InlineKeyboardMarkup, InlineKeyboardButton, ChatPrivileges
+from hydrogram.types import Message, CallbackQuery, InputMediaVideo, InputMediaPhoto, InputMediaAudio, InlineKeyboardMarkup, InlineKeyboardButton, ChatPrivileges
 from hydrogram.enums import ChatType, ChatAction 
 
 
@@ -294,9 +294,8 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
         likes += yt["like_count"]
     if format_ == "video":
         try:
-            await c.send_video(
-                cq.message.chat.id,
-                video=filename,
+            await cq.edit_message_media(
+                media=InputMediaVideo(filename),
                 caption=(await tld(cq.message.chat.id, "YOUTUBE_CAPTION")).format(url or "", yt["title"], datetime.timedelta(seconds=yt["duration"]) or 0, yt["channel"] or None, views, likes),
                 duration=yt["duration"],
                 thumb=thumb,
@@ -315,9 +314,8 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
             performer = yt.get("creator") or yt.get("uploader")
             title = yt["title"]
         try:
-            await c.send_audio(
-                cq.message.chat.id,
-                audio=filename,
+            await cq.edit_message_media(
+                media=InputMediaAudio(filename),
                 title=title,
                 performer=performer,
                 caption=(await tld(cq.message.chat.id, "YOUTUBE_CAPTION")).format(url or "", yt["title"], datetime.timedelta(seconds=yt["duration"]) or 0, yt["channel"] or None, views, likes),
