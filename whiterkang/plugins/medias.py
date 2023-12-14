@@ -166,7 +166,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
             ),
             InlineKeyboardButton(
                 await tld(chat.id, "VID_BNT"),
-                callback_data=f'_vid.{yt["id"]}|{key_search}|{temp}|{user}'
+                callback_data=f'_ytv.{yt["id"]}|{key_search}|{temp}|{user}'
             ),
         ]
     ]
