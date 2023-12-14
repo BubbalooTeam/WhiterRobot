@@ -185,11 +185,11 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
             [
                 InlineKeyboardButton(
                     await tld(chat.id, "BACK_BNT"), 
-                    callback_data=f"yt_scroll.{key_search}|{user}|{back_page}"
+                    callback_data=f"yt_scroll.{key_search}|{user}|{back_page}|{mid}"
                 ),
                 InlineKeyboardButton(
                     "⏭️ 5️",
-                    callback_data=f"yt_scroll.{key_search}|{user}|{skip_page}"
+                    callback_data=f"yt_scroll.{key_search}|{user}|{skip_page}|{mid}"
                 ),
             ]
         ]
