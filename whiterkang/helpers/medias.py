@@ -487,11 +487,12 @@ async def get_download_button(format: str, yt_id: str, user_id: int) -> SearchRe
                             bitrrate
                         ] = f"🎵 {bitrrate}Kbps ({humanbytes(fr_size) or 'N/A'})"
         audio_dict = delete_none(audio_dict)
-        video_btns: List[InlineKeyboardButton] = []
         for frmt in qual_list:
+            print(frmt)
             frmt_dict = qual_dict[frmt]
             if len(frmt_dict) != 0:
                 if video == True:
+                    video_btns: List[InlineKeyboardButton] = []
                     frmt_id = sorted(list(frmt_dict))[-1]
                     frmt_size = humanbytes(frmt_dict.get(frmt_id)) or "N/A"
                     video_btns.append(
