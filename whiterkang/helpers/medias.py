@@ -439,7 +439,7 @@ async def get_download_button(format: str, yt_id: str, user_id: int) -> SearchRe
         return
     
     if video == True:
-        buttons = [
+        buttons += [
             [
                 InlineKeyboardButton(
                     "⭐️ BEST - 📹 MP4",
