@@ -134,7 +134,7 @@ async def iytdl_handler(c: WhiterX, iq: InlineQuery):
     results = []
     scroll = False
     user_id = iq.from_user.id
-    mid = iq.message.id
+    mid = iq.id
     query = iq.query
     if len(query) == 1:
         return await iq.answer(
