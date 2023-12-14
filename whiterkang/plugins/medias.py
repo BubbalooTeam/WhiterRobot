@@ -246,36 +246,38 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
     with tempfile.TemporaryDirectory() as tempdir:
         path = os.path.join(tempdir, "ytdl")
     if format_ == "video":
-        ydl = {
-            "addmetadata": True,
-            "geo_bypass": True,
-            "nocheckcertificate": True,
-            "outtmpl": os.path.join(path, "%(title)s-%(format)s.%(ext)s"),
-            "format": frmt_id,
-            "writethumbnail": True,
-            "prefer_ffmpeg": True,
-            "postprocessors": [{"key": "FFmpegMetadata"}],
-        }
+        ydl = YoutubeDL(
+            {
+                "addmetadata": True,
+                "geo_bypass": True,
+                "nocheckcertificate": True,
+                "outtmpl": os.path.join(path, "%(title)s-%(format)s.%(ext)s"),
+                "format": frmt_id,
+                "prefer_ffmpeg": True,
+                "postprocessors": [{"key": "FFmpegMetadata"}],
+            }
+        )
     else:
-        ydl = {
-            "outtmpl": os.path.join(path, "%(title)s-%(format)s.%(ext)s"),
-            "writethumbnail": True,
-            "prefer_ffmpeg": True,
-            "format": "bestaudio/best",
-            "geo_bypass": True,
-            "nocheckcertificate": True,
-            "postprocessors": [                    {
-                    "key": "FFmpegExtractAudio",
-                    "preferredcodec": "mp3",
-                    "preferredquality": frmt_id,
-                },
-                {"key": "EmbedThumbnail"},
-                {"key": "FFmpegMetadata"},
-            ],
-        }
+        ydl = YoutubeDL(
+            {
+                "outtmpl": os.path.join(path, "%(title)s-%(format)s.%(ext)s"),
+                "writethumbnail": True,
+                "prefer_ffmpeg": True,
+                "format": "bestaudio/best",
+                "geo_bypass": True,
+                "nocheckcertificate": True,
+                "postprocessors": [                    {
+                        "key": "FFmpegExtractAudio",
+                        "preferredcodec": "mp3",
+                        "preferredquality": frmt_id,
+                    },
+                    {"key": "FFmpegMetadata"},
+                ],
+            }
+        )
 
     try:
-        yt = await extract_info(YoutubeDL(ydl), url, download=True)
+        yt = await extract_info(ydl, url, download=True)
     except BaseException as e:
         await c.send_log(e)
         await cq.message.edit("<b>Error:</b> <i>{}</i>".format(e))
