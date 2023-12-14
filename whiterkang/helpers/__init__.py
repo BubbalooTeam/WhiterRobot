@@ -40,6 +40,6 @@ from .tools import (
 )
 from .decorators import disableable_dec, inline_handler, input_str, DISABLABLE_CMDS, require_admin
 from .antispam import gban_user, check_ban, ungban_user, check_antispam #não mecher
-from .medias import DownloadMedia, extract_info
+from .medias import DownloadMedia, extract_info, get_download_button, SearchResult #não mexer
 from .groups import *
 from .lastfm import draw_scrobble

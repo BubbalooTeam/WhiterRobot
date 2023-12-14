@@ -14,7 +14,7 @@ import json
 
 from datetime import datetime, timedelta
 from httpx import HTTPError
-from typing import Tuple, Callable, Union, Optional
+from typing import Any, Tuple, Callable, Union, Optional
 from functools import partial, wraps
 from math import floor
 from PIL import Image, ImageOps

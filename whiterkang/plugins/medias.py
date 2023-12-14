@@ -23,7 +23,7 @@ from hydrogram.enums import ChatType, ChatAction
 
 
 from whiterkang import WhiterX, Config 
-from whiterkang.helpers import humanbytes, tld, csdl, cisdl, tsdl, tisdl, DownloadMedia, extract_info, http, is_admin, add_user, find_user, search_yt, require_admin, disableable_dec, get_ytthumb, rand_key
+from whiterkang.helpers import humanbytes, tld, csdl, cisdl, tsdl, tisdl, DownloadMedia, extract_info, http, is_admin, add_user, find_user, search_yt, require_admin, disableable_dec, get_ytthumb, rand_key, get_download_button, SearchResult
 
 
 YOUTUBE_REGEX = re.compile(
@@ -72,24 +72,16 @@ async def ytdlcmd(c: WhiterX, m: Message):
     else:
         yt = await extract_info(ydl, rege.group(), download=False)
         scroll = False
-        
-    for f in yt["formats"]:
-        with contextlib.suppress(KeyError):
-            if f["format_id"] == "140":
-                afsize = f["filesize"] or 0
-            if f["ext"] == "mp4" and f["filesize"] is not None:
-                vfsize = f["filesize"] or 0
-                vformat = f["format_id"]
 
     keyboard = [
         [
             InlineKeyboardButton(
                 await tld(m.chat.id, "SONG_BNT"),
-                callback_data=f'_aud.{yt["id"]}|{afsize}|{vformat}|{temp}|{user}|{m.id}'
+                callback_data=f'_yta.{yt["id"]}|{key_search}|{temp}|{user}'
             ),
             InlineKeyboardButton(
                 await tld(m.chat.id, "VID_BNT"),
-                callback_data=f'_vid.{yt["id"]}|{vfsize}|{vformat}|{temp}|{user}|{m.id}'
+                callback_data=f'_ytv.{yt["id"]}|{key_search}|{temp}|{user}'
             ),
         ]
     ]
@@ -122,7 +114,6 @@ async def ytdlcmd(c: WhiterX, m: Message):
     thumb_ = await get_ytthumb(yt["id"])
 
     text = f"🎧 <b>{performer}</b> - <i>{title}</i>\n"
-    text += f"💾 <code>{humanbytes(afsize)}</code> (audio) / <code>{humanbytes(int(vfsize))}</code> (video)\n"
     text += f"⏳ <code>{datetime.timedelta(seconds=yt.get('duration'))}</code>"
 
     await m.reply_photo(photo=thumb_, caption=text, reply_markup=InlineKeyboardMarkup(keyboard))
@@ -166,23 +157,15 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
 
     yt = await extract_info(ydl, rege.group(), download=False)
 
-    for f in yt["formats"]:
-        with contextlib.suppress(KeyError):
-            if f["format_id"] == "140":
-                afsize = f["filesize"] or 0
-            if f["ext"] == "mp4" and f["filesize"] is not None:
-                vfsize = f["filesize"] or 0
-                vformat = f["format_id"]
-
     keyboard = [
         [
             InlineKeyboardButton(
                 await tld(chat.id, "SONG_BNT"),
-                callback_data=f'_aud.{yt["id"]}|{afsize}|{vformat}|{temp}|{user}|{cq.message.id}'
+                callback_data=f'_yta.{yt["id"]}|{key_search}|{temp}|{user}'
             ),
             InlineKeyboardButton(
                 await tld(chat.id, "VID_BNT"),
-                callback_data=f'_vid.{yt["id"]}|{vfsize}|{vformat}|{temp}|{user}|{cq.message.id}'
+                callback_data=f'_vid.{yt["id"]}|{key_search}|{temp}|{user}'
             ),
         ]
     ]
@@ -220,11 +203,140 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     thumb_ = await get_ytthumb(yt["id"])
 
     text = f"🎧 <b>{performer}</b> - <i>{title}</i>\n"
-    text += f"💾 <code>{humanbytes(afsize)}</code> (audio) / <code>{humanbytes(int(vfsize))}</code> (video)\n"
     text += f"⏳ <code>{datetime.timedelta(seconds=yt.get('duration'))}</code>"
 
     await cq.edit_message_media(InputMediaPhoto(thumb_, caption=text), reply_markup=InlineKeyboardMarkup(keyboard))
 
+@WhiterX.on_callback_query(filters.regex("^(_(ytv|yta))"))
+async def cli_buttons(c: WhiterX, cq: CallbackQuery):
+    try:
+        data, key_search, temp, userid = cq.data.split("|")
+    except ValueError:
+        return print(cq.data)
+    if cq.from_user.id != int(userid):
+        return await cq.answer(await tld(cq.message.chat.id, "NO_FOR_YOU"), show_alert=True)
+
+    x = await get_download_button(key_search, userid)
+    await cq.edit_message_caption(caption=temp + x.caption, reply_markup=x.buttons)
+
+@WhiterX.on_callback_query(filters.regex(r"yt_dl\|(.*)"))
+async def download_handler(c: WhiterX, cq: CallbackQuery):
+    try:
+        data, yt_id, frmt_id, userid, type = cq.data.split("|")
+    except ValueError:
+        return print(cq.data)
+    if cq.from_user.id != int(userid):
+        return await cq.answer(await tld(cq.message.chat.id, "NO_FOR_YOU"), show_alert=True)
+    
+    if type == "a":
+        format_ = "audio"
+    else:
+        format_ = "video"
+
+    url = f"https://www.youtube.com/watch?v={yt_id}"
+
+    try:
+        await cq.message.edit(await tld(cq.message.chat.id, "DOWNLOAD_YT"))
+    except MessageNotModified:
+        await cq.message.reply_text(await tld(cq.message.chat.id, "DOWNLOAD_YT"))
+
+    with tempfile.TemporaryDirectory() as tempdir:
+        path = os.path.join(tempdir, "ytdl")
+    if format_ == "video":
+        ydl = {
+            "addmetadata": True,
+            "geo_bypass": True,
+            "nocheckcertificate": True,
+            "outtmpl": os.path.join(path, "%(title)s-%(format)s.%(ext)s"),
+            "format": frmt_id,
+            "writethumbnail": True,
+            "prefer_ffmpeg": True,
+            "postprocessors": [{"key": "FFmpegMetadata"}],
+        }
+    else:
+        ydl = {
+            "outtmpl": os.path.join(path, "%(title)s-%(format)s.%(ext)s"),
+            "writethumbnail": True,
+            "prefer_ffmpeg": True,
+            "format": "bestaudio/best",
+            "geo_bypass": True,
+            "nocheckcertificate": True,
+            "postprocessors": [                    {
+                    "key": "FFmpegExtractAudio",
+                    "preferredcodec": "mp3",
+                    "preferredquality": frmt_id,
+                },
+                {"key": "EmbedThumbnail"},
+                {"key": "FFmpegMetadata"},
+            ],
+        }
+
+    try:
+        yt = await extract_info(ydl, url, download=True)
+    except BaseException as e:
+        await c.send_log(e)
+        await cq.message.edit("<b>Error:</b> <i>{}</i>".format(e))
+        return
+    try:
+        await cq.message.edit(await tld(cq.message.chat.id, "UPLOADING_YT"))
+    except MessageNotModified:
+        await cq.message.reply_text(await tld(cq.message.chat.id, "UPLOADING_YT"))
+    await c.send_chat_action(cq.message.chat.id, enums.ChatAction.UPLOAD_VIDEO)
+
+    filename = ydl.prepare_filename(yt)
+    thumb = io.BytesIO((await http.get(yt["thumbnail"])).content)
+    thumb.name = "thumbnail.png"
+    views = 0
+    likes = 0
+    if yt.get("view_count"):
+        views += yt["view_count"]
+    if yt.get("like_count"):
+        likes += yt["like_count"]
+    if "vid" in data:
+        try:
+            await c.send_video(
+                cq.message.chat.id,
+                video=filename,
+                width=1920,
+                height=1080,
+                caption=(await tld(cq.message.chat.id, "YOUTUBE_CAPTION")).format(url or "",  + yt["title"], datetime.timedelta(seconds=yt["duration"]) or 0, yt["channel"] or None, views, likes),
+                duration=yt["duration"],
+                thumb=thumb,
+            )
+            await cq.message.delete()
+        except BadRequest as e:
+            await c.send_log(e)
+            await c.send_message(
+                chat_id=cq.message.chat.id,
+                text="<b>Error:</b> {errmsg}".format(errmsg=e),
+            )
+    else:
+        if " - " in yt["title"]:
+            performer, title = yt["title"].rsplit(" - ", 1)
+        else:
+            performer = yt.get("creator") or yt.get("uploader")
+            title = yt["title"]
+        try:
+            await c.send_audio(
+                cq.message.chat.id,
+                audio=filename,
+                title=title,
+                performer=performer,
+                caption=(await tld(cq.message.chat.id, "YOUTUBE_CAPTION")).format(url or "", yt["title"], datetime.timedelta(seconds=yt["duration"]) or 0, yt["channel"] or None, views, likes),
+                duration=yt["duration"],
+                thumb=thumb,
+            )
+        except BadRequest as e:
+            await cq.message.edit_text(
+                "<b>Error:</b> <i>{errmsg}</i>".format(errmsg=e)
+            )
+        else:
+            await cq.message.delete()
+
+    shutil.rmtree(tempdir, ignore_errors=True)
+
+
+    
 
 @WhiterX.on_callback_query(filters.regex("^(_(vid|aud))"))
 async def cli_ytdl(c: WhiterX, cq: CallbackQuery):
