@@ -80,11 +80,11 @@ async def ytdlcmd(c: WhiterX, m: Message):
         [
             InlineKeyboardButton(
                 await tld(m.chat.id, "SONG_BNT"),
-                callback_data=f'_yta.{yt["id"]}|{key_search}|{user}'
+                callback_data=f'_yta.{yt["id"]}|{key_search}|a|{user}'
             ),
             InlineKeyboardButton(
                 await tld(m.chat.id, "VID_BNT"),
-                callback_data=f'_ytv.{yt["id"]}|{key_search}|{user}'
+                callback_data=f'_ytv.{yt["id"]}|{key_search}|v|{user}'
             ),
         ]
     ]
@@ -162,11 +162,11 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
         [
             InlineKeyboardButton(
                 await tld(chat.id, "SONG_BNT"),
-                callback_data=f'_yta.{yt["id"]}|{key_search}|{user}'
+                callback_data=f'_yta.{yt["id"]}|{key_search}|a|{user}'
             ),
             InlineKeyboardButton(
                 await tld(chat.id, "VID_BNT"),
-                callback_data=f'_ytv.{yt["id"]}|{key_search}|{user}'
+                callback_data=f'_ytv.{yt["id"]}|{key_search}|v|{user}'
             ),
         ]
     ]
@@ -211,7 +211,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
 @WhiterX.on_callback_query(filters.regex("^(_(ytv|yta))"))
 async def cli_buttons(c: WhiterX, cq: CallbackQuery):
     try:
-        yt_id, key_search, userid = cq.data.split("|")
+        yt_id, key_search, fmt, userid = cq.data.split("|")
     except ValueError as vle:
         return print(f"{vle}: {cq.data}")
     if cq.from_user.id != int(userid):
@@ -219,7 +219,7 @@ async def cli_buttons(c: WhiterX, cq: CallbackQuery):
     
     yt_id = re.sub(r"^\_(ytv|yta)\.", "", yt_id)
 
-    x = await get_download_button(yt_id, userid)
+    x = await get_download_button(fmt, yt_id, userid)
     await cq.edit_message_caption(caption=x.caption, reply_markup=x.buttons)
 
 @WhiterX.on_callback_query(filters.regex(r"yt_dl\|(.*)"))
@@ -290,7 +290,12 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
         await cq.message.reply_text(await tld(cq.message.chat.id, "UPLOADING_YT"))
     await c.send_chat_action(cq.message.chat.id, enums.ChatAction.UPLOAD_VIDEO)
 
-    filename = yt.get("requested_downloads")[0]["filepath"] 
+    filename = yt.get("requested_downloads")[0]["filepath"]
+    fsize = yt.get("filesize")
+    if int(fsize) > MAX_FILESIZE:
+        return await cq.edit_message_text(
+            await tld(cq.message.chat.id, "YOUTUBE_FILE_BIG"),
+        ) 
     thumb = io.BytesIO((await http.get(yt["thumbnail"])).content)
     thumb.name = "thumbnail.png"
     views = 0
@@ -359,98 +364,7 @@ async def cli_ytdl(c: WhiterX, cq: CallbackQuery):
         )
     vid = re.sub(r"^\_(vid|aud)\.", "", data)
     url = f"https://www.youtube.com/watch?v={vid}"
-    try:
-        await cq.message.edit(await tld(cq.message.chat.id, "DOWNLOAD_YT"))
-    except MessageNotModified:
-        await cq.message.reply_text(await tld(cq.message.chat.id, "DOWNLOAD_YT"))
-    with tempfile.TemporaryDirectory() as tempdir:
-        path = os.path.join(tempdir, "ytdl")
-
-    ttemp = f"⏰ {datetime.timedelta(seconds=int(temp))} | " if int(temp) else ""
-    if "vid" in data:
-        ydl = YoutubeDL(
-            {
-                "outtmpl": f"{path}/%(title)s-%(id)s.%(ext)s",
-                "format": f"{vformat}+140",
-                "max_filesize": MAX_FILESIZE,
-                "noplaylist": True,
-            }
-        )
-    else:
-        ydl = YoutubeDL(
-            {
-                "outtmpl": f"{path}/%(title)s-%(id)s.%(ext)s",
-                "format": "bestaudio[ext=m4a]",
-                "max_filesize": MAX_FILESIZE,
-                "noplaylist": True,
-            }
-        )
-    try:
-        yt = await extract_info(ydl, url, download=True)
-    except BaseException as e:
-        await c.send_log(e)
-        await cq.message.edit("<b>Error:</b> <i>{}</i>".format(e))
-        return
-    try:
-        await cq.message.edit(await tld(cq.message.chat.id, "UPLOADING_YT"))
-    except MessageNotModified:
-        await cq.message.reply_text(await tld(cq.message.chat.id, "UPLOADING_YT"))
-    await c.send_chat_action(cq.message.chat.id, enums.ChatAction.UPLOAD_VIDEO)
-
-    filename = ydl.prepare_filename(yt)
-    thumb = io.BytesIO((await http.get(yt["thumbnail"])).content)
-    thumb.name = "thumbnail.png"
-    views = 0
-    likes = 0
-    if yt.get("view_count"):
-        views += yt["view_count"]
-    if yt.get("like_count"):
-        likes += yt["like_count"]
-    if "vid" in data:
-        try:
-            await c.send_video(
-                cq.message.chat.id,
-                video=filename,
-                width=1920,
-                height=1080,
-                caption=(await tld(cq.message.chat.id, "YOUTUBE_CAPTION")).format(url or "", ttemp + yt["title"], datetime.timedelta(seconds=yt["duration"]) or 0, yt["channel"] or None, views, likes),
-                duration=yt["duration"],
-                thumb=thumb,
-                reply_to_message_id=int(mid),
-            )
-            await cq.message.delete()
-        except BadRequest as e:
-            await c.send_log(e)
-            await c.send_message(
-                chat_id=cq.message.chat.id,
-                text="<b>Error:</b> {errmsg}".format(errmsg=e),
-                reply_to_message_id=int(mid),
-            )
-    else:
-        if " - " in yt["title"]:
-            performer, title = yt["title"].rsplit(" - ", 1)
-        else:
-            performer = yt.get("creator") or yt.get("uploader")
-            title = yt["title"]
-        try:
-            await c.send_audio(
-                cq.message.chat.id,
-                audio=filename,
-                title=title,
-                performer=performer,
-                caption=(await tld(cq.message.chat.id, "YOUTUBE_CAPTION")).format(url or "", ttemp + yt["title"], datetime.timedelta(seconds=yt["duration"]) or 0, yt["channel"] or None, views, likes),
-                duration=yt["duration"],
-                thumb=thumb,
-                reply_to_message_id=int(mid),
-            )
-        except BadRequest as e:
-            await cq.message.edit_text(
-                "<b>Error:</b> <i>{errmsg}</i>".format(errmsg=e)
-            )
-        else:
-            await cq.message.delete()
-
-    shutil.rmtree(tempdir, ignore_errors=True)
+  
 
 
     

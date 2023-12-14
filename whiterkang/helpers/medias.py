@@ -426,30 +426,43 @@ class SearchResult:
         )
         return json.dumps(out, indent=4)
 
-async def get_download_button(yt_id: str, user_id: int) -> SearchResult:
-    buttons = [
-        [
-            InlineKeyboardButton(
-                "⭐️ BEST - 📹 MP4",
-                callback_data=f"yt_dl|{yt_id}|mp4|{user_id}|v",
-            ),
+async def get_download_button(format: str, yt_id: str, user_id: int) -> SearchResult:
+    audio = False
+    video = False
+    buttons = []
+    best_audio_btn = []
+    if format == "a":
+        audio = True
+    elif format == "v":
+        video = True
+    else:
+        return
+    if video == True:
+        buttons = [
+            [
+                InlineKeyboardButton(
+                    "⭐️ BEST - 📹 MP4",
+                    callback_data=f"yt_dl|{yt_id}|mp4|{user_id}|v",
+                ),
+            ]
         ]
-    ]
-    best_audio_btn = [
-        [
-            InlineKeyboardButton(
-                "⭐️ BEST - 🎵 320Kbps - MP3",
-                callback_data=f"yt_dl|{yt_id}|mp3|{user_id}|a",
-            )
+    if audio == True:
+        best_audio_btn = [
+            [
+                InlineKeyboardButton(
+                    "⭐️ BEST - 🎵 320Kbps - MP3",
+                    callback_data=f"yt_dl|{yt_id}|mp3|{user_id}|a",
+                )
+            ]
         ]
-    ]
     params = {"no-playlist": True}
     try:
         ydl = YoutubeDL(params)
         vid_data = await extract_info(ydl, f"{YT_VID_URL}{yt_id}", download=False)
     except ExtractorError:
         vid_data = None
-        buttons += best_audio_btn
+        if audio == True:
+            buttons += best_audio_btn
     else:
         # ------------------------------------------------ #
         qual_dict = defaultdict(lambda: defaultdict(int))
@@ -469,9 +482,10 @@ async def get_download_button(yt_id: str, user_id: int) -> SearchResult:
                 if bitrrate == (0 or "None"):
                     pass
                 else:
-                    audio_dict[
-                        bitrrate
-                    ] = f"🎵 {bitrrate}Kbps ({humanbytes(fr_size) or 'N/A'})"
+                    if audio == True:
+                        audio_dict[
+                            bitrrate
+                        ] = f"🎵 {bitrrate}Kbps ({humanbytes(fr_size) or 'N/A'})"
         audio_dict = delete_none(audio_dict)
         video_btns: List[InlineKeyboardButton] = []
         for frmt in qual_list:
@@ -479,25 +493,27 @@ async def get_download_button(yt_id: str, user_id: int) -> SearchResult:
             if len(frmt_dict) != 0:
                 frmt_id = sorted(list(frmt_dict))[-1]
                 frmt_size = humanbytes(frmt_dict.get(frmt_id)) or "N/A"
-                video_btns.append(
-                    InlineKeyboardButton(
-                        f"📹 {frmt} ({frmt_size})",
-                        callback_data=f"yt_dl|{yt_id}|{frmt_id}+140|{user_id}|v",
+                if video == True:
+                    video_btns.append(
+                        InlineKeyboardButton(
+                            f"📹 {frmt} ({frmt_size})",
+                            callback_data=f"yt_dl|{yt_id}|{frmt_id}+140|{user_id}|v",
+                        )
                     )
-                )
         buttons += sublists(video_btns, width=2)
-        buttons += best_audio_btn
-        buttons += sublists(
-            list(
-                map(
-                    lambda x: InlineKeyboardButton(
-                        audio_dict[x], callback_data=f"yt_dl|{yt_id}|{x}|{user_id}|a"
-                    ),
-                    sorted(audio_dict.keys(), reverse=True),
-                )
-            ),
-            width=2,
-        )
+        if audio == True:
+            buttons += best_audio_btn
+            buttons += sublists(
+                list(
+                    map(
+                        lambda x: InlineKeyboardButton(
+                            audio_dict[x], callback_data=f"yt_dl|{yt_id}|{x}|{user_id}|a"
+                        ),
+                        sorted(audio_dict.keys(), reverse=True),
+                    )
+                ),
+                width=2,
+            )
 
     return SearchResult(
         yt_id,
