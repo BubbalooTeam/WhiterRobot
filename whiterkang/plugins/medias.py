@@ -217,7 +217,7 @@ async def cli_buttons(c: WhiterX, cq: CallbackQuery):
     if cq.from_user.id != int(userid):
         return await cq.answer(await tld(cq.message.chat.id, "NO_FOR_YOU"), show_alert=True)
     
-    yt_id = re.sub("^(_(ytv|yta))", "", yt_id)
+    yt_id = re.sub(r"^\_(ytv|yta)\.", "", yt_id)
 
     x = await get_download_button(yt_id, userid)
     await cq.edit_message_caption(caption=temp + x.caption, reply_markup=x.buttons)
