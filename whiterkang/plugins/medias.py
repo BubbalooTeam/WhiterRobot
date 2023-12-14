@@ -211,13 +211,13 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
 @WhiterX.on_callback_query(filters.regex("^(_(ytv|yta))"))
 async def cli_buttons(c: WhiterX, cq: CallbackQuery):
     try:
-        data, key_search, temp, userid = cq.data.split("|")
+        data, yt_id, key_search, temp, userid = cq.data.split("|")
     except ValueError:
         return print(cq.data)
     if cq.from_user.id != int(userid):
         return await cq.answer(await tld(cq.message.chat.id, "NO_FOR_YOU"), show_alert=True)
 
-    x = await get_download_button(key_search, userid)
+    x = await get_download_button(yt_id, userid)
     await cq.edit_message_caption(caption=temp + x.caption, reply_markup=x.buttons)
 
 @WhiterX.on_callback_query(filters.regex(r"yt_dl\|(.*)"))
