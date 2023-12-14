@@ -263,7 +263,6 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
                 "nocheckcertificate": True,
                 "postprocessors": [                    
                     {
-                        "key": "FFmpegExtractAudio",
                         "preferredcodec": "mp3",
                         "preferredquality": frmt_id,
                     },
