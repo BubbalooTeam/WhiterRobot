@@ -489,11 +489,10 @@ async def get_download_button(format: str, yt_id: str, user_id: int) -> SearchRe
                         ] = f"🎵 {bitrrate}Kbps ({humanbytes(fr_size) or 'N/A'})"
         audio_dict = delete_none(audio_dict)
         video_btns: List[InlineKeyboardButton] = []
-        for frmt in qual_list:
-            frmt_dict = qual_dict[frmt]
-            print(len(frmt_dict))
-            if len(frmt_dict) != 0:
-                if video == True:
+        if video == True:
+            for frmt in qual_list:
+                frmt_dict = qual_dict[frmt]
+                if len(frmt_dict) != 0:
                     frmt_id = sorted(list(frmt_dict))[-1]
                     frmt_size = humanbytes(frmt_dict.get(frmt_id)) or "N/A"
                     video_btns.append(
@@ -502,7 +501,7 @@ async def get_download_button(format: str, yt_id: str, user_id: int) -> SearchRe
                             callback_data=f"yt_dl|{yt_id}|{frmt_id}+140|{user_id}|v",
                         )
                     )
-                buttons += sublists(video_btns, width=2)
+                    buttons += sublists(video_btns, width=2)
         if audio == True:
             buttons += best_audio_btn
             buttons += sublists(
