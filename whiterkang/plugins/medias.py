@@ -275,7 +275,7 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
         }
 
     try:
-        yt = await extract_info(ydl, url, download=True)
+        yt = await extract_info(YoutubeDL(ydl), url, download=True)
     except BaseException as e:
         await c.send_log(e)
         await cq.message.edit("<b>Error:</b> <i>{}</i>".format(e))
