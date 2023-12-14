@@ -73,6 +73,9 @@ async def ytdlcmd(c: WhiterX, m: Message):
         yt = await extract_info(ydl, rege.group(), download=False)
         scroll = False
 
+    #Generate a  random code
+    key_search = rand_key()
+
     keyboard = [
         [
             InlineKeyboardButton(
@@ -95,8 +98,6 @@ async def ytdlcmd(c: WhiterX, m: Message):
 
 
     if scroll == True:
-        #Generate a  random code
-        key_search = rand_key()
         #Getting infos
         inf = await search_yt(url)
         # Save infos
