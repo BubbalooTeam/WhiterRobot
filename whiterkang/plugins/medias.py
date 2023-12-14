@@ -297,7 +297,7 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
         views += yt["view_count"]
     if yt.get("like_count"):
         likes += yt["like_count"]
-    if "vid" in data:
+    if format == "video":
         try:
             await c.send_video(
                 cq.message.chat.id,
