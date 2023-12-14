@@ -18,12 +18,24 @@ from hydrogram import filters, enums
 from hydrogram.errors import BadRequest, FloodWait, Forbidden, MediaEmpty, MessageNotModified, UserNotParticipant
 from hydrogram.raw.types import InputMessageID
 from hydrogram.raw.functions import channels, messages
-from hydrogram.types import Message, CallbackQuery, InputMediaVideo, InputMediaPhoto, InlineKeyboardMarkup, InlineKeyboardButton, ChatPrivileges
+from hydrogram.types import (
+    Message, 
+    CallbackQuery, 
+    InlineQuery, 
+    InlineQueryResultArticle,
+    InlineQueryResultPhoto,
+    InputMediaVideo, 
+    InputMediaPhoto, 
+    InputTextMessageContent, 
+    InlineKeyboardMarkup, 
+    InlineKeyboardButton, 
+    ChatPrivileges,
+)
 from hydrogram.enums import ChatType, ChatAction 
 
 
 from whiterkang import WhiterX, Config 
-from whiterkang.helpers import humanbytes, tld, csdl, cisdl, tsdl, tisdl, DownloadMedia, extract_info, http, is_admin, add_user, find_user, search_yt, require_admin, disableable_dec, get_ytthumb, rand_key, get_download_button, SearchResult
+from whiterkang.helpers import humanbytes, tld, csdl, cisdl, tsdl, tisdl, DownloadMedia, extract_info, http, is_admin, add_user, find_user, search_yt, require_admin, disableable_dec, get_ytthumb, rand_key, get_download_button, SearchResult, inline_handler
 
 
 YOUTUBE_REGEX = re.compile(
@@ -35,6 +47,8 @@ SDL_REGEX_LINKS = r"(?:htt.+?//)?(?:.+?)?(?:instagram|twitter|x|tiktok|threads).
 MAX_FILESIZE = 2000000000
 
 YT_VAR = {}
+
+iytdl_url_thumb = "https://telegra.ph/file/adba42039e95dae5559aa.png"
 
 @WhiterX.on_message(filters.command("ytdl", Config.TRIGGER))
 @disableable_dec("ytdl")
@@ -114,6 +128,106 @@ async def ytdlcmd(c: WhiterX, m: Message):
     text += f"⏳ <code>{datetime.timedelta(seconds=yt.get('duration'))}</code>"
 
     await m.reply_photo(photo=thumb_, caption=text, reply_markup=InlineKeyboardMarkup(keyboard))
+
+@WhiterX.on_inline_query(r"^iytdl")
+async def iytdl_handler(c: WhiterX, iq: InlineQuery):
+    results = []
+    scroll = False
+    user_id = iq.from_user.id
+    mid = iq.message.id
+    query = iq.query
+    if len(query) == 1:
+        return await iq.answer(
+            [
+                InlineQueryResultArticle(
+                    title=await tld(user_id, "NO_ARGS_YT"),
+                    thumb_url=iytdl_url_thumb,
+                    input_message_content=InputTextMessageContent(
+                        message_text=await tld(user_id, "NO_ARGS_YT"),
+                    ),
+                )
+            ],
+            cache_time=0,
+        )
+    match = YOUTUBE_REGEX.match(query)
+    ydl = YoutubeDL({"noplaylist": True})
+    found_ = True
+    if match is None:
+        yt = await extract_info(ydl, f"ytsearch:{query}", download=False)
+        scroll = True
+        try:
+            yt = yt["entries"][0]
+        except (KeyError, IndexError):
+            return
+    else:
+        yt = await extract_info(ydl, match.group(), download=False)
+        scroll = False    
+
+    #Generate a  random code
+    key_search = rand_key()
+
+    keyboard = [
+        [
+            InlineKeyboardButton(
+                await tld(user_id, "SONG_BNT"),
+                callback_data=f'_yta.{yt["id"]}|a|{user_id}|{mid}'
+            ),
+            InlineKeyboardButton(
+                await tld(user_id, "VID_BNT"),
+                callback_data=f'_ytv.{yt["id"]}|v|{user_id}|{mid}'
+            ),
+        ]
+    ]
+
+    
+    if " - " in yt["title"]:
+        performer, title = yt["title"].rsplit(" - ", 1)
+    else:
+        performer = yt.get("creator") or yt.get("uploader")
+        title = yt["title"]
+
+
+    if scroll == True:
+        #Getting infos
+        inf = await search_yt(query)
+        # Save infos
+        YT_VAR[key_search] = inf
+        #Add a scroll buttons
+        keyboard += [
+            [
+                InlineKeyboardButton(
+                    f"1/{len(inf)}",
+                    callback_data=f'yt_scroll.{key_search}|{user_id}|1|{mid}'
+                ),
+            ],
+        ]
+
+    thumb_ = await get_ytthumb(yt["id"])
+
+    text = f"🎧 <b>{performer}</b> - <i>{title}</i>\n"
+    text += f"⏳ <code>{datetime.timedelta(seconds=yt.get('duration'))}</code>"
+
+    if found_:
+        results.append(
+            InlineQueryResultPhoto(
+                photo_url=thumb_,
+                thumb_url=iytdl_url_thumb,
+                caption=text,
+                reply_markup=InlineKeyboardMarkup(keyboard),
+            )
+        )
+    else:
+        results.append(
+                InlineQueryResultArticle(
+                    title="not found",
+                    input_message_content=InputTextMessageContent(
+                        f"No result found for `{query}`"
+                    ),
+                    description="INVALID",
+                )
+            )
+    await iq.answer(results=results, is_gallery=False, is_personal=True)
+    iq.stop_propagation()
 
 @WhiterX.on_callback_query(filters.regex("^yt_scroll\.\w{8}\|(\d+\|)?\d{1,3}\|?(\w+)$"))
 async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
@@ -483,5 +597,7 @@ async def yt_search_cmd(c: WhiterX, m: Message):
     await m.reply_text(
         "\n".join(vids) if vids else r"¯\_(ツ)_/¯", disable_web_page_preview=True
     )
+
+inline_handler.add_cmd("iytdl <query>", "A advanced downloader from medias of the YouTube.", iytdl_url_thumb, aliases=["iytdl", "ytdl"])
 
 __help__ = True
