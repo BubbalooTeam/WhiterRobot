@@ -290,7 +290,7 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
         await cq.message.reply_text(await tld(cq.message.chat.id, "UPLOADING_YT"))
     await c.send_chat_action(cq.message.chat.id, enums.ChatAction.UPLOAD_VIDEO)
 
-    filename = ydl.prepare_filename(yt)
+    filename = yt.get("requested_downloads")[0]["filepath"] 
     thumb = io.BytesIO((await http.get(yt["thumbnail"])).content)
     thumb.name = "thumbnail.png"
     views = 0
