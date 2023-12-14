@@ -34,7 +34,6 @@ class WhiterKangBOT(Client):
             parse_mode=ParseMode.HTML,
             workers=24,
             in_memory=True,
-            plugins={"root": "whiterkang/plugins"},
             sleep_threshold=180,
         )
 
