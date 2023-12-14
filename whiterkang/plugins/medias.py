@@ -225,13 +225,11 @@ async def cli_buttons(c: WhiterX, cq: CallbackQuery):
 @WhiterX.on_callback_query(filters.regex(r"yt_dl\|(.*)"))
 async def download_handler(c: WhiterX, cq: CallbackQuery):
     try:
-        yt_id, frmt_id, userid, type = cq.data.split("|")
+        data, yt_id, frmt_id, userid, type = cq.data.split("|")
     except ValueError as vle:
         return print(f"{vle}: {cq.data}")
     if cq.from_user.id != int(userid):
         return await cq.answer(await tld(cq.message.chat.id, "NO_FOR_YOU"), show_alert=True)
-    
-    yt_id = re.sub(r"yt_dl\|(.*)", "", yt_id)
 
     if type == "a":
         format_ = "audio"
