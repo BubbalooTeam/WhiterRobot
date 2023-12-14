@@ -33,6 +33,7 @@ class WhiterKangBOT(Client):
             bot_token=Config.BOT_TOKEN,
             parse_mode=ParseMode.HTML,
             workers=24,
+            plugins={"root": "whiterkang/plugins"},
             in_memory=True,
             sleep_threshold=180,
         )
