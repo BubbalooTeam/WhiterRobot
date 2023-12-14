@@ -491,9 +491,9 @@ async def get_download_button(format: str, yt_id: str, user_id: int) -> SearchRe
         for frmt in qual_list:
             frmt_dict = qual_dict[frmt]
             if len(frmt_dict) != 0:
-                frmt_id = sorted(list(frmt_dict))[-1]
-                frmt_size = humanbytes(frmt_dict.get(frmt_id)) or "N/A"
                 if video == True:
+                    frmt_id = sorted(list(frmt_dict))[-1]
+                    frmt_size = humanbytes(frmt_dict.get(frmt_id)) or "N/A"
                     video_btns.append(
                         InlineKeyboardButton(
                             f"📹 {frmt} ({frmt_size})",
