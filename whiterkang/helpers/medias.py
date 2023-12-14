@@ -501,6 +501,7 @@ async def get_download_button(format: str, yt_id: str, user_id: int) -> SearchRe
                             callback_data=f"yt_dl|{yt_id}|{frmt_id}+140|{user_id}|v",
                         )
                     )
+            print(video_btns)
             buttons += sublists(video_btns, width=2)
         if audio == True:
             buttons += best_audio_btn
