@@ -226,8 +226,8 @@ async def cli_buttons(c: WhiterX, cq: CallbackQuery):
 async def download_handler(c: WhiterX, cq: CallbackQuery):
     try:
         yt_id, frmt_id, userid, type = cq.data.split("|")
-    except ValueError:
-        return print(cq.data)
+    except ValueError as vle:
+        return print(f"{vle}: {cq.data}")
     if cq.from_user.id != int(userid):
         return await cq.answer(await tld(cq.message.chat.id, "NO_FOR_YOU"), show_alert=True)
     
