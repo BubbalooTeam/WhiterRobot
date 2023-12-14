@@ -80,11 +80,11 @@ async def ytdlcmd(c: WhiterX, m: Message):
         [
             InlineKeyboardButton(
                 await tld(m.chat.id, "SONG_BNT"),
-                callback_data=f'_yta.{yt["id"]}|{key_search}|{temp}|{user}'
+                callback_data=f'_yta.{yt["id"]}|{key_search}|{user}'
             ),
             InlineKeyboardButton(
                 await tld(m.chat.id, "VID_BNT"),
-                callback_data=f'_ytv.{yt["id"]}|{key_search}|{temp}|{user}'
+                callback_data=f'_ytv.{yt["id"]}|{key_search}|{user}'
             ),
         ]
     ]
@@ -162,11 +162,11 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
         [
             InlineKeyboardButton(
                 await tld(chat.id, "SONG_BNT"),
-                callback_data=f'_yta.{yt["id"]}|{key_search}|{temp}|{user}'
+                callback_data=f'_yta.{yt["id"]}|{key_search}|{user}'
             ),
             InlineKeyboardButton(
                 await tld(chat.id, "VID_BNT"),
-                callback_data=f'_ytv.{yt["id"]}|{key_search}|{temp}|{user}'
+                callback_data=f'_ytv.{yt["id"]}|{key_search}|{user}'
             ),
         ]
     ]
@@ -211,7 +211,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
 @WhiterX.on_callback_query(filters.regex("^(_(ytv|yta))"))
 async def cli_buttons(c: WhiterX, cq: CallbackQuery):
     try:
-        yt_id, key_search, temp, userid = cq.data.split("|")
+        yt_id, key_search, userid = cq.data.split("|")
     except ValueError as vle:
         return print(f"{vle}: {cq.data}")
     if cq.from_user.id != int(userid):
@@ -220,7 +220,7 @@ async def cli_buttons(c: WhiterX, cq: CallbackQuery):
     yt_id = re.sub(r"^\_(ytv|yta)\.", "", yt_id)
 
     x = await get_download_button(yt_id, userid)
-    await cq.edit_message_caption(caption=temp + x.caption, reply_markup=x.buttons)
+    await cq.edit_message_caption(caption=x.caption, reply_markup=x.buttons)
 
 @WhiterX.on_callback_query(filters.regex(r"yt_dl\|(.*)"))
 async def download_handler(c: WhiterX, cq: CallbackQuery):
@@ -248,30 +248,25 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
     if format_ == "video":
         ydl = YoutubeDL(
             {
-                "addmetadata": True,
                 "geo_bypass": True,
                 "nocheckcertificate": True,
                 "outtmpl": os.path.join(path, "%(title)s-%(format)s.%(ext)s"),
                 "format": frmt_id,
-                "prefer_ffmpeg": True,
-                "postprocessors": [{"key": "FFmpegMetadata"}],
             }
         )
     else:
         ydl = YoutubeDL(
             {
                 "outtmpl": os.path.join(path, "%(title)s-%(format)s.%(ext)s"),
-                "writethumbnail": True,
-                "prefer_ffmpeg": True,
                 "format": "bestaudio/best",
                 "geo_bypass": True,
                 "nocheckcertificate": True,
-                "postprocessors": [                    {
+                "postprocessors": [                    
+                    {
                         "key": "FFmpegExtractAudio",
                         "preferredcodec": "mp3",
                         "preferredquality": frmt_id,
                     },
-                    {"key": "FFmpegMetadata"},
                 ],
             }
         )
