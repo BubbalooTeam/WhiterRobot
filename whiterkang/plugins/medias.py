@@ -291,11 +291,7 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
     await c.send_chat_action(cq.message.chat.id, enums.ChatAction.UPLOAD_VIDEO)
 
     filename = yt.get("requested_downloads")[0]["filepath"]
-    fsize = yt.get("filesize")
-    if int(fsize) > MAX_FILESIZE:
-        return await cq.edit_message_text(
-            await tld(cq.message.chat.id, "YOUTUBE_FILE_BIG"),
-        ) 
+    
     thumb = io.BytesIO((await http.get(yt["thumbnail"])).content)
     thumb.name = "thumbnail.png"
     views = 0
@@ -344,28 +340,6 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
             await cq.message.delete()
 
     shutil.rmtree(tempdir, ignore_errors=True)
-
-
-    
-
-@WhiterX.on_callback_query(filters.regex("^(_(vid|aud))"))
-async def cli_ytdl(c: WhiterX, cq: CallbackQuery):
-    try:
-        data, fsize, vformat, temp, userid, mid = cq.data.split("|")
-    except ValueError:
-        return print(cq.data)
-    if cq.from_user.id != int(userid):
-        return await cq.answer(await tld(cq.message.chat.id, "NO_FOR_YOU"), show_alert=True)
-    if int(fsize) > MAX_FILESIZE:
-        return await cq.answer(
-            await tld(cq.message.chat.id, "YOUTUBE_FILE_BIG"),
-            show_alert=True,
-            cache_time=60,
-        )
-    vid = re.sub(r"^\_(vid|aud)\.", "", data)
-    url = f"https://www.youtube.com/watch?v={vid}"
-  
-
 
     
 @WhiterX.on_message(filters.command(["dl", "sdl", "mdl"], Config.TRIGGER) | filters.regex(SDL_REGEX_LINKS))
