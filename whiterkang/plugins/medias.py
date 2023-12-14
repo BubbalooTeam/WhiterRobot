@@ -302,9 +302,7 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
             await c.send_video(
                 cq.message.chat.id,
                 video=filename,
-                width=1920,
-                height=1080,
-                caption=(await tld(cq.message.chat.id, "YOUTUBE_CAPTION")).format(url or "",  + yt["title"], datetime.timedelta(seconds=yt["duration"]) or 0, yt["channel"] or None, views, likes),
+                caption=(await tld(cq.message.chat.id, "YOUTUBE_CAPTION")).format(url or "", yt["title"], datetime.timedelta(seconds=yt["duration"]) or 0, yt["channel"] or None, views, likes),
                 duration=yt["duration"],
                 thumb=thumb,
             )

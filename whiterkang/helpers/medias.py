@@ -482,7 +482,7 @@ async def get_download_button(yt_id: str, user_id: int) -> SearchResult:
                 video_btns.append(
                     InlineKeyboardButton(
                         f"📹 {frmt} ({frmt_size})",
-                        callback_data=f"yt_dl|{yt_id}|{frmt_id}|{user_id}|v",
+                        callback_data=f"yt_dl|{yt_id}|{frmt_id}+140|{user_id}|v",
                     )
                 )
         buttons += sublists(video_btns, width=2)
