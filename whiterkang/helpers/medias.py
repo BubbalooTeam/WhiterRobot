@@ -427,18 +427,18 @@ class SearchResult:
         return json.dumps(out, indent=4)
 
 async def get_download_button(format: str, yt_id: str, user_id: int) -> SearchResult:
-    audio = False
-    video = False
+    aud = False
+    vid = False
     buttons = []
     best_audio_btn = []
     if format == "a":
-        audio = True
+        aud = True
     elif format == "v":
-        video = True
+        vid = True
     else:
         return
     
-    if video == True:
+    if vid:
         buttons += [
             [
                 InlineKeyboardButton(
@@ -447,7 +447,7 @@ async def get_download_button(format: str, yt_id: str, user_id: int) -> SearchRe
                 ),
             ]
         ]
-    if audio == True:
+    if aud:
         best_audio_btn = [
             [
                 InlineKeyboardButton(
@@ -462,7 +462,7 @@ async def get_download_button(format: str, yt_id: str, user_id: int) -> SearchRe
         vid_data = await extract_info(ydl, f"{YT_VID_URL}{yt_id}", download=False)
     except ExtractorError:
         vid_data = None
-        if audio == True:
+        if aud:
             buttons += best_audio_btn
     else:
         # ------------------------------------------------ #
@@ -483,13 +483,13 @@ async def get_download_button(format: str, yt_id: str, user_id: int) -> SearchRe
                 if bitrrate == (0 or "None"):
                     pass
                 else:
-                    if audio == True:
+                    if aud:
                         audio_dict[
                             bitrrate
                         ] = f"🎵 {bitrrate}Kbps ({humanbytes(fr_size) or 'N/A'})"
         audio_dict = delete_none(audio_dict)
         video_btns: List[InlineKeyboardButton] = []
-        if video == True:
+        if vid:
             for frmt in qual_list:
                 frmt_dict = qual_dict[frmt]
                 if len(frmt_dict) != 0:
@@ -503,7 +503,7 @@ async def get_download_button(format: str, yt_id: str, user_id: int) -> SearchRe
                     )
             print(video_btns)
             buttons += sublists(video_btns, width=2)
-        if audio == True:
+        if aud:
             buttons += best_audio_btn
             buttons += sublists(
                 list(
