@@ -136,7 +136,7 @@ async def iytdl_handler(c: WhiterX, iq: InlineQuery):
     user_id = iq.from_user.id
     mid = iq.id
     query = iq.query
-    if len(query) == 1:
+    if len(query.split(maxsplit=1)) == 1:
         return await iq.answer(
             [
                 InlineQueryResultArticle(
@@ -149,19 +149,22 @@ async def iytdl_handler(c: WhiterX, iq: InlineQuery):
             ],
             cache_time=0,
         )
+    query = query.split(maxsplit=1)[1]
     match = YOUTUBE_REGEX.match(query)
     ydl = YoutubeDL({"noplaylist": True})
-    found_ = True
+    found_ = False
     if match is None:
         yt = await extract_info(ydl, f"ytsearch:{query}", download=False)
         scroll = True
         try:
             yt = yt["entries"][0]
+            found_ = True
         except (KeyError, IndexError):
             return
     else:
         yt = await extract_info(ydl, match.group(), download=False)
-        scroll = False    
+        scroll = False
+        found_ = True 
 
     #Generate a  random code
     key_search = rand_key()
