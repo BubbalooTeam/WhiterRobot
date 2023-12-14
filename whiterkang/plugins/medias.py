@@ -265,6 +265,7 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
             {
                 "outtmpl": os.path.join(path, "%(title)s-%(format)s.%(ext)s"),
                 "format": "bestaudio/best",
+                "prefer_ffmpeg": True,
                 "geo_bypass": True,
                 "nocheckcertificate": True,
                 "postprocessors": [                    
