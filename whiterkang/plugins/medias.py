@@ -246,7 +246,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     
     ydl = YoutubeDL({"noplaylist": True})
 
-    key_search = re.sub(r"ytdl_scroll\|", "", key_search)
+    key_search = re.sub(r"yt_scroll\|", "", key_search)
     pages = int(pages)
 
     infos = YT_VAR[key_search]
