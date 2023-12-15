@@ -232,7 +232,7 @@ async def iytdl_handler(c: WhiterX, iq: InlineQuery):
     await iq.answer(results=results, is_gallery=False, is_personal=True)
     iq.stop_propagation()
 
-@WhiterX.on_callback_query(filters.regex(r"ytdl_scroll\|(.*)"))
+@WhiterX.on_callback_query(filters.regex(r"yt_scroll\|(.*)"))
 async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     try: 
         key_search, user, pages, chat_id = cq.data.split("|")
