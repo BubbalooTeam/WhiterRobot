@@ -237,7 +237,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     try: 
         key_search, user, pages, chat_id = cq.data.split("|")
     except ValueError:
-        return await c.send_log("Scroll ValueError in: {cq.data}")
+        return await c.send_log(f"Scroll ValueError in: {cq.data}")
     
     chat_id = int(chat_id)
     
