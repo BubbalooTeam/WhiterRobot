@@ -429,9 +429,9 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
     if format_ == "video":
         try:
             await c.send_video(
-                cq.message.chat.id,
+                chat.id,
                 video=filename,
-                caption=(await tld(cq.message.chat.id, "YOUTUBE_CAPTION")).format(url or "", yt["title"], datetime.timedelta(seconds=yt["duration"]) or 0, yt["channel"] or None, views, likes),
+                caption=(await tld(chat.id, "YOUTUBE_CAPTION")).format(url or "", yt["title"], datetime.timedelta(seconds=yt["duration"]) or 0, yt["channel"] or None, views, likes),
                 duration=yt["duration"],
                 thumb=thumb,
                 reply_to_message_id=int(mid),
@@ -451,19 +451,22 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
             title = yt["title"]
         try:
             await c.send_audio(
-                cq.message.chat.id,
+                chat.id,
                 audio=filename,
                 title=title,
                 performer=performer,
-                caption=(await tld(cq.message.chat.id, "YOUTUBE_CAPTION")).format(url or "", yt["title"], datetime.timedelta(seconds=yt["duration"]) or 0, yt["channel"] or None, views, likes),
+                caption=(await tld(chat.id, "YOUTUBE_CAPTION")).format(url or "", yt["title"], datetime.timedelta(seconds=yt["duration"]) or 0, yt["channel"] or None, views, likes),
                 duration=yt["duration"],
                 thumb=thumb,
                 reply_to_message_id=int(mid),
             )
         except BadRequest as e:
-            await cq.message.edit_text(
-                "<b>Error:</b> <i>{errmsg}</i>".format(errmsg=e)
-            )
+            try:
+                await cq.message.edit_text(
+                    "<b>Error:</b> <i>{errmsg}</i>".format(errmsg=e)
+                )
+            except Exceptioh:
+                await cq.edit_message_caption(caption="<b>Error:</b> <i>{errmsg}</i>".format(errmsg=e))
         else:
             try:
                 await cq.message.delete()
