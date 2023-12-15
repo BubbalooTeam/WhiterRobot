@@ -426,7 +426,7 @@ class SearchResult:
         )
         return json.dumps(out, indent=4)
 
-async def get_download_button(format: str, yt_id: str, user_id: int, mid: int) -> SearchResult:
+async def get_download_button(format: str, yt_id: str, user_id: int) -> SearchResult:
     aud = False
     vid = False
     buttons = []
@@ -443,7 +443,7 @@ async def get_download_button(format: str, yt_id: str, user_id: int, mid: int) -
             [
                 InlineKeyboardButton(
                     "⭐️ BEST - 📹 MP4",
-                    callback_data=f"yt_dl|{yt_id}|mp4|{user_id}|v|{mid}",
+                    callback_data=f"yt_dl|{yt_id}|mp4|{user_id}|v",
                 ),
             ]
         ]
@@ -452,7 +452,7 @@ async def get_download_button(format: str, yt_id: str, user_id: int, mid: int) -
             [
                 InlineKeyboardButton(
                     "⭐️ BEST - 🎵 320Kbps - MP3",
-                    callback_data=f"yt_dl|{yt_id}|mp3|{user_id}|a|{mid}",
+                    callback_data=f"yt_dl|{yt_id}|mp3|{user_id}|a",
                 )
             ]
         ]
@@ -498,7 +498,7 @@ async def get_download_button(format: str, yt_id: str, user_id: int, mid: int) -
                     video_btns.append(
                         InlineKeyboardButton(
                             f"📹 {frmt} ({frmt_size})",
-                            callback_data=f"yt_dl|{yt_id}|{frmt_id}+140|{user_id}|v|{mid}",
+                            callback_data=f"yt_dl|{yt_id}|{frmt_id}+140|{user_id}|v",
                         )
                     )
             buttons += sublists(video_btns, width=2)
@@ -508,7 +508,7 @@ async def get_download_button(format: str, yt_id: str, user_id: int, mid: int) -
                 list(
                     map(
                         lambda x: InlineKeyboardButton(
-                            audio_dict[x], callback_data=f"yt_dl|{yt_id}|{x}|{user_id}|a|{mid}"
+                            audio_dict[x], callback_data=f"yt_dl|{yt_id}|{x}|{user_id}|a"
                         ),
                         sorted(audio_dict.keys(), reverse=True),
                     )

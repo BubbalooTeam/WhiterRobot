@@ -25,7 +25,7 @@ from hydrogram.types import (
     InlineQueryResultArticle,
     InlineQueryResultPhoto,
     InputMediaVideo, 
-    InputMediaPhoto, 
+    InputMediaPhoto,
     InputTextMessageContent, 
     InlineKeyboardMarkup, 
     InlineKeyboardButton, 
@@ -54,7 +54,6 @@ iytdl_url_thumb = "https://telegra.ph/file/adba42039e95dae5559aa.png"
 @disableable_dec("ytdl")
 async def ytdlcmd(c: WhiterX, m: Message):
     user = m.from_user.id
-    mid = m.id
     scroll = False
 
     if not await find_user(user):
@@ -90,11 +89,11 @@ async def ytdlcmd(c: WhiterX, m: Message):
         [
             InlineKeyboardButton(
                 await tld(m.chat.id, "SONG_BNT"),
-                callback_data=f'_yta.{yt["id"]}|a|{user}|{mid}'
+                callback_data=f'_yta.{yt["id"]}|a|{user}'
             ),
             InlineKeyboardButton(
                 await tld(m.chat.id, "VID_BNT"),
-                callback_data=f'_ytv.{yt["id"]}|v|{user}|{mid}'
+                callback_data=f'_ytv.{yt["id"]}|v|{user}'
             ),
         ]
     ]
@@ -117,7 +116,7 @@ async def ytdlcmd(c: WhiterX, m: Message):
             [
                 InlineKeyboardButton(
                     f"1/{len(inf)}",
-                    callback_data=f'yt_scroll.{key_search}|{user}|1|{mid}'
+                    callback_data=f'yt_scroll.{key_search}|{user}|1'
                 ),
             ],
         ]
@@ -134,7 +133,6 @@ async def iytdl_handler(c: WhiterX, iq: InlineQuery):
     results = []
     scroll = False
     user_id = iq.from_user.id
-    mid = iq.id
     query = iq.query
     if len(query.split(maxsplit=1)) == 1:
         return await iq.answer(
@@ -173,11 +171,11 @@ async def iytdl_handler(c: WhiterX, iq: InlineQuery):
         [
             InlineKeyboardButton(
                 await tld(user_id, "SONG_BNT"),
-                callback_data=f'_yta.{yt["id"]}|a|{user_id}|{mid}'
+                callback_data=f'_yta.{yt["id"]}|a|{user_id}'
             ),
             InlineKeyboardButton(
                 await tld(user_id, "VID_BNT"),
-                callback_data=f'_ytv.{yt["id"]}|v|{user_id}|{mid}'
+                callback_data=f'_ytv.{yt["id"]}|v|{user_id}'
             ),
         ]
     ]
@@ -200,7 +198,7 @@ async def iytdl_handler(c: WhiterX, iq: InlineQuery):
             [
                 InlineKeyboardButton(
                     f"1/{len(inf)}",
-                    callback_data=f'yt_scroll.{key_search}|{user_id}|1|{mid}'
+                    callback_data=f'yt_scroll.{key_search}|{user_id}|1'
                 ),
             ],
         ]
@@ -232,20 +230,20 @@ async def iytdl_handler(c: WhiterX, iq: InlineQuery):
     await iq.answer(results=results, is_gallery=False, is_personal=True)
     iq.stop_propagation()
 
-@WhiterX.on_callback_query(filters.regex("^yt_scroll\.\w{8}\|(\d+\|)?\d{1,3}\|?(\w+)$"))
+@WhiterX.on_callback_query(filters.regex("^yt_scroll\.\w{8}\|(\d+\|)?\d{1,3}$"))
 async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     try:
-        key_search, user, pages, mid = cq.data.split("|")
+        key_search, user, pages = cq.data.split("|")
     except ValueError:
         return await c.send_log("Scroll ValueError in: {cq.data}")
     
     try:
-        chat = cq.message.chat
+        chat_id = cq.message.chat.id
     except Exception:
-        chat = cq.chat
+        chat_id = user
     
     if cq.from_user.id != int(user):
-        return await cq.answer(await tld(chat.id, "NO_FOR_YOU"), show_alert=True)
+        return await cq.answer(await tld(chat_id, "NO_FOR_YOU"), show_alert=True)
     
     ydl = YoutubeDL({"noplaylist": True})
 
@@ -274,12 +272,12 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     keyboard = [
         [
             InlineKeyboardButton(
-                await tld(chat.id, "SONG_BNT"),
-                callback_data=f'_yta.{yt["id"]}|a|{user}|{mid}'
+                await tld(chat_id, "SONG_BNT"),
+                callback_data=f'_yta.{yt["id"]}|a|{user}'
             ),
             InlineKeyboardButton(
-                await tld(chat.id, "VID_BNT"),
-                callback_data=f'_ytv.{yt["id"]}|v|{user}|{mid}'
+                await tld(chat_id, "VID_BNT"),
+                callback_data=f'_ytv.{yt["id"]}|v|{user}'
             ),
         ]
     ]
@@ -296,7 +294,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
         [
             InlineKeyboardButton(
                 f"{page}/{l_infos}",
-                callback_data=f'yt_scroll.{key_search}|{user}|{page}|{mid}'
+                callback_data=f'yt_scroll.{key_search}|{user}|{page}'
             ),
         ],
     ]
@@ -304,12 +302,12 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
         keyboard += [
             [
                 InlineKeyboardButton(
-                    await tld(chat.id, "BACK_BNT"), 
-                    callback_data=f"yt_scroll.{key_search}|{user}|{back_page}|{mid}"
+                    await tld(chat_id, "BACK_BNT"), 
+                    callback_data=f"yt_scroll.{key_search}|{user}|{back_page}"
                 ),
                 InlineKeyboardButton(
                     "⏭️ 5️",
-                    callback_data=f"yt_scroll.{key_search}|{user}|{skip_page}|{mid}"
+                    callback_data=f"yt_scroll.{key_search}|{user}|{skip_page}"
                 ),
             ]
         ]
@@ -324,15 +322,21 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
 @WhiterX.on_callback_query(filters.regex("^(_(ytv|yta))"))
 async def cli_buttons(c: WhiterX, cq: CallbackQuery):
     try:
-        yt_id, fmt, userid, mid = cq.data.split("|")
+        yt_id, fmt, userid = cq.data.split("|")
     except ValueError as vle:
         return print(f"{vle}: {cq.data}")
+    
+    try:
+        chat_id = cq.message.chat.id
+    except Exception:
+        chat_id = userid
+
     if cq.from_user.id != int(userid):
-        return await cq.answer(await tld(cq.message.chat.id, "NO_FOR_YOU"), show_alert=True)
+        return await cq.answer(await tld(chat_id, "NO_FOR_YOU"), show_alert=True)
     
     yt_id = re.sub(r"^\_(ytv|yta)\.", "", yt_id)
 
-    x = await get_download_button(fmt, yt_id, userid, mid)
+    x = await get_download_button(fmt, yt_id, userid)
     await cq.edit_message_caption(caption=x.caption, reply_markup=x.buttons)
 
 @WhiterX.on_callback_query(filters.regex(r"yt_dl\|(.*)"))
@@ -341,27 +345,28 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
         data, yt_id, frmt_id, userid, type, mid = cq.data.split("|")
     except ValueError as vle:
         return print(f"{vle}: {cq.data}")
+    
+    try:
+        chat_id = cq.message.chat.id
+    except Exception:
+        chat_id = userid
+
     if cq.from_user.id != int(userid):
-        return await cq.answer(await tld(cq.message.chat.id, "NO_FOR_YOU"), show_alert=True)
+        return await cq.answer(await tld(chat_id, "NO_FOR_YOU"), show_alert=True)
 
     if type == "a":
         format_ = "audio"
     else:
         format_ = "video"
 
-    try:
-        chat = cq.message.chat
-    except Exception:
-        chat = cq.chat
-
     url = f"https://www.youtube.com/watch?v={yt_id}"
 
     try:
-        await cq.message.edit(await tld(chat.id, "DOWNLOAD_YT"))
+        await cq.message.edit(await tld(chat_id, "DOWNLOAD_YT"))
     except MessageNotModified:
-        await cq.message.reply_text(await tld(chat.id, "DOWNLOAD_YT"))
+        await cq.message.reply_text(await tld(chat_id, "DOWNLOAD_YT"))
     except Exception:
-        await cq.edit_message_caption(caption=await tld(chat.id, "DOWNLOAD_YT"))
+        await cq.edit_message_caption(caption=await tld(chat_id, "DOWNLOAD_YT"))
 
     with tempfile.TemporaryDirectory() as tempdir:
         path = os.path.join(tempdir, "ytdl")
@@ -408,13 +413,13 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
             await cq.edit_message_caption(caption="<b>Error:</b> <i>{}</i>".format(e))
         return
     try:
-        await cq.message.edit(await tld(chat.id, "UPLOADING_YT"))
+        await cq.message.edit(await tld(chat_id, "UPLOADING_YT"))
     except MessageNotModified:
-        await cq.message.reply_text(await tld(chat.id, "UPLOADING_YT"))
+        await cq.message.reply_text(await tld(chat_id, "UPLOADING_YT"))
     except Exception:
-        await cq.edit_message_caption(await tld(chat.id, "UPLOADING_YT"))
+        await cq.edit_message_caption(await tld(chat_id, "UPLOADING_YT"))
 
-    await c.send_chat_action(chat.id, enums.ChatAction.UPLOAD_VIDEO)
+    await c.send_chat_action(chat_id, enums.ChatAction.UPLOAD_VIDEO)
 
     filename = yt.get("requested_downloads")[0]["filepath"]
 
@@ -429,9 +434,9 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
     if format_ == "video":
         try:
             await c.send_video(
-                chat.id,
+                chat_id,
                 video=filename,
-                caption=(await tld(chat.id, "YOUTUBE_CAPTION")).format(url or "", yt["title"], datetime.timedelta(seconds=yt["duration"]) or 0, yt["channel"] or None, views, likes),
+                caption=(await tld(chat_id, "YOUTUBE_CAPTION")).format(url or "", yt["title"], datetime.timedelta(seconds=yt["duration"]) or 0, yt["channel"] or None, views, likes),
                 duration=yt["duration"],
                 thumb=thumb,
                 reply_to_message_id=int(mid),
@@ -451,11 +456,11 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
             title = yt["title"]
         try:
             await c.send_audio(
-                chat.id,
+                chat_id,
                 audio=filename,
                 title=title,
                 performer=performer,
-                caption=(await tld(chat.id, "YOUTUBE_CAPTION")).format(url or "", yt["title"], datetime.timedelta(seconds=yt["duration"]) or 0, yt["channel"] or None, views, likes),
+                caption=(await tld(chat_id, "YOUTUBE_CAPTION")).format(url or "", yt["title"], datetime.timedelta(seconds=yt["duration"]) or 0, yt["channel"] or None, views, likes),
                 duration=yt["duration"],
                 thumb=thumb,
                 reply_to_message_id=int(mid),
@@ -465,7 +470,7 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
                 await cq.message.edit_text(
                     "<b>Error:</b> <i>{errmsg}</i>".format(errmsg=e)
                 )
-            except Exceptioh:
+            except Exception:
                 await cq.edit_message_caption(caption="<b>Error:</b> <i>{errmsg}</i>".format(errmsg=e))
         else:
             try:
