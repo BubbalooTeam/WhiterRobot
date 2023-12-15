@@ -118,7 +118,7 @@ async def ytdlcmd(c: WhiterX, m: Message):
             [
                 InlineKeyboardButton(
                     f"1/{len(inf)}",
-                    callback_data=f'yt_scroll.{key_search}|{user}|1|{chat_id}'
+                    callback_data=f'yt_scroll|{key_search}|{user}|1|{chat_id}'
                 ),
             ],
         ]
@@ -200,7 +200,7 @@ async def iytdl_handler(c: WhiterX, iq: InlineQuery):
             [
                 InlineKeyboardButton(
                     f"1/{len(inf)}",
-                    callback_data=f'yt_scroll.{key_search}|{user_id}|1|{user_id}'
+                    callback_data=f'yt_scroll|{key_search}|{user_id}|1|{user_id}'
                 ),
             ],
         ]
@@ -232,9 +232,9 @@ async def iytdl_handler(c: WhiterX, iq: InlineQuery):
     await iq.answer(results=results, is_gallery=False, is_personal=True)
     iq.stop_propagation()
 
-@WhiterX.on_callback_query(filters.regex("^yt_scroll\.\w{8}\|(\d+\|)?\d{1,3}\|?(\w+)$"))
+@WhiterX.on_callback_query(filters.regex(r"ytdl_scroll\|(.*)"))
 async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
-    try:
+    try: 
         key_search, user, pages, chat_id = cq.data.split("|")
     except ValueError:
         return await c.send_log("Scroll ValueError in: {cq.data}")
@@ -246,7 +246,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     
     ydl = YoutubeDL({"noplaylist": True})
 
-    key_search = re.sub(r"^yt_scroll\.", "", key_search)
+    key_search = re.sub(r"ytdl_scroll\|", "", key_search)
     pages = int(pages)
 
     infos = YT_VAR[key_search]
@@ -293,7 +293,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
         [
             InlineKeyboardButton(
                 f"{page}/{l_infos}",
-                callback_data=f'yt_scroll.{key_search}|{user}|{page}|{chat_id}'
+                callback_data=f'yt_scroll|{key_search}|{user}|{page}|{chat_id}'
             ),
         ],
     ]
@@ -302,11 +302,11 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
             [
                 InlineKeyboardButton(
                     await tld(chat_id, "BACK_BNT"), 
-                    callback_data=f"yt_scroll.{key_search}|{user}|{back_page}|{chat_id}"
+                    callback_data=f"yt_scroll|{key_search}|{user}|{back_page}|{chat_id}"
                 ),
                 InlineKeyboardButton(
                     "⏭️ 5️",
-                    callback_data=f"yt_scroll.{key_search}|{user}|{skip_page}|{chat_id}"
+                    callback_data=f"yt_scroll|{key_search}|{user}|{skip_page}|{chat_id}"
                 ),
             ]
         ]
