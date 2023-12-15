@@ -239,7 +239,10 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     except ValueError:
         return await c.send_log("Scroll ValueError in: {cq.data}")
     
-    chat = cq.message.chat
+    try:
+        chat = cq.message.chat
+    except Exception:
+        chat = cq.chat
     
     if cq.from_user.id != int(user):
         return await cq.answer(await tld(chat.id, "NO_FOR_YOU"), show_alert=True)
@@ -346,12 +349,19 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
     else:
         format_ = "video"
 
+    try:
+        chat = cq.message.chat
+    except Exception:
+        chat = cq.chat
+
     url = f"https://www.youtube.com/watch?v={yt_id}"
 
     try:
-        await cq.message.edit(await tld(cq.message.chat.id, "DOWNLOAD_YT"))
+        await cq.message.edit(await tld(chat.id, "DOWNLOAD_YT"))
     except MessageNotModified:
-        await cq.message.reply_text(await tld(cq.message.chat.id, "DOWNLOAD_YT"))
+        await cq.message.reply_text(await tld(chat.id, "DOWNLOAD_YT"))
+    except Exception:
+        await cq.edit_message_caption(caption=await tld(chat.id, "DOWNLOAD_YT"))
 
     with tempfile.TemporaryDirectory() as tempdir:
         path = os.path.join(tempdir, "ytdl")
@@ -392,13 +402,19 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
         yt = await extract_info(ydl, url, download=True)
     except BaseException as e:
         await c.send_log(e)
-        await cq.message.edit("<b>Error:</b> <i>{}</i>".format(e))
+        try:
+            await cq.message.edit("<b>Error:</b> <i>{}</i>".format(e))
+        except Exception:
+            await cq.edit_message_caption(caption="<b>Error:</b> <i>{}</i>".format(e))
         return
     try:
-        await cq.message.edit(await tld(cq.message.chat.id, "UPLOADING_YT"))
+        await cq.message.edit(await tld(chat.id, "UPLOADING_YT"))
     except MessageNotModified:
-        await cq.message.reply_text(await tld(cq.message.chat.id, "UPLOADING_YT"))
-    await c.send_chat_action(cq.message.chat.id, enums.ChatAction.UPLOAD_VIDEO)
+        await cq.message.reply_text(await tld(chat.id, "UPLOADING_YT"))
+    except Exception:
+        await cq.edit_message_caption(await tld(chat.id, "UPLOADING_YT"))
+
+    await c.send_chat_action(chat.id, enums.ChatAction.UPLOAD_VIDEO)
 
     filename = yt.get("requested_downloads")[0]["filepath"]
 
@@ -449,7 +465,10 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
                 "<b>Error:</b> <i>{errmsg}</i>".format(errmsg=e)
             )
         else:
-            await cq.message.delete()
+            try:
+                await cq.message.delete()
+            except Exception:
+                await cq.delete()
 
     shutil.rmtree(tempdir, ignore_errors=True)
 
