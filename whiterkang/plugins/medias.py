@@ -342,7 +342,7 @@ async def cli_buttons(c: WhiterX, cq: CallbackQuery):
 @WhiterX.on_callback_query(filters.regex(r"yt_dl\|(.*)"))
 async def download_handler(c: WhiterX, cq: CallbackQuery):
     try:
-        data, yt_id, frmt_id, userid, type, mid = cq.data.split("|")
+        data, yt_id, frmt_id, userid, type = cq.data.split("|")
     except ValueError as vle:
         return print(f"{vle}: {cq.data}")
     
@@ -439,7 +439,6 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
                 caption=(await tld(chat_id, "YOUTUBE_CAPTION")).format(url or "", yt["title"], datetime.timedelta(seconds=yt["duration"]) or 0, yt["channel"] or None, views, likes),
                 duration=yt["duration"],
                 thumb=thumb,
-                reply_to_message_id=int(mid),
             )
             await cq.message.delete()
         except BadRequest as e:
@@ -463,7 +462,6 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
                 caption=(await tld(chat_id, "YOUTUBE_CAPTION")).format(url or "", yt["title"], datetime.timedelta(seconds=yt["duration"]) or 0, yt["channel"] or None, views, likes),
                 duration=yt["duration"],
                 thumb=thumb,
-                reply_to_message_id=int(mid),
             )
         except BadRequest as e:
             try:
