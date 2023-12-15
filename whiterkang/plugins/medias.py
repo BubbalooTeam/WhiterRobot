@@ -440,7 +440,6 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
                 duration=yt["duration"],
                 thumb=thumb,
             )
-            await cq.message.delete()
         except BadRequest as e:
             await c.send_log(e)
             await c.send_message(
@@ -470,15 +469,10 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
                 )
             except Exception:
                 await cq.edit_message_caption(caption="<b>Error:</b> <i>{errmsg}</i>".format(errmsg=e))
-        else:
-            try:
-                await cq.message.delete()
-            except Exception:
-                await cq.delete()
 
     shutil.rmtree(tempdir, ignore_errors=True)
 
-    
+
 @WhiterX.on_message(filters.command(["dl", "sdl", "mdl"], Config.TRIGGER) | filters.regex(SDL_REGEX_LINKS))
 async def sdl(c: WhiterX, message: Message):
     if message.matches:
