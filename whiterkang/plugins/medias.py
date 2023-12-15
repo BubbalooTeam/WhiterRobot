@@ -26,6 +26,7 @@ from hydrogram.types import (
     InlineQueryResultPhoto,
     InputMediaVideo, 
     InputMediaPhoto,
+    InputMediaAudio,
     InputTextMessageContent, 
     InlineKeyboardMarkup, 
     InlineKeyboardButton, 
@@ -433,12 +434,10 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
         likes += yt["like_count"]
     if format_ == "video":
         try:
-            await c.send_video(
-                chat_id,
-                video=filename,
-                caption=(await tld(chat_id, "YOUTUBE_CAPTION")).format(url or "", yt["title"], datetime.timedelta(seconds=yt["duration"]) or 0, yt["channel"] or None, views, likes),
-                duration=yt["duration"],
-                thumb=thumb,
+            await cq.edit_message_media(
+                media=InputMediaVideo(
+                    media=filename, duration=yt["duration"], caption=(await tld(chat_id, "YOUTUBE_CAPTION")).format(url or "", yt["title"], datetime.timedelta(seconds=yt["duration"]) or 0, yt["channel"] or None, views, likes), thumb=thumb
+                )
             )
         except BadRequest as e:
             await c.send_log(e)
@@ -453,14 +452,10 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
             performer = yt.get("creator") or yt.get("uploader")
             title = yt["title"]
         try:
-            await c.send_audio(
-                chat_id,
-                audio=filename,
-                title=title,
-                performer=performer,
-                caption=(await tld(chat_id, "YOUTUBE_CAPTION")).format(url or "", yt["title"], datetime.timedelta(seconds=yt["duration"]) or 0, yt["channel"] or None, views, likes),
-                duration=yt["duration"],
-                thumb=thumb,
+            await cq.edit_message_media(
+                media=InputMediaAudio(
+                    media=filename, duration=yt["duration"], caption=(await tld(chat_id, "YOUTUBE_CAPTION")).format(url or "", yt["title"], datetime.timedelta(seconds=yt["duration"]) or 0, yt["channel"] or None, views, likes), thumb=thumb
+                )
             )
         except BadRequest as e:
             try:
