@@ -235,7 +235,7 @@ async def iytdl_handler(c: WhiterX, iq: InlineQuery):
 @WhiterX.on_callback_query(filters.regex(r"yt_scroll\|(.*)"))
 async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     try: 
-        key_search, user, pages, chat_id = cq.data.split("|")
+        key_search, user, pages, chat_id, *rest = cq.data.split("|")
     except ValueError as vle:
         return await c.send_log(f"Scroll ValueError in: {cq.data} -> {vle}")
     
@@ -246,7 +246,6 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     
     ydl = YoutubeDL({"noplaylist": True})
 
-    key_search = re.sub(r"yt_scroll\|", "", key_search)
     pages = int(pages)
 
     infos = YT_VAR[key_search]
