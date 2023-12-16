@@ -128,7 +128,7 @@ async def ytdlcmd(c: WhiterX, m: Message):
     thumb_ = await get_ytthumb(yt["id"])
 
     text = f"🎧 <b>{performer}</b> - <i>{title}</i>\n"
-    text += f"⏳ <code>{datetime.timedelta(seconds=yt.get('duration'))}</code>"
+    text += f"⏳ <code>{yt.get('duration')}</code>"
 
     await m.reply_photo(photo=thumb_, caption=text, reply_markup=InlineKeyboardMarkup(keyboard))
 
@@ -211,7 +211,7 @@ async def iytdl_handler(c: WhiterX, iq: InlineQuery):
     thumb_ = await get_ytthumb(yt["id"])
 
     text = f"🎧 <b>{performer}</b> - <i>{title}</i>\n"
-    text += f"⏳ <code>{datetime.timedelta(seconds=yt.get('duration'))}</code>"
+    text += f"⏳ <code>{yt.get('duration')}</code>"
 
     if found_:
         results.append(
@@ -321,7 +321,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     thumb_ = await get_ytthumb(yt["id"])
 
     text = f"🎧 <b>{performer}</b> - <i>{title}</i>\n"
-    text += f"⏳ <code>{datetime.timedelta(seconds=yt.get('duration'))}</code>"
+    text += f"⏳ <code>{yt.get('duration')}</code>"
 
     await cq.edit_message_media(InputMediaPhoto(thumb_, caption=text), reply_markup=InlineKeyboardMarkup(keyboard))
 
