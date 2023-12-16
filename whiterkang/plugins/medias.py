@@ -271,8 +271,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
             return await cq.answer("That's the end of list", show_alert=True)
     skip_page = (pages+5)
     back_page = (pages-1)
-    print(key_search)
-    print(page)
+    
     yt = infos[page]
     yt_id = yt["id"]
 
