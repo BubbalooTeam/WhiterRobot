@@ -458,10 +458,14 @@ async def get_download_button(format: str, yt_id: str, user_id: int, chat_id: in
             ]
         ]
 
-    back_btn = InlineKeyboardButton(
-        await tld(chat_id, "BACK_BNT"),
-        callback_data=f"yt_scroll|{key_search}|{user_id}|1|{chat_id}"
-    )
+    back_btn = [
+        [
+            InlineKeyboardButton(
+                await tld(chat_id, "BACK_BNT"),
+                callback_data=f"yt_scroll|{key_search}|{user_id}|1|{chat_id}"
+            )
+        ]
+    ]
     
     params = {"no-playlist": True}
     try:
