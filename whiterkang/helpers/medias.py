@@ -17,7 +17,8 @@ from hydrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from collections import defaultdict
 
 from whiterkang import Config
-from .tools import http, aiowrap, humanbytes         
+from .tools import http, aiowrap, humanbytes
+from .database.lang import tld         
 
 proxys = {
     "PROXIES":
@@ -426,7 +427,7 @@ class SearchResult:
         )
         return json.dumps(out, indent=4)
 
-async def get_download_button(format: str, yt_id: str, user_id: int, chat_id: int) -> SearchResult:
+async def get_download_button(format: str, yt_id: str, user_id: int, chat_id: int, key_search: str) -> SearchResult:
     aud = False
     vid = False
     buttons = []
@@ -515,6 +516,11 @@ async def get_download_button(format: str, yt_id: str, user_id: int, chat_id: in
                 ),
                 width=2,
             )
+
+    buttons += InlineKeyboardButton(
+        await tld(chat_id, "BACK_BNT"),
+        callback_data=f"yt_scroll|{key_search}|{user_id}|1|{chat_id}"
+    )
 
     return SearchResult(
         yt_id,

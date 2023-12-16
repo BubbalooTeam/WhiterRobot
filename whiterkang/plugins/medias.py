@@ -95,11 +95,11 @@ async def ytdlcmd(c: WhiterX, m: Message):
         [
             InlineKeyboardButton(
                 await tld(m.chat.id, "SONG_BNT"),
-                callback_data=f'_yta.{yt["id"]}|a|{user}|{chat_id}'
+                callback_data=f'_yta.{yt["id"]}|a|{user}|{chat_id}|{key_search}'
             ),
             InlineKeyboardButton(
                 await tld(m.chat.id, "VID_BNT"),
-                callback_data=f'_ytv.{yt["id"]}|v|{user}|{chat_id}'
+                callback_data=f'_ytv.{yt["id"]}|v|{user}|{chat_id}|{key_search}'
             ),
         ]
     ]
@@ -154,8 +154,8 @@ async def iytdl_handler(c: WhiterX, iq: InlineQuery):
             cache_time=0,
         )
     query = query.split(maxsplit=1)[1]
-    match = YOUTUBE_REGEX.match(query)
     ydl = YoutubeDL({"noplaylist": True})
+    match = YOUTUBE_REGEX.match(query)
     found_ = False
     if match is None:
         yt = await VideosSearch(query).next()
@@ -180,11 +180,11 @@ async def iytdl_handler(c: WhiterX, iq: InlineQuery):
         [
             InlineKeyboardButton(
                 await tld(user_id, "SONG_BNT"),
-                callback_data=f'_yta.{yt["id"]}|a|{user_id}|{user_id}'
+                callback_data=f'_yta.{yt["id"]}|a|{user_id}|{user_id}|{key_search}'
             ),
             InlineKeyboardButton(
                 await tld(user_id, "VID_BNT"),
-                callback_data=f'_ytv.{yt["id"]}|v|{user_id}|{user_id}'
+                callback_data=f'_ytv.{yt["id"]}|v|{user_id}|{user_id}|{key_search}'
             ),
         ]
     ]
@@ -255,8 +255,6 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     if cq.from_user.id != user:
         return await cq.answer(await tld(chat_id, "NO_FOR_YOU"), show_alert=True)
     
-    ydl = YoutubeDL({"noplaylist": True})
-
     pages = int(pages)
 
     infos = YT_VAR[key_search]
@@ -279,11 +277,11 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
         [
             InlineKeyboardButton(
                 await tld(chat_id, "SONG_BNT"),
-                callback_data=f'_yta.{yt_id}|a|{user}|{chat_id}'
+                callback_data=f'_yta.{yt_id}|a|{user}|{chat_id}|{key_search}'
             ),
             InlineKeyboardButton(
                 await tld(chat_id, "VID_BNT"),
-                callback_data=f'_ytv.{yt_id}|v|{user}|{chat_id}'
+                callback_data=f'_ytv.{yt_id}|v|{user}|{chat_id}|{key_search}'
             ),
         ]
     ]
@@ -330,7 +328,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
 @WhiterX.on_callback_query(filters.regex("^(_(ytv|yta))"))
 async def cli_buttons(c: WhiterX, cq: CallbackQuery):
     try:
-        yt_id, fmt, userid, chat_id = cq.data.split("|")
+        yt_id, fmt, userid, chat_id, key_search = cq.data.split("|")
     except ValueError as vle:
         return print(f"{vle}: {cq.data}")
     
@@ -341,7 +339,7 @@ async def cli_buttons(c: WhiterX, cq: CallbackQuery):
     
     yt_id = re.sub(r"^\_(ytv|yta)\.", "", yt_id)
 
-    x = await get_download_button(fmt, yt_id, userid, chat_id)
+    x = await get_download_button(fmt, yt_id, userid, chat_id, key_search)
     await cq.edit_message_caption(caption=x.caption, reply_markup=x.buttons)
 
 @WhiterX.on_callback_query(filters.regex(r"yt_dl\|(.*)"))
