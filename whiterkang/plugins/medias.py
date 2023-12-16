@@ -41,7 +41,7 @@ from whiterkang.helpers import humanbytes, tld, csdl, cisdl, tsdl, tisdl, Downlo
 
 
 YOUTUBE_REGEX = re.compile(
-    r"(?m)http(?:s?):\/\/(?:www\.)?(?:music\.)?youtu(?:be\.com\/(watch\?v=|shorts/|embed/)|\.be\/|)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?"
+    r"(?m)http(?:s?):\/\/(?:www\.)?(?:music\.)?youtu(?:be\.com\/(watch\?v=|shorts/|embed/)|\.be\/|)(?P<id>([\w\-\_]{11}))(&(amp;)?‌​[\w\?‌​=]*)?"
 )
 
 SDL_REGEX_LINKS = r"(?:htt.+?//)?(?:.+?)?(?:instagram|twitter|x|tiktok|threads).(com|net)\/(?:\S*)"
