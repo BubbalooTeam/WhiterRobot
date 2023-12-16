@@ -12,6 +12,7 @@ import filetype
 
 from yt_dlp import YoutubeDL
 from urllib.parse import unquote
+from youtubesearchpython.__future__ import VideosSearch
 from bs4 import BeautifulSoup
 
 from hydrogram import filters, enums
@@ -74,10 +75,13 @@ async def ytdlcmd(c: WhiterX, m: Message):
     rege = YOUTUBE_REGEX.match(url)
 
     if not rege:
-        yt = await extract_info(ydl, f"ytsearch:{url}", download=False)
+        yt = await VideosSearch(url).next()
+        if yt["result"] == []:
+            return await m.reply(f"No result found for `{url}`")
+        inf = yt["result"]
         scroll = True
         try:
-            yt = yt["entries"][0]
+            yt = yt["result"][0]
         except IndexError:
             return
     else:
@@ -109,8 +113,6 @@ async def ytdlcmd(c: WhiterX, m: Message):
 
 
     if scroll == True:
-        #Getting infos
-        inf = await search_yt(url)
         # Save infos
         YT_VAR[key_search] = inf
         #Add a scroll buttons
@@ -154,10 +156,13 @@ async def iytdl_handler(c: WhiterX, iq: InlineQuery):
     ydl = YoutubeDL({"noplaylist": True})
     found_ = False
     if match is None:
-        yt = await extract_info(ydl, f"ytsearch:{query}", download=False)
+        yt = await VideosSearch(query).next()
+        if yt["result"] == []:
+            found_ = False
+        inf = yt["result"]
         scroll = True
         try:
-            yt = yt["entries"][0]
+            yt = yt["result"][0]
             found_ = True
         except (KeyError, IndexError):
             return
@@ -191,8 +196,6 @@ async def iytdl_handler(c: WhiterX, iq: InlineQuery):
 
 
     if scroll == True:
-        #Getting infos
-        inf = await search_yt(query)
         # Save infos
         YT_VAR[key_search] = inf
         #Add a scroll buttons
@@ -266,7 +269,8 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     back_page = (pages-1)
     print(key_search)
     print(page)
-    url = infos[page]["url"]
+    yt_id = infos[page]["id"]
+    url = f"https://www.youtube.com/watch?v={yt_id}"
     rege = YOUTUBE_REGEX.match(url)
 
     yt = await extract_info(ydl, rege.group(), download=False)
