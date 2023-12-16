@@ -108,7 +108,10 @@ async def ytdlcmd(c: WhiterX, m: Message):
     if " - " in yt["title"]:
         performer, title = yt["title"].rsplit(" - ", 1)
     else:
-        performer = yt.get("channel", {}).get("name", "N/A")
+        try:
+            performer = yt.get("channel", {}).get("name", "N/A")
+        except AttributeError:
+            performer = None
         title = yt["title"]
 
 
@@ -293,7 +296,10 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     if " - " in yt["title"]:
         performer, title = yt["title"].rsplit(" - ", 1)
     else:
-        performer = yt.get("channel", {}).get("name", "N/A")
+        try:
+            performer = yt.get("channel", {}).get("name", "N/A")
+        except AttributeError:
+            performer = None
         title = yt["title"]
 
     #Add a scroll buttons
