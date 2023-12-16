@@ -127,9 +127,9 @@ async def ytdlcmd(c: WhiterX, m: Message):
 
     thumb_ = await get_ytthumb(yt["id"])
 
-    text = f"🎧 <b>{performer}</b> - <i>{title}</i>\n"
-    text += f"⏳ <code>{yt.get('duration', None)}</code>\n"
-    text += f"🎥 <b> Views:</b>: <code>{yt.get('viewCount', {}).get('short', 'N/A')}</code>\n"
+    text = f"🎧 <b>{performer}</b> - <i>{title}</i>\n\n"
+    text += f"⏳ <code>{yt.get('duration', None)}</code>\n\n"
+    text += f"🎥 <b> Views:</b> <code>{yt.get('viewCount', {}).get('short', 'N/A')}</code>\n\n"
     text += f"⏰ <code>{yt.get('publishedTime', None)}</code>"
 
     await m.reply_photo(photo=thumb_, caption=text, reply_markup=InlineKeyboardMarkup(keyboard))
@@ -212,9 +212,9 @@ async def iytdl_handler(c: WhiterX, iq: InlineQuery):
 
     thumb_ = await get_ytthumb(yt["id"])
 
-    text = f"🎧 <b>{performer}</b> - <i>{title}</i>\n"
-    text += f"⏳ <code>{yt.get('duration', None)}</code>\n"
-    text += f"🎥 <b> Views:</b>: <code>{yt.get('viewCount', {}).get('short', 'N/A')}</code>\n"
+    text = f"🎧 <b>{performer}</b> - <i>{title}</i>\n\n"
+    text += f"⏳ <code>{yt.get('duration', None)}</code>\n\n"
+    text += f"🎥 <b> Views:</b> <code>{yt.get('viewCount', {}).get('short', 'N/A')}</code>\n\n"
     text += f"⏰ <code>{yt.get('publishedTime', None)}</code>"
 
     if found_:
@@ -273,21 +273,18 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     back_page = (pages-1)
     print(key_search)
     print(page)
-    yt_id = infos[page]["id"]
-    url = f"https://www.youtube.com/watch?v={yt_id}"
-    rege = YOUTUBE_REGEX.match(url)
-
-    yt = await extract_info(ydl, rege.group(), download=False)
+    yt = infos[page]
+    yt_id = yt["id"]
 
     keyboard = [
         [
             InlineKeyboardButton(
                 await tld(chat_id, "SONG_BNT"),
-                callback_data=f'_yta.{yt["id"]}|a|{user}|{chat_id}'
+                callback_data=f'_yta.{yt_id}|a|{user}|{chat_id}'
             ),
             InlineKeyboardButton(
                 await tld(chat_id, "VID_BNT"),
-                callback_data=f'_ytv.{yt["id"]}|v|{user}|{chat_id}'
+                callback_data=f'_ytv.{yt_id}|v|{user}|{chat_id}'
             ),
         ]
     ]
@@ -324,9 +321,9 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
 
     thumb_ = await get_ytthumb(yt["id"])
 
-    text = f"🎧 <b>{performer}</b> - <i>{title}</i>\n"
-    text += f"⏳ <code>{yt.get('duration', None)}</code>\n"
-    text += f"🎥 <b> Views:</b>: <code>{yt.get('viewCount', {}).get('short', 'N/A')}</code>\n"
+    text = f"🎧 <b>{performer}</b> - <i>{title}</i>\n\n"
+    text += f"⏳ <code>{yt.get('duration', None)}</code>\n\n"
+    text += f"🎥 <b> Views:</b> <code>{yt.get('viewCount', {}).get('short', 'N/A')}</code>\n\n"
     text += f"⏰ <code>{yt.get('publishedTime', None)}</code>"
 
     await cq.edit_message_media(InputMediaPhoto(thumb_, caption=text), reply_markup=InlineKeyboardMarkup(keyboard))
