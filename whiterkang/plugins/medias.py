@@ -95,7 +95,7 @@ async def ytdlcmd(c: WhiterX, m: Message):
         [
             InlineKeyboardButton(
                 await tld(m.chat.id, "SONG_BNT"),
-                callback_data=f'_yta.{yt["id"]}|a|{user}|{chat_id}|{key_search}|{scroll_ytdl}'
+                callback_data=f'_yta.{yt["id"]}|a|{user}|{chat_id}|{key_search}|{scroll}'
             ),
             InlineKeyboardButton(
                 await tld(m.chat.id, "VID_BNT"),
