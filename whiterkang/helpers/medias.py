@@ -427,7 +427,7 @@ class SearchResult:
         )
         return json.dumps(out, indent=4)
 
-async def get_download_button(format: str, yt_id: str, user_id: int, chat_id: int, key_search: str) -> SearchResult:
+async def get_download_button(format: str, yt_id: str, user_id: int, chat_id: int, key_search: str, scroll: bool) -> SearchResult:
     aud = False
     vid = False
     buttons = []
@@ -458,14 +458,15 @@ async def get_download_button(format: str, yt_id: str, user_id: int, chat_id: in
             ]
         ]
 
-    back_btn = [
-        [
-            InlineKeyboardButton(
-                await tld(chat_id, "BACK_BNT"),
-                callback_data=f"yt_scroll|{key_search}|{user_id}|0|{chat_id}"
-            )
+    if scroll:
+        back_btn = [
+            [
+                InlineKeyboardButton(
+                    await tld(chat_id, "BACK_BNT"),
+                    callback_data=f"yt_scroll|{key_search}|{user_id}|0|{chat_id}"
+                )
+            ]
         ]
-    ]
     
     params = {"no-playlist": True}
     try:
@@ -513,7 +514,8 @@ async def get_download_button(format: str, yt_id: str, user_id: int, chat_id: in
                         )
                     )
             buttons += sublists(video_btns, width=2)
-            buttons += back_btn
+            if scroll:
+                buttons += back_btn
 
         if aud:
             buttons += best_audio_btn
@@ -528,7 +530,8 @@ async def get_download_button(format: str, yt_id: str, user_id: int, chat_id: in
                 ),
                 width=2,
             )
-            buttons += back_btn
+            if scroll:
+                buttons += back_btn
 
     return SearchResult(
         yt_id,
