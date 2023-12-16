@@ -108,7 +108,7 @@ async def ytdlcmd(c: WhiterX, m: Message):
     if " - " in yt["title"]:
         performer, title = yt["title"].rsplit(" - ", 1)
     else:
-        performer = yt.get("creator") or yt.get("uploader")
+        performer = yt.get("channel", {}).get("name", "N/A")
         title = yt["title"]
 
 
@@ -193,7 +193,7 @@ async def iytdl_handler(c: WhiterX, iq: InlineQuery):
     if " - " in yt["title"]:
         performer, title = yt["title"].rsplit(" - ", 1)
     else:
-        performer = yt.get("creator") or yt.get("uploader")
+        performer = yt.get("channel", {}).get("name", "N/A")
         title = yt["title"]
 
 
@@ -271,7 +271,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
             return await cq.answer("That's the end of list", show_alert=True)
     skip_page = (pages+5)
     back_page = (pages-1)
-    
+
     yt = infos[page]
     yt_id = yt["id"]
 
@@ -292,7 +292,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     if " - " in yt["title"]:
         performer, title = yt["title"].rsplit(" - ", 1)
     else:
-        performer = yt.get("creator") or yt.get("uploader")
+        performer = yt.get("channel", {}).get("name", "N/A")
         title = yt["title"]
 
     #Add a scroll buttons
