@@ -195,7 +195,7 @@ async def iytdl_handler(c: WhiterX, iq: InlineQuery):
     else:
         try:
             performer = yt.get("channel", {}).get("name", "N/A")
-        except Exception:
+        except AttributeError:
             performer = None
         title = yt["title"]
 
