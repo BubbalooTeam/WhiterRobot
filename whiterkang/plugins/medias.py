@@ -193,7 +193,10 @@ async def iytdl_handler(c: WhiterX, iq: InlineQuery):
     if " - " in yt["title"]:
         performer, title = yt["title"].rsplit(" - ", 1)
     else:
-        performer = yt.get("channel", {}).get("name", "N/A")
+        try:
+            performer = yt.get("channel", {}).get("name", "N/A")
+        except Exception:
+            performer = None
         title = yt["title"]
 
 

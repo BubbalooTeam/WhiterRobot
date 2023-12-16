@@ -462,7 +462,7 @@ async def get_download_button(format: str, yt_id: str, user_id: int, chat_id: in
         [
             InlineKeyboardButton(
                 await tld(chat_id, "BACK_BNT"),
-                callback_data=f"yt_scroll|{key_search}|{user_id}|1|{chat_id}"
+                callback_data=f"yt_scroll|{key_search}|{user_id}|0|{chat_id}"
             )
         ]
     ]
