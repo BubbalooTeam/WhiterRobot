@@ -345,7 +345,7 @@ async def now_play(c: WhiterX, cb: InlineQuery):
         # User Photo
         if user.photo:
             photos = cb.from_user.photo.big_file_id
-            pfp = await WhiterX.download_media(photos)
+            pfp = await WhiterX.download_media(photos, Config.DOWN_PATH)
         else:
             pfp = 'whiterkang/resources/user.png'
 
