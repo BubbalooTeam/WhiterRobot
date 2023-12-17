@@ -137,8 +137,9 @@ async def ytdlcmd(c: WhiterX, m: Message):
 
     await m.reply_photo(photo=thumb_, caption=text, reply_markup=InlineKeyboardMarkup(keyboard))
 
-@WhiterX.on_inline_query(r"^(iytdl|ytdl)")
+@WhiterX.on_inline_query(filters.regex(r"^(iytdl|ytdl)"))
 async def iytdl_handler(c: WhiterX, iq: InlineQuery):
+    query = iq.query
     results = []
     scroll = False
     user_id = iq.from_user.id
