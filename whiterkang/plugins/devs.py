@@ -57,7 +57,7 @@ async def broadcasting_(c: WhiterX, m: Message):
     sucess_br = 0
     no_sucess = 0
     total_user = await USERS.estimated_document_count()
-    ulist = USERS.find()
+    ulist = USERS_STARTED.find()
     if query.startswith("-d"):
         web_preview = True
         query_ = query.strip("-d")
@@ -257,9 +257,9 @@ async def terminal(c: WhiterX, m: Message):
             with open(filename, "w+") as file:
                 file.write(output)
             await c.send_document(
-                message.chat.id,
+                m.chat.id,
                 filename,
-                reply_to_message_id=message.id,
+                reply_to_message_id=m.id,
                 caption="<code>Output file</code>",
             )
             os.remove(filename)
@@ -271,7 +271,7 @@ async def terminal(c: WhiterX, m: Message):
         await m.reply_text("<b>Output:<b>\n<code>No Output</code>")
         await status_message.delete()
     try:
-        return await locals()["_aexec_"](client, message)
+        return await locals()["_aexec_"](c, m)
     except Exception:
         pass
 
