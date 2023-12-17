@@ -69,5 +69,6 @@ wget
 wikipedia
 gpytranslate
 yt-dlp
+youtube-search-python
 psutil
 zalgo_text
