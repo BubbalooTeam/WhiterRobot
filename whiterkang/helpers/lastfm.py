@@ -19,8 +19,8 @@ class Fonts:
 
 
 def truncate(text, font, limit):
-    edited = True if font.getsize(text)[0] > limit else False
-    while font.getsize(text)[0] > limit:
+    edited = True if font.getlength(text) > limit else False
+    while font.getlength(text) > limit:
         text = text[:-1]
     if edited:
         return(text.strip() + '..')
@@ -90,7 +90,7 @@ def draw_scrobble(
         # draw heart
         if loved:
             lov_ = Image.open("whiterkang/resources/heart.png", 'r')
-            leve = lov_.resize((25, 25), Image.ANTIALIAS)
+            leve = lov_.resize((25, 25), Image.LANCZOS)
             canvas.paste(leve, (248, 190), mask=leve)
             draw.text((278, 187), truncate("loved", artistfont, 315),
                     fill=white, font=artistfont)
