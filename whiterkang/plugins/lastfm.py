@@ -32,9 +32,11 @@ async def last_save_user(c: WhiterX, m: Message):
         "api_key": Config.LASTFM_API_KEY,
         "format": "json",
     }
+    resp_ = await http.get(API, params=params)
+    resp = resp_.json()
+    if resp_.status_code == 404:
+        await m.reply("<i>This does't exist in LastFM database</i>")
     try:
-        resp_ = await http.get(API, params=params)
-        resp = resp_.json()
         found = await REG.find_one({"id_": user_id})
         user_start = f"#USER_REGISTER #LOGS\n\n<b>User:</b> {fname}\n<b>ID:</b> {user_id} <a href='tg://user?id={user_id}'><b>Link</b></a>"
         if uname:
@@ -57,8 +59,8 @@ async def last_save_user(c: WhiterX, m: Message):
                 m.reply(await tld(m.chat.id, "SET_USER_LAST"))
             )
 
-    except ValueError:
-        return await m.reply("<i>This user does not exist in LastFM database</i>")
+    except Exception:
+        return await m.reply("<i>An error occured!!</i>")
 
 @WhiterX.on_message(filters.command(["deluser", "duser"], Config.TRIGGER))
 @disableable_dec("deluser")
