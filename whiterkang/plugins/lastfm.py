@@ -26,18 +26,27 @@ async def last_save_user(c: WhiterX, m: Message):
     if not text:
         await m.reply(await tld(m.chat.id, "NO_SET_USERNAME_LAST"))
         return
-    found = await REG.find_one({"id_": user_id})
-    user_start = f"#USER_REGISTER #LOGS\n\n<b>User:</b> {fname}\n<b>ID:</b> {user_id} <a href='tg://user?id={user_id}'><b>Link</b></a>"
-    if uname:
-        user_start += f"\n<b>Username:</b> @{uname}"
-    if found:
-        await asyncio.gather(
+    params = {
+        "method": "user.getinfo",
+        "user": text,
+        "api_key": Config.LASTFM_API_KEY,
+        "format": "json",
+    }
+    try:
+        resp_ = await http.get(API, params=params)
+        resp = resp_.json()
+        found = await REG.find_one({"id_": user_id})
+        user_start = f"#USER_REGISTER #LOGS\n\n<b>User:</b> {fname}\n<b>ID:</b> {user_id} <a href='tg://user?id={user_id}'><b>Link</b></a>"
+        if uname:
+            user_start += f"\n<b>Username:</b> @{uname}"
+        if found:
+            await asyncio.gather(
                 REG.update_one({"id_": user_id}, {
                                 "$set": {"last_data": text}}, upsert=True),
                 m.reply(await tld(m.chat.id, "UPDATE_USER_LAST"))
             )
-    else:
-        await asyncio.gather(
+        else:
+            await asyncio.gather(
                 REG.update_one({"id_": user_id}, {
                                 "$set": {"last_data": text}}, upsert=True),
                 c.send_log(
@@ -47,6 +56,9 @@ async def last_save_user(c: WhiterX, m: Message):
                 ),
                 m.reply(await tld(m.chat.id, "SET_USER_LAST"))
             )
+
+    except ValueError:
+        return await m.reply("<i>This user does not exist in LastFM database</i>")
 
 @WhiterX.on_message(filters.command(["deluser", "duser"], Config.TRIGGER))
 @disableable_dec("deluser")
