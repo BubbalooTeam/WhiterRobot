@@ -35,7 +35,7 @@ async def last_save_user(c: WhiterX, m: Message):
     resp_ = await http.get(API, params=params)
     resp = resp_.json()
     if resp_.status_code == 404:
-        await m.reply("<i>This does't exist in LastFM database</i>")
+        return await m.reply("<i>This does't exist in LastFM database</i>")
     try:
         found = await REG.find_one({"id_": user_id})
         user_start = f"#USER_REGISTER #LOGS\n\n<b>User:</b> {fname}\n<b>ID:</b> {user_id} <a href='tg://user?id={user_id}'><b>Link</b></a>"
