@@ -37,6 +37,7 @@ from .tools import (
     rand_key,
     scan_file,
     get_report,
+    speedtst_performer,
 )
 from .decorators import disableable_dec, inline_handler, input_str, DISABLABLE_CMDS, require_admin
 from .antispam import gban_user, check_ban, ungban_user, check_antispam #não mecher

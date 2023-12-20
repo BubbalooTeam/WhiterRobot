@@ -19,6 +19,7 @@ from functools import partial, wraps
 from math import floor
 from PIL import Image, ImageOps
 from io import BytesIO
+from speedtest import Speedtest
 
 
 from hydrogram import emoji
@@ -654,3 +655,22 @@ async def get_report(sha1: str) -> requests.Response:
         'apikey': Config.VT_API_KEY, 'resource': sha1, 'allinfo': 'False'
     }
     return await http.get(url, params=params)
+
+async def speedtst_performer(msg): 
+    test = Speedtest()
+    bs = test.get_best_server()
+    await msg.edit("<code>Performing test from Download...</code>")
+    dl = round(test.download() / 1024 / 1024, 2)
+    await msg.edit("<code>Performing test from Upload...</code>")
+    ul = round(test.upload() / 1024 / 1024, 2)
+    await msg.edit("<code>Getting some informations...</code>")
+    test.results.share()
+    result = test.results.dict()
+    name = result["server"]["name"]
+    host = bs["sponsor"]
+    ping = bs["latency"]
+    isp = result["client"]["isp"]   
+    country = result["server"]["country"] 
+    cc = result["server"]["cc"]
+    path = (result["share"])
+    return dl, ul, name, host, ping, isp, country, cc, path

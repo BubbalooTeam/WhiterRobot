@@ -20,10 +20,10 @@ from hydrogram.types import Message
 from datetime import datetime
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError
-from speedtest import Speedtest
+from speedtest import Speedtest, ShareResultsConnectFailure, ServersRetrievalError
 
 from whiterkang import WhiterX, db, START_TIME, Config
-from whiterkang.helpers import is_dev, http, input_str, aexec, time_formatter
+from whiterkang.helpers import is_dev, http, input_str, aexec, time_formatter, speedtst_performer
 
 USERS = db["USERS"]
 GROUPS = db["GROUPS"]
@@ -280,31 +280,26 @@ async def speed_test(c: WhiterX, m: Message):
     user_id = m.from_user.id
     if not is_dev(user_id):
         return
+    
+    msg = await m.reply("<i>Running Speedtest...</i>") 
+
     try:
-        running = await m.reply("<code>Rodando Speedtest...</code>") 
-        test = Speedtest()
-        bs = test.get_best_server()
-        await running.edit("<code>Fazendo teste de Download...</code>")
-        dl = round(test.download() / 1024 / 1024, 2)
-        await running.edit("<code>Fazendo teste de Upload...</code>")
-        ul = round(test.upload() / 1024 / 1024, 2)
-        await running.edit("<code>Getting some informations...</code>")
-        test.results.share()
-        result = test.results.dict()
-        name = result["server"]["name"]
-        host = bs["sponsor"]
-        ping = bs["latency"]
-        isp = result["client"]["isp"]   
-        country = result["server"]["country"] 
-        cc = result["server"]["cc"]
-        path = (result["share"]) 
+        #Get speedtest        
+        dl, ul, name, host, ping, isp, country, cc, path = await speedtst_performer(msg)
+
         response = await m.reply_photo(
             photo=path, caption=f"🌀 <b>Name:</b> <code>{name}</code>\n🌐 <b>Host:</b> <code>{host}</code>\n🏁 <b>Country:</b> <code>{country}, {cc}</code>\n\n🏓 <b>Ping:</b> <code>{ping} ms</code>\n🔽 <b>Download:</b> <code>{dl} Mbps</code>\n🔼 <b>Upload:</b> <code>{ul} Mbps</code>\n🖥  <b>ISP:</b> <code>{isp}</code>"
         )
-        await running.delete()
+        await msg.delete()
+    except ServersRetrievalError:
+        await c.send_err("<i>Error connecting to server, please try again later!!</i>")
+        return await msg.edit("<i>Error connecting to server, please try again later!!</i>")
+    except ShareResultsConnectFailure:
+        await c.send_err("A network error occurred, please try again later")
+        return await msg.edit("A network error occurred, please try again later")
     except Exception as e:
         await c.send_err(e)
-        return
+        return await msg.edit("<i>An error occurred!!\n<b>Error:</b> {}".format(e))
     
 
 @WhiterX.on_message(filters.command("ping", Config.TRIGGER))
@@ -325,23 +320,43 @@ async def stats(c: WhiterX, m: Message):
 
     # Getting infos from task manager
     try:
-        mem = psutil.virtual_memory()
-        total_mem_gb = round(mem.total / (1024 ** 3), 2)
-        used_mem_gb = round(mem.used / (1024 ** 3), 2)
-        mem_percent = mem.percent
+        try:
+            mem = psutil.virtual_memory()
+            total_mem_gb = round(mem.total / (1024 ** 3), 2)
+            used_mem_gb = round(mem.used / (1024 ** 3), 2)
+            mem_percent = mem.percent
+        except Exception:
+            mem = "N/A"
+            total_mem_gb = "0"
+            mem_percent = "0"
 
-        disk = psutil.disk_usage('/')
-        total_disk_gb = round(disk.total / (1024 ** 3), 2)
-        used_disk_gb = round(disk.used / (1024 ** 3), 2)
-        
-        cpu_freq = psutil.cpu_freq().current / 1000
-        cpu_percent = psutil.cpu_percent()
+        try:
+            disk = psutil.disk_usage('/')
+            total_disk_gb = round(disk.total / (1024 ** 3), 2)
+            used_disk_gb = round(disk.used / (1024 ** 3), 2)
+        except Exception:
+            disk = "N/A"
+            total_disk_gb = "0"
+            used_disk_gb = "0"
 
-        uptime_bot = time_formatter(time.time() - START_TIME)
-        boot_machine = boot_time = psutil.boot_time()
-        uptime_machine = time_formatter(time.time() - boot_machine)
+        try:
+            cpu_freq = psutil.cpu_freq().current / 1000
+            cpu_percent = psutil.cpu_percent()
+        except Exception:
+            cpu_freq = "N/A"
+            cpu_percent = "0"
 
-        system_info = str(c.system_version)
+        try:
+            uptime_bot = time_formatter(time.time() - START_TIME)
+            boot_machine = boot_time = psutil.boot_time()
+            uptime_machine = time_formatter(time.time() - boot_machine)
+
+            system_info = str(c.system_version)
+        except Exception:
+            uptime_bot = "N/A"
+            boot_machine = "N/A"
+            uptime_machine = "N/A"
+            system_info = "N/A"
 
         text = "<b>System Info:</b> <i>{}</i>\n\n<b>Bot Uptime:</b> <i>{}</i>\n<b>Machine Uptime:</b> <i>{}</i>\n<b>RAM Memory:</b> <i>{} GB/{} GB ({}%)</i>\n<b>Disk Memory:</b> <i>{} GB/{} GB</i>\n<b>Processor Usage:</b> <i>{} GHz ({}%)</i>".format(system_info, uptime_bot, uptime_machine, used_mem_gb, total_mem_gb, mem_percent, used_disk_gb, total_disk_gb, cpu_freq, cpu_percent)
     except Exception as e:

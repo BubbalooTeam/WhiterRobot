@@ -33,7 +33,6 @@ async def last_save_user(c: WhiterX, m: Message):
         "format": "json",
     }
     resp_ = await http.get(API, params=params)
-    resp = resp_.json()
     if resp_.status_code == 404:
         return await m.reply("<i>This does't exist in LastFM database</i>")
     try:
@@ -59,8 +58,9 @@ async def last_save_user(c: WhiterX, m: Message):
                 m.reply(await tld(m.chat.id, "SET_USER_LAST"))
             )
 
-    except Exception:
-        return await m.reply("<i>An error occured!!</i>")
+    except Exception as e:
+        await c.send_err(e)
+        return await m.reply("<i>An error occured!!\n<b>Error:</b> {}</i>".format(e))
 
 @WhiterX.on_message(filters.command(["deluser", "duser"], Config.TRIGGER))
 @disableable_dec("deluser")
