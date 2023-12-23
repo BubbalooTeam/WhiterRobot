@@ -1521,11 +1521,11 @@ async def antispam_status(c: WhiterX, m: Message):
     flag = input_str(m)
     if "true" or "on" in flag:
         await DB_ANTISPAM.update_one({"chat_id": m.chat.id}, {"$set": {"status": True}}, upsert=True)
-        await m.reply_text(await tld(await tld(chat_id, "ANTISPAM_ON")))
+        await m.reply_text(await tld(chat_id, "ANTISPAM_ON"))
         return
     elif "false" or "off" in flag:
         await DB_ANTISPAM.update_one({"chat_id": m.chat.id}, {"$set": {"status": False}}, upsert=True)
-        await m.reply_text(await tld(await tld(chat_id, "ANTISPAM_OFF")))
+        await m.reply_text(await tld(chat_id, "ANTISPAM_OFF"))
         return 
 
     status = await DB_ANTISPAM.find_one({"chat_id": chat_id})
