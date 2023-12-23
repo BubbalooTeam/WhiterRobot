@@ -1518,6 +1518,15 @@ async def ban(c: WhiterX, m: Message):
 @require_admin(ChatPrivileges(can_change_info=True))
 async def antispam_status(c: WhiterX, m: Message):
     chat_id = m.chat.id
+    flag = input_str(m)
+    if "true" or "on" in flag:
+        await DB_ANTISPAM.update_one({"chat_id": m.chat.id}, {"$set": {"status": True}}, upsert=True)
+        await m.reply_text(await tld(await tld(chat_id, "ANTISPAM_ON")))
+        return
+    elif "false" or "off" in flag:
+        await DB_ANTISPAM.update_one({"chat_id": m.chat.id}, {"$set": {"status": False}}, upsert=True)
+        await m.reply_text(await tld(await tld(chat_id, "ANTISPAM_OFF")))
+        return 
 
     status = await DB_ANTISPAM.find_one({"chat_id": chat_id})
     if status:
@@ -1526,19 +1535,3 @@ async def antispam_status(c: WhiterX, m: Message):
         status = False
 
     await m.reply_text((await tld(chat_id, "ANTISPAM_ERR_WRONG_ARG")).format(status))
-
-@WhiterX.on_message(filters.command("antispam on", Config.TRIGGER))
-@require_admin(ChatPrivileges(can_change_info=True))
-async def antispam_on(c: WhiterX, m: Message):
-    chat_id = m.chat.id
-
-    await DB_ANTISPAM.update_one({"chat_id": m.chat.id}, {"$set": {"status": True}}, upsert=True)
-    await m.reply_text(await tld(await tld(chat_id, "ANTISPAM_ON")))
-
-
-@WhiterX.on_message(filters.command("antispam off", Config.TRIGGER))
-@require_admin(ChatPrivileges(can_change_info=True))
-async def antispam_on(c: WhiterX, m: Message):
-    chat_id = m.chat.id
-    await DB_ANTISPAM.update_one({"chat_id": m.chat.id}, {"$set": {"status": False}}, upsert=True)
-    await m.reply_text(await tld(await tld(chat_id, "ANTISPAM_OFF")))
