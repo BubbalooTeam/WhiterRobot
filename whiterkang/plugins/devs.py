@@ -23,7 +23,7 @@ from git.exc import GitCommandError, InvalidGitRepositoryError
 from speedtest import Speedtest, ShareResultsConnectFailure, ServersRetrievalError
 
 from whiterkang import WhiterX, db, START_TIME, Config
-from whiterkang.helpers import is_dev, http, input_str, get_target_user, get_reason_text, aexec, time_formatter, speedtst_performer, gban_user
+from whiterkang.helpers import is_dev, http, input_str, get_target_user, get_reason_text, aexec, time_formatter, speedtst_performer, gban_user, ungban_user
 
 USERS = db["USERS"]
 GROUPS = db["GROUPS"]
