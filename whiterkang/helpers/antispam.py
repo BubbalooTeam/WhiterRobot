@@ -6,7 +6,7 @@ from hydrogram.types import Message
 from typing import Optional
 
 from whiterkang import WhiterX, Config, db
-from whiterkang.helpers import is_dev, sw, tld, check_bot_rights, is_self
+from whiterkang.helpers import is_dev, sw, tld, check_bot_rights, is_self, is_admin
 
 antispam_db = db["ANTISPAM_CHATS"]
 gban_db = db["GBAN"]
@@ -37,6 +37,8 @@ async def gban_user(m: Message, user_id: int, user_name: str, admin_name: str, r
                 # Try ban user gbanned
                 try:
                     if not await check_bot_rights(chat_id, "can_restrict_members"):
+                        pass
+                    if await is_admin(chat_id, user_id):
                         pass
                 
                     await WhiterX.ban_chat_member(chat_id, user_id)
@@ -74,6 +76,8 @@ async def gban_user(m: Message, user_id: int, user_name: str, admin_name: str, r
                     try:
                         if not await check_bot_rights(chat_id, "can_restrict_members"):
                             pass
+                        if not await is_admin(chat_id, user_id):
+                            pass
                 
                         await WhiterX.ban_chat_member(chat_id, user_id)
                     except Exception:
@@ -99,9 +103,12 @@ async def check_ban(m: Message, chat_id: int, user_id: int):
             if sw_response:
                 sw_reason = sw_response.reason
                 if await check_bot_rights(chat_id, "can_restrict_members"):
-                    await WhiterX.ban_chat_member(chat_id, user_id)
-                    await m.reply((await tld(chat_id, "ANTISPAM_SPAMWATCH_BANNED")).format(sw_reason))
-                    return await m.stop_propagation()
+                    if not await is_admin(chat_id, user_id):
+                        await WhiterX.ban_chat_member(chat_id, user_id)
+                        await m.reply((await tld(chat_id, "ANTISPAM_SPAMWATCH_BANNED")).format(sw_reason))
+                        return await m.stop_propagation()
+                    else:
+                        pass
                 else:
                     pass
             else:
@@ -142,6 +149,8 @@ async def ungban_user(m: Message, user_id: int, user_name: str, admin_name: str,
                 # Try unban user gbanned
                 try:
                     if not await check_bot_rights(chat_id, "can_restrict_members"):
+                        pass
+                    if await is_admin(chat_id, user_id):
                         pass
                 
                     await WhiterX.unban_chat_member(chat_id, user_id)

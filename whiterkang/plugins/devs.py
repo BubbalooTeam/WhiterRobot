@@ -23,7 +23,7 @@ from git.exc import GitCommandError, InvalidGitRepositoryError
 from speedtest import Speedtest, ShareResultsConnectFailure, ServersRetrievalError
 
 from whiterkang import WhiterX, db, START_TIME, Config
-from whiterkang.helpers import is_dev, http, input_str, aexec, time_formatter, speedtst_performer
+from whiterkang.helpers import is_dev, http, input_str, get_target_user, get_reason_text, aexec, time_formatter, speedtst_performer, gban_user
 
 USERS = db["USERS"]
 GROUPS = db["GROUPS"]
@@ -305,8 +305,10 @@ async def speed_test(c: WhiterX, m: Message):
 @WhiterX.on_message(filters.command("ping", Config.TRIGGER))
 async def ping(c: WhiterX, m: Message):
     user_id = m.from_user.id
+
     if not is_dev(user_id):
         return
+    
     first = datetime.now()
     sent = await m.reply_text("<b>Pong!</b>")
     second = datetime.now()
@@ -316,7 +318,11 @@ async def ping(c: WhiterX, m: Message):
 
 @WhiterX.on_message(filters.command("stats", Config.TRIGGER))
 async def stats(c: WhiterX, m: Message):
+    user_id = m.from_user.id
     msg = await m.reply("<i>Getting information from task manager...</i>")
+
+    if not is_dev(user_id):
+        return
 
     # Getting infos from task manager
     try:
@@ -362,3 +368,16 @@ async def stats(c: WhiterX, m: Message):
     except Exception as e:
         text = "<b>⚠️ An error occurred in My Operating System:</b> <i>Unable to obtain information from:</i>\n<code>- Task Manager</code>\n\n<b>Due to:</b> {}".format(e)
     await msg.edit(text)
+
+@WhiterX.on_message(filters.command("gban", Config.TRIGGER))
+async def gban_usr(c: WhiterX, m: Message):
+    user_id = m.from_user.id
+    user_name = m.from_user.mention
+
+    if not is_dev(user_id):
+        return
+    
+    target_user = await get_target_user(c, m)
+    reason = await get_reason_text(c, m)
+
+    await gban_user(m, target_user.id, target_user.mention, user_name, reason)
