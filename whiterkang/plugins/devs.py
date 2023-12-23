@@ -381,3 +381,16 @@ async def gban_usr(c: WhiterX, m: Message):
     reason = await get_reason_text(c, m)
 
     await gban_user(m, target_user.id, target_user.mention, user_name, reason)
+
+@WhiterX.on_message(filters.command("ungban", Config.TRIGGER))
+async def gban_usr(c: WhiterX, m: Message):
+    user_id = m.from_user.id
+    user_name = m.from_user.mention
+
+    if not is_dev(user_id):
+        return
+    
+    target_user = await get_target_user(c, m)
+    reason = await get_reason_text(c, m)
+
+    await ungban_user(m, target_user.id, target_user.mention, user_name, reason)
