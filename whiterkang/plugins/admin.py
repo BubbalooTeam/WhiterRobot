@@ -67,6 +67,9 @@ DB_FILTERS = db["CHAT_FILTERS"]
 # Disable/enable
 DB_DISABLEABLE = db["DISABLED"]
 
+# Antispam
+DB_ANTISPAM = db["ANTISPAM_CHATS"]
+
 
 SMART_OPEN = "“"
 SMART_CLOSE = "”"
@@ -1510,3 +1513,32 @@ async def ban(c: WhiterX, m: Message):
         await m.reply_text(text + (await tld(chat_id, "REASON")).format(reason))
     else:
         await m.reply_text(text)
+
+@WhiterX.on_message(filters.command("antispam", Config.TRIGGER))
+@require_admin(ChatPrivileges(can_change_info=True))
+async def antispam_status(c: WhiterX, m: Message):
+    chat_id = m.chat.id
+
+    status = await DB_ANTISPAM.find_one({"chat_id": chat_id})
+    if status:
+        status = status["status"]
+    else:
+        status = False
+
+    await m.reply_text((await tld(chat_id, "ANTISPAM_ERR_WRONG_ARG")).format(status))
+
+@WhiterX.on_message(filters.command("antispam on", Config.TRIGGER))
+@require_admin(ChatPrivileges(can_change_info=True))
+async def antispam_on(c: WhiterX, m: Message):
+    chat_id = m.chat.id
+
+    await DB_ANTISPAM.update_one({"chat_id": m.chat.id}, {"$set": {"status": True}}, upsert=True)
+    await m.reply_text(await tld(await tld(chat_id, "ANTISPAM_ON")))
+
+
+@WhiterX.on_message(filters.command("antispam off", Config.TRIGGER))
+@require_admin(ChatPrivileges(can_change_info=True))
+async def antispam_on(c: WhiterX, m: Message):
+    chat_id = m.chat.id
+    await DB_ANTISPAM.update_one({"chat_id": m.chat.id}, {"$set": {"status": False}}, upsert=True)
+    await m.reply_text(await tld(await tld(chat_id, "ANTISPAM_OFF")))
