@@ -76,7 +76,7 @@ async def gban_user(m: Message, user_id: int, user_name: str, admin_name: str, r
                     try:
                         if not await check_bot_rights(chat_id, "can_restrict_members"):
                             pass
-                        if not await is_admin(chat_id, user_id):
+                        if await is_admin(chat_id, user_id):
                             pass
                 
                         await WhiterX.ban_chat_member(chat_id, user_id)
