@@ -56,7 +56,7 @@ async def broadcasting_(c: WhiterX, m: Message):
     web_preview = False
     sucess_br = 0
     no_sucess = 0
-    total_user = await USERS.estimated_document_count()
+    total_user = await USERS_STARTED.estimated_document_count()
     ulist = USERS_STARTED.find()
     if query.startswith("-d"):
         web_preview = True
