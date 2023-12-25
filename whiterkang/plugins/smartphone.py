@@ -2,7 +2,7 @@
 import bs4
 import requests
 import rapidjson
-import time
+import re
 import asyncio
 
 from bs4 import BeautifulSoup
@@ -141,6 +141,8 @@ async def deviceinfo_callback(c: WhiterX, cb: CallbackQuery):
         return await cb.answer(await tld(cb.message.chat.id, "NO_FOR_YOU"), show_alert=True)
     
     await cb.edit_message_text("[.!....]")
+
+    device_id = re.sub(r"^d\.")
 
     link, img, description = await find_device(user_id, device_id)
 
