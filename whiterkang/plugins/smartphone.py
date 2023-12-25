@@ -142,7 +142,7 @@ async def deviceinfo_callback(c: WhiterX, cb: CallbackQuery):
     
     await cb.edit_message_text("[.!....]")
 
-    device_id = re.sub(r"^d\.", device_id)
+    device_id = re.sub(r"^d\.", "", device_id)
 
     link, img, description = await find_device(user_id, device_id)
 
