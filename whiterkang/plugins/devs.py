@@ -383,7 +383,7 @@ async def gban_usr(c: WhiterX, m: Message):
     await gban_user(m, target_user.id, target_user.mention, user_name, reason)
 
 @WhiterX.on_message(filters.command("ungban", Config.TRIGGER))
-async def gban_usr(c: WhiterX, m: Message):
+async def ungban_usr(c: WhiterX, m: Message):
     user_id = m.from_user.id
     user_name = m.from_user.mention
 
