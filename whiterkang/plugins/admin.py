@@ -1519,11 +1519,11 @@ async def ban(c: WhiterX, m: Message):
 async def antispam_status(c: WhiterX, m: Message):
     chat_id = m.chat.id
     flag = input_str(m)
-    if "true" or "on" in flag:
+    if flag == "true" or "on":
         await DB_ANTISPAM.update_one({"chat_id": m.chat.id}, {"$set": {"status": True}}, upsert=True)
         await m.reply_text(await tld(chat_id, "ANTISPAM_ON"))
         return
-    elif "false" or "off" in flag:
+    elif flag == "false" or "off":
         await DB_ANTISPAM.update_one({"chat_id": m.chat.id}, {"$set": {"status": False}}, upsert=True)
         await m.reply_text(await tld(chat_id, "ANTISPAM_OFF"))
         return 
