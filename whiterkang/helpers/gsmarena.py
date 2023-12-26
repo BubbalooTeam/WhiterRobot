@@ -8,12 +8,10 @@ DB_ = db["DEVICES"]
 async def getDataFromUrl(url):
     datadb = await DB_.find_one({"url": url})
     if datadb:
-        logging.info("Device Database Finded: {}".format(url))
         return datadb["result"]
     else:
         res = requests.get(url).json()
         await DB_.update_one({"url": url}, {"$set": {"result": res}}, upsert=True)
-        logging.info("Requested Device: {}".format(url))
         return res
 
 async def search_device(searchValue):
