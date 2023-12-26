@@ -13,7 +13,8 @@ from hydrogram import filters
 from hydrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 
 from whiterkang import WhiterX, Config, db
-from whiterkang.helpers import disableable_dec, search_device, get_device, add_user, find_user, tld, gsmarena_tr_category, gsmarena_tr_info, input_str, humanbytes, http, add_inf_device, find_inf_device, del_inf_device
+from whiterkang.helpers import disableable_dec, search_device, get_device, add_user, find_user, tld, gsmarena_tr_category, gsmarena_tr_info, input_str, humanbytes, http, add_inf_device, find_inf_device
+
 CATEGORY_EMOJIS = {
     "Display": "📱",
     "Platform": "⚙️",
@@ -175,8 +176,6 @@ async def deviceinfo_callback(c: WhiterX, cb: CallbackQuery):
         DEVICE_TEXT += f"\n\n<b>Description</b>: <i>{description}</i>"
 
         await cb.edit_message_text("[.....!]")
-
-        await del_device(user_id)
                 
         try:
             await cb.edit_message_text(DEVICE_TEXT, disable_web_page_preview=False)
