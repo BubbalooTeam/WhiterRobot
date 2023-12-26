@@ -3,10 +3,9 @@ from .database.disabled import is_disabled
 from .database.afk import add_afk_reason, add_afk, del_afk, is_afk, find_reason_afk, check_afk
 from .database.medias import csdl, cisdl, tsdl, tisdl
 from .database.core import add_user, find_user, add_gp, del_gp, find_gp
-from .database.smartphones import add_device, find_device, del_device
 from .database.feds import get_fed_by_creator, get_fed_by_id, get_fed_by_name, add_fed, add_fed_chat, del_fed_chat, fed_post_log
 from .pexels import PexelsImagesAPI
-from .gsmarena import search_device, get_device
+from .gsmarena import search_device, get_device, add_inf_device, find_inf_device, del_inf_device #não mexer
 from .tools import (
     check_bot_rights,
     check_perms,

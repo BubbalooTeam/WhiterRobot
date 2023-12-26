@@ -13,7 +13,7 @@ from hydrogram import filters
 from hydrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 
 from whiterkang import WhiterX, Config, db
-from whiterkang.helpers import disableable_dec, is_disabled, search_device, get_device, add_user, find_user, tld, gsmarena_tr_category, gsmarena_tr_info, input_str, humanbytes, http, add_device, find_device, del_device
+from whiterkang.helpers import disableable_dec, search_device, get_device, add_user, find_user, tld, gsmarena_tr_category, gsmarena_tr_info, input_str, humanbytes, http, add_inf_device, find_inf_device, del_inf_device
 CATEGORY_EMOJIS = {
     "Display": "📱",
     "Platform": "⚙️",
@@ -115,7 +115,7 @@ async def deviceinfo(c: WhiterX, m: Message):
                         description = devices["description"]
                         device_geral = await get_device(device_id)
                         device_name = device_geral.get("name", "N/A")
-                        await add_device(user_id, device_id, link, img, description)
+                        await add_inf_device(device_id, link, img, description)
                         buttons.append([InlineKeyboardButton(device_name, callback_data=f"d.{device_id}|{user_id}")])
                         if len(buttons) >= 30:
                             break
@@ -144,8 +144,7 @@ async def deviceinfo_callback(c: WhiterX, cb: CallbackQuery):
 
     device_id = re.sub(r"^d\.", "", device_id)
 
-    link, img, description = await find_device(user_id, device_id)
-
+    link, img, description = await find_inf_device(device_id)
     try:
         get_device_api = await get_device(device_id)
         name_cll = get_device_api.get("name", "N/A")
