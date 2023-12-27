@@ -8,6 +8,7 @@ from telegraph import upload_file
 from hydrogram import filters
 from hydrogram.enums import ChatType
 from hydrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, InlineQuery, InlineQueryResultArticle, InputTextMessageContent, InlineQueryResultPhoto
+from hydrogram.errors import MediaEmpty, WebpageCurlFailed
 
 from whiterkang import WhiterX, Config, db
 from whiterkang.helpers import disableable_dec, http, add_gp, find_user, add_user, find_gp, search_yt, draw_scrobble, tld, input_str, inline_handler
@@ -15,6 +16,23 @@ from whiterkang.helpers import disableable_dec, http, add_gp, find_user, add_use
 API = "http://ws.audioscrobbler.com/2.0"
 LAST_KEY = Config.LASTFM_API_KEY
 REG = db["USERS"]
+
+MODES = [
+    "3x3",
+    "4x4",
+    "5x5",
+    "6x6"
+]
+
+
+DATE = {
+    "7d",
+    "1m",
+    "3m",
+    "6m",
+    "12m",
+    "overall"
+}
 
 @WhiterX.on_message(filters.command(["setuser", "reg", "set"], Config.TRIGGER))
 @disableable_dec("set")
@@ -441,6 +459,54 @@ async def now_play(c: WhiterX, cb: InlineQuery):
             results=results,
             cache_time=1
         )
+
+@WhiterX.on_message(filters.command("collage", Config.TRIGGER))
+@WhiterX.on_message(filters.command("collage", prefixes=""))
+async def collage_lastfm(c: WhiterX, m: Message):
+    user_ = m.from_user
+    query = int(len(input_str(m).split()))
+    args = input_str(m)
+    lastdb = await REG.find_one({"id_": user_.id})
+    if not lastdb:
+        button = InlineKeyboardMarkup(
+            [
+                [
+                    InlineKeyboardButton(
+                        await tld(m.chat.id, "LAST_CREATE_ACCOUNT_BNT"), url="https://www.last.fm/join"
+                    )
+                ]
+            ]
+        )
+        
+        reg_ = await tld(m.chat.id, "CREATE_LASTFM_ACCOUNT")
+        await m.reply(reg_, reply_markup=button)
+        return
+    user_lastfm = lastdb["last_data"]
+    if query == 0:
+        format_ = "3x3"
+        date_ = "7d"
+    elif query < 4:
+        if " " in args:
+            format_, date_ = args.split(" ")
+        else:
+            format_ = args
+            date_ = "7d"
+    else:
+        return await m.reply("<b>LastFM Says:</b> <i>Invalid format<i>")
+    try:
+        if not format_ in MODES:
+            return await m.reply("<b>LastFM Says:</b> <i>Invalid format<i>")
+        if not date_ in DATE:
+            return await m.reply("<b>LastFM Says:</b> <i>Invalid format<i>")
+        capt = f"<i>{user_lastfm} - {format_} - {date_}</i>"
+        link = f"https://www.tapmusic.net/collage.php?user={user_lastfm}&type={date_}&size={format_}&caption=true&playcount=true"
+        await m.reply_photo(link, caption=capt)
+    except WebpageCurlFailed as e:
+        print(e)
+        return await m.reply("<b>LastFM Says:</b> <i>Failed to process image, try with lower values</i>")
+    except MediaEmpty as e:
+        print(e)
+        return await m.reply("<b>LastFM Says:</b> <i>Failed to process image, try with lower values</i>")
 
 inline_handler.add_cmd("status", "Share the music you are listening to with your friends.", "https://telegra.ph/file/d9e8a2572131b2f5205ae.jpg", aliases=["lastfm", "lt"])
 
