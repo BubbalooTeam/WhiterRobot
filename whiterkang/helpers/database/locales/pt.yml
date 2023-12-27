@@ -11,7 +11,7 @@ LANG_: "<i>Idioma inválido. os idiomas disponiveis atualmente são: PT, EN, ES<
 
 
 #bot
-START: "<i>Ei <b>{}</b>! Meu nome é <b>{}</b>. Estou aqui para divertir e ajudar você a gerenciar seus grupos!\n\nClique no botão Ajuda para saber mais sobre como usar todo o meu potencial.\n\nSiga WhiterKangNews (@WhiterKangNews) se quiser ficar por dentro das novidades, atualizações e tempo de inatividade do bot!\n\nFeito com amor por @DaviTudo.</i>\n\n<b><u>Quer me adicionar no seu grupo?</u> <a href='https://t.me/{}?startgroup=new'>Clique Aqui!</a></b>"
+START: "<i>Ei <b>{}</b>! Meu nome é <b>{}</b>. Estou aqui para divertir e ajudar você a gerenciar seus grupos!\n\nClique no botão Ajuda para saber mais sobre como usar todo o meu potencial.\n\nSiga WhiterKangNews (@WhiterKangNews) se quiser ficar por dentro das novidades, atualizações e tempo de inatividade do bot!\n\nFeito com amor por @DaviisDev.</i>\n\n<b><u>Quer me adicionar no seu grupo?</u> <a href='https://t.me/{}?startgroup=new'>Clique Aqui!</a></b>"
 START_NO_PRIVATE: "Oi meu nome é <b>{}</b>."
 ABOUT_TEXT: "<b>— WhiterKang</b>\n\n- <b>Número da versão:</b> <code>{}</code>\n- <b>Código Fonte:</b> <a href='https://github.com/BubbalooTeam/WhiterRobot'>📦 GitHub</a>\n- <b>Desenvolvedor:</b> @DaviTudo\n\n©2023 - <a href='https://github.com/BubbalooTeam/'>🌐 BubbalooTeam</a>"
 HELP_MSG: "Olá! Me chamo <b>{}</b>. Sou um bot de gerenciamento de grupo modular com alguns extras divertidos! Dê uma olhada no seguinte para ter uma idéia de algumas das coisas em que posso ajudá-lo.\n\nComandos básicos:\n- /start: Comando Legal pra ver se eu estou Vivo ou Não :3\n- /help: envia esta mensagem de ajuda\n- /ping Ver o atraso para o bot retornar a mensagem.\n- /about Veja mais sobre os desenvolvedores.\n\nTodos os comandos podem ser usados com os seguintes caracteres: <code>/ !</code>"
@@ -202,7 +202,7 @@ ANTISPAM_ERR_WRONG_ARG: "Dê-me alguns argumentos para escolher um ajuste! on/of
 ANTISPAM_USERINFO_GBANNED: "Banido globalmente: <b>{}</b>"
 ANTISPAM_USERINFO_GBAN_REASON: "\nMotivo: {}"
 ANTISPAM_CHATSETTINGS_GBAN: "Este grupo está cumprindo *gbans*: `{}`."
-ANTISPAM_ATTEAL: "\n<b>Fale com</b> @DaviTudo"
+ANTISPAM_ATTEAL: "\n<b>Fale com</b> @DaviisDev"
 ANTISPAM_SPAMWATCH_BANNED: "<i>Este usuário foi detectado como um spambot pela SpamWatch e foi removido!<i>\n\n<b>Motivo</b>: <code>{}</code>"
 
 
