@@ -19,6 +19,7 @@ from hydrogram.raw.types import (
     InputStickerSetShortName,
 )
 from hydrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+from hydrogram.enums import ChatType
 
 
 SUPPORTED_TYPES = ["jpeg", "png", "webp"]

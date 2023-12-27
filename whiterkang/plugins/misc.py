@@ -26,7 +26,7 @@ from hydrogram.types import (
     InlineQueryResultArticle,
     InputTextMessageContent,
 )
-from hydrogram.types import ChatType
+from hydrogram.enums import ChatType
 from hydrogram.errors import BadRequest
 
 from whiterkang import WhiterX, Config
