@@ -485,35 +485,35 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
 
 
 @WhiterX.on_message(filters.command(["dl", "sdl", "mdl"], Config.TRIGGER) | filters.regex(SDL_REGEX_LINKS))
-async def sdl(c: WhiterX, message: Message):
+async def sdl(c: WhiterX, m: Message):
     if m.chat.type != ChatType.PRIVATE:
         if not await find_gp(m.chat.id):
             await add_gp(m)
-    if message.matches:
+    if m.matches:
         if (
-            message.chat.type is ChatType.PRIVATE
-            or await csdl(message.chat.id)
+            m.chat.type is ChatType.PRIVATE
+            or await csdl(m.chat.id)
         ):
-            url = message.matches[0].group(0)
+            url = m.matches[0].group(0)
         else:
             return None
-    elif not message.matches and len(message.command) > 1:
-        url = message.text.split(None, 1)[1]
+    elif not m.matches and len(m.command) > 1:
+        url = m.text.split(None, 1)[1]
         if not re.match(SDL_REGEX_LINKS, url, re.M):
-            return await message.reply_text("This link is not supported use Instagram Links, Tiktok Links, Threads Links, Twitter Links")
-    elif message.reply_to_message and message.reply_to_message.text:
-        url = message.reply_to_message.text
+            return await m.reply_text("This link is not supported use Instagram Links, Tiktok Links, Threads Links, Twitter Links")
+    elif m.reply_to_message and m.reply_to_message.text:
+        url = m.reply_to_message.text
     else:
-        return await message.reply_text(await tld(message.chat.id, "NO_ARGS_YT"))
+        return await m.reply_text(await tld(m.chat.id, "NO_ARGS_YT"))
 
-    if message.chat.type == ChatType.PRIVATE:
-        captions = await cisdl(message.from_user.id)
-        method = messages.GetMessages(id=[InputMessageID(id=(message.id))])
+    if m.chat.type == ChatType.PRIVATE:
+        captions = await cisdl(m.from_user.id)
+        method = messages.GetMessages(id=[InputMessageID(id=(m.id))])
     else:
-        captions = await cisdl(message.chat.id)
+        captions = await cisdl(m.chat.id)
         method = channels.GetMessages(
-            channel=await c.resolve_peer(message.chat.id),
-            id=[InputMessageID(id=(message.id))],
+            channel=await c.resolve_peer(m.chat.id),
+            id=[InputMessageID(id=(m.id))],
         )
 
     rawM = (await c.invoke(method)).messages[0].media
@@ -529,8 +529,8 @@ async def sdl(c: WhiterX, message: Message):
     medias = []
     for media in files:
         if filetype.is_video(media["p"]) and len(files) == 1:
-            await c.send_chat_action(message.chat.id, ChatAction.UPLOAD_VIDEO)
-            return await message.reply_video(
+            await c.send_chat_action(m.chat.id, ChatAction.UPLOAD_VIDEO)
+            return await m.reply_video(
                 video=media["p"],
                 width=media["h"],
                 height=media["h"],
@@ -564,7 +564,7 @@ async def sdl(c: WhiterX, message: Message):
             return None
 
         await c.send_chat_action(message.chat.id, ChatAction.UPLOAD_DOCUMENT)
-        await message.reply_media_group(media=medias)
+        await m.reply_media_group(media=medias)
         return None
     return None
 
@@ -613,9 +613,9 @@ async def config(c: WhiterX, union: Message | CallbackQuery):
     reply = union.edit_message_text if isinstance(union, CallbackQuery) else union.reply_text
     chat = union.message.chat if isinstance(union, CallbackQuery) else union.chat
 
-    if isinstance(m, Message) and m.chat.type != ChatType.PRIVATE:
+    if isinstance(union, Message) and m.chat.type != ChatType.PRIVATE:
         if not await find_gp(chat.id):
-            await add_gp(m)
+            await add_gp(union)
 
     keyboard = [
         [
