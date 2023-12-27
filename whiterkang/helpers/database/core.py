@@ -10,7 +10,7 @@ USERS = db["USERS_START"]
 async def find_user(uid: int):
     try:
         user = await WhiterX.get_users(uid)
-        USR = await USERS.find_one({"_id": user.id})
+        USR = await USERS.find_one({"id_": user.id})
         return bool(USR)
     except Exception as e:
         logging.error(f"An Error Ocurred: {e}")
@@ -23,7 +23,7 @@ async def add_user(uid: int):
         if user.username:
             user_start += f"\n<b>Username:</b> @{user.username}"
         await asyncio.gather(
-            USERS.update_one({"_id": user.id}, {"$set": {"user": user.first_name}}, upsert=True),
+            USERS.update_one({"id_": user.id}, {"$set": {"user": user.first_name}}, upsert=True),
             WhiterX.send_log(user_start),
         )
     except Exception as e:
@@ -36,7 +36,7 @@ async def add_gp(m):
     if m.chat.username:
         text_add += f"<b>\nUsername</b>: @{m.chat.username}"
     try:
-        await GROUPS.insert_one({"chat_id": m.chat.id, "title": m.chat.title}),
+        await GROUPS.insert_one({"id_": m.chat.id, "title": m.chat.title}),
         await WhiterX.send_log(
             text_add, disable_notification=False, disable_web_page_preview=True
         )
@@ -47,7 +47,7 @@ async def add_gp(m):
 async def del_gp(m):
     del_txt = f"#WhiterKang #LEFT_GROUP #LOGS\n\n<b>Group</b>: {m.chat.title}\n<b>ID</b>: {m.chat.id}"
     try:
-        await GROUPS.delete_one({"chat_id": m.chat.id})
+        await GROUPS.delete_one({"id_": m.chat.id})
         await WhiterX.send_log(
             del_txt, disable_notification=False, disable_web_page_preview=True
         )
@@ -55,5 +55,5 @@ async def del_gp(m):
         await WhiterX.send_err(e)
 
 async def find_gp(gid):
-    row = await GROUPS.find_one({"chat_id": gid})
+    row = await GROUPS.find_one({"id_": gid})
     return bool(row)
