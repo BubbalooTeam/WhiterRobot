@@ -462,6 +462,7 @@ async def now_play(c: WhiterX, cb: InlineQuery):
 
 @WhiterX.on_message(filters.command("collage", Config.TRIGGER))
 @WhiterX.on_message(filters.command("collage", prefixes=""))
+@disableable_dec("collage")
 async def collage_lastfm(c: WhiterX, m: Message):
     user_ = m.from_user
     query = int(len(input_str(m).split()))
