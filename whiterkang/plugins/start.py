@@ -21,7 +21,7 @@ from hydrogram.types import (
 )
 
 from whiterkang import WhiterX, version, START_TIME, db
-from whiterkang.helpers import time_formatter, add_user, find_user, add_lang, tld
+from whiterkang.helpers import time_formatter, add_user, find_user, add_lang, tld, find_gp, add_gp
 
 HELPABLE: list[str] = []
 
