@@ -11,9 +11,10 @@ from yaml import load, Loader
 
 from hydrogram import filters
 from hydrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
+from hydrogram.enums import ChatType
 
 from whiterkang import WhiterX, Config, db
-from whiterkang.helpers import disableable_dec, search_device, get_device, add_user, find_user, tld, gsmarena_tr_category, gsmarena_tr_info, input_str, humanbytes, http, add_inf_device, find_inf_device
+from whiterkang.helpers import disableable_dec, search_device, get_device, add_user, find_user, tld, gsmarena_tr_category, gsmarena_tr_info, input_str, humanbytes, http, add_inf_device, find_inf_device, find_gp, add_gp
 
 CATEGORY_EMOJIS = {
     "Display": "📱",
@@ -41,6 +42,9 @@ DB_DEVICES = db["DEVICES"]
 async def deviceinfo(c: WhiterX, m: Message):
     if not await find_user(m.from_user.id):
         await add_user(m.from_user.id)
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(m.chat.id):
+            await add_gp(m)
 
     getlist = requests.get(DEVICE_LIST).json()
 
@@ -198,6 +202,9 @@ async def deviceinfo_callback(c: WhiterX, cb: CallbackQuery):
 
 @WhiterX.on_message(filters.command(["twrp"], Config.TRIGGER))
 async def twrp(c: WhiterX, m: Message):
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(m.chat.id):
+            await add_gp(m)
     if not len(m.command) == 2:
         message = "Por favor, escreva seu codinome nele, ou seja, <code>/twrp herolte</code>"
         await m.reply_text(message)
@@ -228,6 +235,9 @@ async def twrp(c: WhiterX, m: Message):
 
 @WhiterX.on_message(filters.command(["magisk"], Config.TRIGGER))
 async def magisk(c: WhiterX, m: Message):
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(m.chat.id):
+            await add_gp(m)
     repo_url = "https://raw.githubusercontent.com/topjohnwu/magisk-files/master/"
     text = await tld(m.chat.id, "MAGISK_STRING")
     for magisk_type in ["stable", "beta", "canary"]:
@@ -241,11 +251,14 @@ async def magisk(c: WhiterX, m: Message):
     await m.reply_text(text, disable_web_page_preview=True)
 
 @WhiterX.on_message(filters.command(["app"], Config.TRIGGER))
-async def app(c: WhiterX, message: Message):
+async def app(c: WhiterX, m: Message):
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(m.chat.id):
+            await add_gp(m)
     try:
-        i = await message.reply(await tld(message.chat.id, "COM_2"))
-        app_name = "+".join(message.text.split(" "))
-        if not input_str(message):
+        i = await m.reply(await tld(m.chat.id, "COM_2"))
+        app_name = "+".join(m.text.split(" "))
+        if not input_str(m):
             return await i.edit("<i>Eu preciso que você digite algo.</i>")
             
         res = requests.get(f"https://play.google.com/store/search?q={app_name}&c=apps")
@@ -273,10 +286,10 @@ async def app(c: WhiterX, message: Message):
         app_link = "https://play.google.com" + _app_link
 
         app_details = f"📲<b>{app_name}</b>\n\n"
-        app_details += (await tld(message.chat.id, "APP_DEVELOPER")).format(app_dev, app_dev_link)
-        app_details += (await tld(message.chat.id, "APP_RATING")).format(app_rating)
-        keyboard = [[InlineKeyboardButton(await tld(message.chat.id, "VIEW_IN_PLAYSTORE_BNT"), url=app_link)]]
-        await message.reply_photo(app_icon, caption=app_details, reply_markup=InlineKeyboardMarkup(keyboard))
+        app_details += (await tld(m.chat.id, "APP_DEVELOPER")).format(app_dev, app_dev_link)
+        app_details += (await tld(m.chat.id, "APP_RATING")).format(app_rating)
+        keyboard = [[InlineKeyboardButton(await tld(m.chat.id, "VIEW_IN_PLAYSTORE_BNT"), url=app_link)]]
+        await m.reply_photo(app_icon, caption=app_details, reply_markup=InlineKeyboardMarkup(keyboard))
         await i.delete()
     except IndexError:
         await i.edit("<i>No result found in search. Please enter</i> <b>Valid app name</b>")
@@ -284,13 +297,16 @@ async def app(c: WhiterX, message: Message):
         await i.edit(err)
 
 @WhiterX.on_message(filters.command(["device", "whatis"], Config.TRIGGER))
-async def device_(_, message: Message):
-    if not len(message.command) == 2:
-        await message.reply(await tld(message.chat.id, "DEVICE_NO_CODENAME"))
+async def device_(c: WhiterX, m: Message):
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(m.chat.id):
+            await add_gp(m)
+    if not len(m.command) == 2:
+        await m.reply(await tld(m.chat.id, "DEVICE_NO_CODENAME"))
         return
-    msg = await message.reply(await tld(message.chat.id, "COM_2"))
+    msg = await m.reply(await tld(m.chat.id, "COM_2"))
     getlist = requests.get(DEVICE_LIST).json()
-    target_device = message.text.split()[1].lower()
+    target_device = m.text.split()[1].lower()
     if target_device in list(getlist):
         device = getlist.get(target_device)
         text = ""
@@ -298,11 +314,11 @@ async def device_(_, message: Message):
             brand = x['brand']
             name = x['name']
             model = x['model']
-            text += (await tld(message.chat.id, "DEVICE_SUCCESS")).format(brand, name, model, target_device)
+            text += (await tld(m.chat.id, "DEVICE_SUCCESS")).format(brand, name, model, target_device)
             text += "\n\n"
         await msg.edit(text)
     else:
-        await msg.edit((await tld(message.chat.id, "DEVICE_NOT_FOUND")).format(target_device))
+        await msg.edit((await tld(m.chat.id, "DEVICE_NOT_FOUND")).format(target_device))
         await asyncio.sleep(5)
         await msg.delete()
 

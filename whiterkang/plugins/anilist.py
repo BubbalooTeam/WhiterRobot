@@ -1,9 +1,10 @@
 # Copyright (C) 2023 BubbalooTeam
 from hydrogram import filters
 from hydrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from hydrogram.enums import ChatType
 
 from whiterkang import WhiterX, Config
-from whiterkang.helpers import http, MANGA_QUERY, input_str, tld
+from whiterkang.helpers import http, MANGA_QUERY, input_str, tld, add_gp, find_gp
 
 async def return_anilist_data(query, vars_):
     url_ = "https://graphql.anilist.co"
@@ -16,6 +17,9 @@ async def return_anilist_data(query, vars_):
 
 @WhiterX.on_message(filters.command("manga", Config.TRIGGER))
 async def manga_search(c: WhiterX, m: Message):
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(m.chat.id):
+            await add_gp(m)
     query = input_str(m)
     if not query:
         await m.reply(await tld(m.chat.id, "ANILIST_NOT_QUERY"))

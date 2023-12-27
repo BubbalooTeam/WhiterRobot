@@ -52,6 +52,8 @@ async def start_(c: WhiterX, m: Union[Message, CallbackQuery]):
     msg = (await tld(msg.chat.id, "START")).format(m.from_user.first_name, c.me.first_name, c.me.username)
     if isinstance(m, Message):
         if not m.chat.type == ChatType.PRIVATE:
+            if not await find_gp(m.chat.id):
+                await add_gp(m)
             return await m.reply((await tld(m.chat.id, "START_NO_PRIVATE")).format(c.me.first_name))
         await c.send_message(m.chat.id, text=msg, reply_markup=keyboard)
         if not await find_user(m.from_user.id):

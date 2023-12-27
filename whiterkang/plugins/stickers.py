@@ -26,6 +26,9 @@ SUPPORTED_TYPES = ["jpeg", "png", "webp"]
 @WhiterX.on_message(filters.command(["getsticker"], Config.TRIGGER))
 @disableable_dec("getsticker")
 async def getsticker_(c: WhiterX, m: Message):
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(m.chat.id):
+            await add_gp(m)
     sticker = m.reply_to_message.sticker
     if sticker:
         if sticker.is_animated:
@@ -54,6 +57,9 @@ async def getsticker_(c: WhiterX, m: Message):
 @WhiterX.on_message(filters.command("stickerid", Config.TRIGGER) & filters.reply)
 @disableable_dec("stickerid")
 async def getstickerid(c: WhiterX, m: Message):
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(m.chat.id):
+            await add_gp(m)
     if m.reply_to_message.sticker:
         await m.reply_text(
             "O id deste sticker é: <code>{stickerid}</code>".format(
@@ -65,6 +71,9 @@ async def getstickerid(c: WhiterX, m: Message):
 @WhiterX.on_message(filters.command(["kibe", "kang"], Config.TRIGGER))
 @disableable_dec("kang")
 async def kang(c: WhiterX, m: Message):
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(m.chat.id):
+            await add_gp(m)
     progress_mesage = await m.reply_text(await tld(m.chat.id, "KANGING"))
     emoji = "🤔"
     packnum = 0

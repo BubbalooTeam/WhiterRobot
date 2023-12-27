@@ -19,6 +19,9 @@ REG = db["USERS"]
 @WhiterX.on_message(filters.command(["setuser", "reg", "set"], Config.TRIGGER))
 @disableable_dec("set")
 async def last_save_user(c: WhiterX, m: Message):
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(m.chat.id):
+            await add_gp(m)
     user_id = m.from_user.id
     fname = m.from_user.first_name
     uname = m.from_user.username
@@ -65,6 +68,9 @@ async def last_save_user(c: WhiterX, m: Message):
 @WhiterX.on_message(filters.command(["deluser", "duser"], Config.TRIGGER))
 @disableable_dec("deluser")
 async def last_del_user(c: WhiterX, m: Message):
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(m.chat.id):
+            await add_gp(m)
     user_id = m.from_user.id
     found = await REG.find_one({"id_": user_id})
     if found:
@@ -78,6 +84,9 @@ async def last_del_user(c: WhiterX, m: Message):
 @WhiterX.on_message(filters.command(["profile", "user"], Config.TRIGGER))
 @disableable_dec("profile")
 async def profile(c: WhiterX, m: Message):
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(m.chat.id):
+            await add_gp(m)
     user_ = m.from_user
     lastdb = await REG.find_one({"id_": user_.id})
     if not lastdb:
@@ -153,7 +162,7 @@ async def profile(c: WhiterX, m: Message):
         text_ += (await tld(m.chat.id, "PROFILE_LATEST")).format(kek)
     await m.reply(text_, disable_web_page_preview=True)
 
-@WhiterX.on_message(filters.command("status", prefixes=""))
+@WhiterX.on_message(filters.command(["status", "lt"], prefixes=""))
 @WhiterX.on_message(filters.command(["lt", "lastfm", "lmu"], Config.TRIGGER))
 @disableable_dec("lt")
 async def now_play(c: WhiterX, m: Message):

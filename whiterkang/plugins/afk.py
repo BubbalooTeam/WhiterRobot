@@ -2,7 +2,7 @@ import re
 import asyncio 
 
 from hydrogram import filters
-from hydrogram.enums import MessageEntityType
+from hydrogram.enums import MessageEntityType, ChatType
 from hydrogram.errors import FloodWait, UserNotParticipant, BadRequest, ChatWriteForbidden
 from hydrogram.types import Message
 
@@ -13,7 +13,9 @@ from whiterkang.helpers import (
     tld, 
     check_afk, 
     find_user, 
-    add_user, 
+    add_user,
+    add_gp,
+    find_gp, 
     add_afk, 
     add_afk_reason, 
     find_reason_afk, 
@@ -30,6 +32,9 @@ from whiterkang.helpers import (
 async def afk_cmd(c: WhiterX, m: Message):
     if not await find_user(m.from_user.id):
         await add_user(m.from_user.id)
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(m.chat.id):
+            await add_gp(m)
         
     time = datetime.now().timestamp()
     if input_str(m):

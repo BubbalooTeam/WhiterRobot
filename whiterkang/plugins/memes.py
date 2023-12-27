@@ -4,15 +4,19 @@ from zalgo_text import zalgo
 
 from hydrogram import filters
 from hydrogram.types import Message
+from hydrogram.enums import ChatType
 
 from whiterkang import WhiterX, Config
-from whiterkang.helpers import input_str, tld, disableable_dec
+from whiterkang.helpers import input_str, tld, disableable_dec, find_gp, add_gp
 
 WIDE_MAP = {i: i + 0xFEE0 for i in range(0x21, 0x7F)}
 WIDE_MAP[0x20] = 0x3000
 
 @WhiterX.on_message(filters.command("owo", Config.TRIGGER))
 async def owo(c: WhiterX, m: Message):
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(m.chat.id):
+            await add_gp(m)
     noreply = False
     if m.reply_to_message and m.reply_to_message.text:
         data = m.reply_to_message.text
@@ -49,6 +53,9 @@ async def owo(c: WhiterX, m: Message):
 
 @WhiterX.on_message(filters.command("stretch", Config.TRIGGER))
 async def stretch(c: WhiterX, m: Message):
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(m.chat.id):
+            await add_gp(m)
     noreply = False
     if m.reply_to_message and m.reply_to_message.text:
         data = m.reply_to_message.text
@@ -69,6 +76,9 @@ async def stretch(c: WhiterX, m: Message):
 
 @WhiterX.on_message(filters.command("vapor", Config.TRIGGER))
 async def vapor(c: WhiterX, m: Message):
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(m.chat.id):
+            await add_gp(m)
     noreply = False
     if m.reply_to_message and m.reply_to_message.text:
         data = m.reply_to_message.text
@@ -88,6 +98,9 @@ async def vapor(c: WhiterX, m: Message):
 
 @WhiterX.on_message(filters.command("zalgo", Config.TRIGGER))
 async def zalgo_text(c: WhiterX, m: Message):
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(m.chat.id):
+            await add_gp(m)
     noreply = False
     if m.reply_to_message and m.reply_to_message.text:
         data = m.reply_to_message.text
@@ -107,6 +120,9 @@ async def zalgo_text(c: WhiterX, m: Message):
 
 @WhiterX.on_message(filters.command("insults", Config.TRIGGER))
 async def insults(c: WhiterX, m: Message):
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(m.chat.id):
+            await add_gp(m)
     text = random.choice(await tld(m.chat.id, "MEMES_INSULTS_LIST"))
 
     if m.reply_to_message:
@@ -116,12 +132,18 @@ async def insults(c: WhiterX, m: Message):
 
 @WhiterX.on_message(filters.command("runs", Config.TRIGGER))
 async def runs(c: WhiterX, m: Message):
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(m.chat.id):
+            await add_gp(m)
     text = random.choice(await tld(m.chat.id, "MEMES_RUNS_LIST"))
 
     await m.reply(text)
 
 @WhiterX.on_message(filters.command("slap", Config.TRIGGER))
 async def slap(c: WhiterX, m: Message):
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(m.chat.id):
+            await add_gp(m)
     # reply to correct message
     reply_text = m.reply_to_message.reply if m.reply_to_message else m.reply
 

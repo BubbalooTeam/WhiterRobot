@@ -3,14 +3,17 @@ import html
 
 from hydrogram import filters
 from hydrogram.types import Message, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
-from hydrogram.enums import ChatMemberStatus
+from hydrogram.enums import ChatMemberStatus, ChatType
 
 from whiterkang import WhiterX, Config
-from whiterkang.helpers import input_str, is_dev, disableable_dec, add_fed, add_fed_chat, del_fed_chat, get_fed_by_id, get_fed_by_creator, get_fed_by_name, fed_post_log
+from whiterkang.helpers import input_str, is_dev, disableable_dec, add_fed, add_fed_chat, del_fed_chat, get_fed_by_id, get_fed_by_creator, get_fed_by_name, fed_post_log, find_gp, add_gp
 
 @WhiterX.on_message(filters.command(["newfed", "fnew"], Config.TRIGGER))
 @disableable_dec("newfed")
 async def new_fed(c: WhiterX, m: Message):
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(m.chat.id):
+            await add_gp(m)
     name_fed = input_str(m)
     user_id = m.from_user.id
     user_mention = m.from_user.mention
@@ -46,6 +49,8 @@ async def new_fed(c: WhiterX, m: Message):
 @WhiterX.on_message(filters.command(["joinfed", "fjoin"], Config.TRIGGER))
 @disableable_dec("joinfed")
 async def join_fed(c: WhiterX, m: Message):
+    if not await find_gp(m.chat.id):
+        await add_gp(m)
     fed_id = input_str(m)
     user_id = m.from_user.id
     chat_id = m.chat.id

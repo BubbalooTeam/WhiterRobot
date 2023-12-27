@@ -37,7 +37,7 @@ from hydrogram.enums import ChatType, ChatAction
 
 
 from whiterkang import WhiterX, Config 
-from whiterkang.helpers import humanbytes, tld, csdl, cisdl, tsdl, tisdl, DownloadMedia, extract_info, http, is_admin, add_user, find_user, search_yt, require_admin, disableable_dec, get_ytthumb, rand_key, get_download_button, SearchResult, inline_handler
+from whiterkang.helpers import humanbytes, tld, csdl, cisdl, tsdl, tisdl, DownloadMedia, extract_info, http, is_admin, add_user, find_user, search_yt, require_admin, disableable_dec, get_ytthumb, rand_key, get_download_button, SearchResult, inline_handler, find_gp, add_gp
 
 
 YOUTUBE_REGEX = re.compile(
@@ -61,6 +61,9 @@ async def ytdlcmd(c: WhiterX, m: Message):
 
     if not await find_user(user):
         await add_user(user)
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(m.chat.id):
+            await add_gp(m)
 
     if m.reply_to_message and m.reply_to_message.text:
         url = m.reply_to_message.text
@@ -483,6 +486,9 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
 
 @WhiterX.on_message(filters.command(["dl", "sdl", "mdl"], Config.TRIGGER) | filters.regex(SDL_REGEX_LINKS))
 async def sdl(c: WhiterX, message: Message):
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(m.chat.id):
+            await add_gp(m)
     if message.matches:
         if (
             message.chat.type is ChatType.PRIVATE
@@ -607,6 +613,10 @@ async def config(c: WhiterX, union: Message | CallbackQuery):
     reply = union.edit_message_text if isinstance(union, CallbackQuery) else union.reply_text
     chat = union.message.chat if isinstance(union, CallbackQuery) else union.chat
 
+    if isinstance(m, Message) and m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(chat.id):
+            await add_gp(m)
+
     keyboard = [
         [
             InlineKeyboardButton(await tld(chat.id, "MEDIAS_BNT"), "media_config"),
@@ -620,6 +630,9 @@ async def config(c: WhiterX, union: Message | CallbackQuery):
 
 @WhiterX.on_message(filters.command("yt", Config.TRIGGER))
 async def yt_search_cmd(c: WhiterX, m: Message):
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(m.chat.id):
+            await add_gp(m)
     vids = [
         '{}: <a href="{}">{}</a>'.format(num + 1, i["url"], i["title"])
         for num, i in enumerate(await search_yt(m.text.split(None, 1)[1]))

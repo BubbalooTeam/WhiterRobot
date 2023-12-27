@@ -26,10 +26,11 @@ from hydrogram.types import (
     InlineQueryResultArticle,
     InputTextMessageContent,
 )
+from hydrogram.types import ChatType
 from hydrogram.errors import BadRequest
 
 from whiterkang import WhiterX, Config
-from whiterkang.helpers import tld, inline_handler, group_apps, weather_apikey, disableable_dec, scan_file, get_report, humanbytes
+from whiterkang.helpers import tld, inline_handler, group_apps, weather_apikey, disableable_dec, scan_file, get_report, humanbytes, find_gp, add_gp
 
 IMG_PATH = Config.DOWN_PATH + "WhiterOS-RemoveBG.png"
 
@@ -144,6 +145,9 @@ def get_status_emoji(status_code: int) -> str:
 @WhiterX.on_message(filters.command(["cota"], Config.TRIGGER))
 async def cotas_money(c: WhiterX, m: Message):
     chat_id = m.chat.id
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(chat_id):
+            await add_gp(m)
     obting_info = await m.reply(await tld(chat_id, "COTA_PROGRESSING"))
 
     req = requests.get("https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,GBP-BRL,JPY-BRL,BTC-BRL,ETH-BRL,XRP-BRL,DOGE-BRL,ARS-BRL,RUB-BRL")
@@ -231,6 +235,9 @@ async def search_inline(c: WhiterX, q: InlineQuery):
 @disableable_dec("removebg")
 async def remove_background(c: WhiterX, m: Message):
     chat_id = m.chat.id
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(chat_id):
+            await add_gp(m)
     if not Config.REMOVE_BG_API_KEY:
         await m.reply(
             await tld(chat_id, "NO_API_RBG"),
@@ -287,6 +294,9 @@ async def remove_background(c: WhiterX, m: Message):
 async def weather(c: WhiterX, m: Union[InlineQuery, Message]):
     text = m.text if isinstance(m, Message) else m.query
     chat_id = m.chat.id if isinstance(m, Message) else m.from_user.id
+    if isinstance(m, Message) and m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(chat_id):
+            await add_gp(m)
     if len(text.split(maxsplit=1)) == 1:
         try:
             if isinstance(m, Message):
@@ -390,6 +400,9 @@ async def weather(c: WhiterX, m: Union[InlineQuery, Message]):
 @WhiterX.on_message(filters.command("tr", Config.TRIGGER))
 async def translate(c: WhiterX, m: Message):
     chat_id = m.chat.id
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(chat_id):
+            await add_gp(m)
     text = m.text[4:]
     lang = await get_tr_lang(m, text)
 
@@ -455,6 +468,9 @@ async def tr_inline(c: WhiterX, q: InlineQuery):
 @disableable_dec("vt")
 async def virus_total(c: WhiterX, m: Message):
     chat_id = m.chat.id
+    if m.chat.type != ChatType.PRIVATE:
+        if not await find_gp(chat_id):
+            await add_gp(m)
     user_id = m.from_user.id
     FILE_PATH = f"{Config.DOWN_PATH}virustotal/"
     if not Config.VT_API_KEY:
