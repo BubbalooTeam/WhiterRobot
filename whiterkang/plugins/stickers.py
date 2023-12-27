@@ -5,7 +5,7 @@ import math
 import filetype
 
 from whiterkang import WhiterX, Config
-from whiterkang.helpers import tld, disableable_dec, EMOJI_PATTERN, convert_video, resize_image, http
+from whiterkang.helpers import tld, disableable_dec, EMOJI_PATTERN, convert_video, resize_image, http, find_gp, add_gp
 
 from hydrogram import filters
 from hydrogram.errors import PeerIdInvalid, StickersetInvalid
