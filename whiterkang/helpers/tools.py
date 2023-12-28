@@ -390,10 +390,11 @@ async def cssworker_url(target_url: str):
         scl_secret = soup.findAll("input")[1]["value"]
 
         key = md5((target_url + scl_secret).encode()).hexdigest()
-        resp = f"https://screenshotlayer.com/php_helper_scripts/scl_api.php?secret_key={key}&url={target_url}"
-        if not resp.status_code != 200:
-            resp = "https://telegra.ph/file/8b3f16e296b6f1d0111f4.jpg"
-        return resp
+        res = f"https://screenshotlayer.com/php_helper_scripts/scl_api.php?secret_key={key}&url={target_url}"
+        resp = await http.get(res)
+        if not resp.status_code != 200 and not resp.content:
+            resp = await http.get("https://telegra.ph/file/8b3f16e296b6f1d0111f4.jpg")
+        return resp.content
     except HTTPError:
         return None
 
