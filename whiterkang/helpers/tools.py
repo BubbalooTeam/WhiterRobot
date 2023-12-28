@@ -392,13 +392,7 @@ async def cssworker_url(target_url: str):
         key = md5((target_url + scl_secret).encode()).hexdigest()
 
         res = f"https://screenshotlayer.com/php_helper_scripts/scl_api.php?secret_key={key}&url={target_url}"
-
-        res = await http.get(res)
-        if res.status_code != 200:
-            return None
-        else:
-            resp = f"https://screenshotlayer.com/php_helper_scripts/scl_api.php?secret_key={key}&url={target_url}"
-            return resp
+        return res
         
     except HTTPError:
         return None
