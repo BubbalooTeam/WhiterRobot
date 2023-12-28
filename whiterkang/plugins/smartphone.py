@@ -40,6 +40,8 @@ DB_DEVICES = db["DEVICES"]
 @WhiterX.on_message(filters.command(["deviceinfo", "d"], Config.TRIGGER))
 @disableable_dec("deviceinfo")
 async def deviceinfo(c: WhiterX, m: Message):
+    if not Config.GSMARENA_API:
+        return
     if not await find_user(m.from_user.id):
         await add_user(m.from_user.id)
     if m.chat.type != ChatType.PRIVATE:

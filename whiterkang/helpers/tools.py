@@ -20,6 +20,8 @@ from math import floor
 from PIL import Image, ImageOps
 from io import BytesIO
 from speedtest import Speedtest
+from bs4 import BeautifulSoup
+from hashlib import md5
 
 
 from hydrogram import emoji
@@ -375,27 +377,16 @@ async def extract_time(msg, time_val):
         return
 
 
-async def cssworker_url(target_url: str, pc_id: str):
-    url = "https://htmlcsstoimage.com/demo_run"
-    my_headers = {
-    "User-Agent": f"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:95.0) Gecko/20100101 Firefox/95.0 [PC-ID({pc_id})]",
-    "Accept-Language": "pt-BR"
-}
-
-
-    data = {
-        "url": target_url,
-        # Sending a random CSS to make the API to generate a new screenshot.
-        "css": f"random-tag {uuid.uuid4()}",
-        "render_when_ready": False,
-        "viewport_width": 1280,
-        "viewport_height": 720,
-        "device_scale": 1,
-    }
+async def cssworker_url(target_url: str):
+    url = "https://screenshotlayer.com"
 
     try:
-        resp = await http.post(url, headers=my_headers, json=data)
-        return resp.json()
+        res = await http.get(url, headers=my_headers, json=data)
+        soup = BeautifulSoup(await res.text(), "html.parser")
+        scl_secret = soup.findAll("input")[1]["value"]
+        key = md5((str(query) + scl_secret).encode()).hexdigest()
+        resp = f"https://screenshotlayer.com/php_helper_scripts/scl_api.php?secret_key={key}&url={query}"
+        return resp
     except HTTPError:
         return None
 
