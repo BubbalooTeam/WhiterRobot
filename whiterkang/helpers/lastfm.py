@@ -99,13 +99,13 @@ def draw_scrobble(
 
         duration = 15
         current_time = 5
-        bar_color = (0, 0, 0) # black
+        bar_color = (10, 10, 10) # black
         progress_color = (255, 255, 255) # white
         bar_width = 300
 
-        draw.rectangle((248, 220, 248 + bar_width, 240), fill=bar_color, outline=None, width=0)
+        draw.rectangle((248, 220, 248 + bar_width, 240), fill=bar_color, outline=None, width=0, joint='curve')
         progress_width = round(bar_width * current_time / duration)
-        draw.rectangle((248, 220, 248 + progress_width, 240), fill=progress_color, outline=None, width=0)
+        draw.rectangle((248, 220, 248 + progress_width, 240), fill=progress_color, outline=None, width=0, joint='curve')
         
         current_time_str = f"{current_time // 60:02d}:{current_time % 60:02d}"
         duration_str = f"{duration // 60:02d}:{duration % 60:02d}"
