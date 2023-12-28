@@ -103,9 +103,9 @@ def draw_scrobble(
         progress_color = (255, 255, 255) # white
         bar_width = 300
 
-        draw.rectangle((248, 220, 248 + bar_width, 240), fill=bar_color, outline=None, width=0, joint='curve')
+        draw.rectangle((248, 220, 248 + bar_width, 240), fill=bar_color, outline=None, width=0)
         progress_width = round(bar_width * current_time / duration)
-        draw.rectangle((248, 220, 248 + progress_width, 240), fill=progress_color, outline=None, width=0, joint='curve')
+        draw.rectangle((248, 220, 248 + progress_width, 240), fill=progress_color, outline=None, width=0)
         
         current_time_str = f"{current_time // 60:02d}:{current_time % 60:02d}"
         duration_str = f"{duration // 60:02d}:{duration % 60:02d}"
