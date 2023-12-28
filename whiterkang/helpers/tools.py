@@ -381,7 +381,7 @@ async def cssworker_url(target_url: str):
     url = "https://screenshotlayer.com"
 
     try:
-        res = await http.get(url, headers=my_headers, json=data)
+        res = await http.get(url)
         soup = BeautifulSoup(await res.text(), "html.parser")
         scl_secret = soup.findAll("input")[1]["value"]
         key = md5((str(query) + scl_secret).encode()).hexdigest()
