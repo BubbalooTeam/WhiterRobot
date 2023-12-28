@@ -396,8 +396,6 @@ async def cssworker_url(target_url: str):
         
     except HTTPError:
         return None
-    except Exception:
-        return None
 
 def cleanhtml(raw_html):
     cleanr = re.compile("<.*?>")
