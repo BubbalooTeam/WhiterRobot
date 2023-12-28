@@ -598,10 +598,10 @@ async def screenshot(c: WhiterX, m: Message):
                 return
         else:
             await sent.delete()
-            await m.reply_photo("https://telegra.ph/file/8b3f16e296b6f1d0111f4.jpg")
+            await m.reply_photo("https://telegra.ph/file/082b97b7fa44c85782b85.jpg")
     else:
         await sent.delete()
-        await m.reply_photo("https://telegra.ph/file/8b3f16e296b6f1d0111f4.jpg")
+        await m.reply_photo("https://telegra.ph/file/082b97b7fa44c85782b85.jpg")
 
 
 

@@ -386,18 +386,16 @@ async def cssworker_url(target_url: str):
         if not target_url.startswith("http://") and not target_url.startswith("https://"):
             target_url = "https://" + target_url
 
-        resp = await http.get(target_url)
-
-        if not resp.status_code != 200:
-            res = "https://telegra.ph/file/8b3f16e296b6f1d0111f4.jpg"
-            return res
-
         soup = BeautifulSoup(acs.text, features="html.parser")
         scl_secret = soup.findAll("input")[1]["value"]
 
         key = md5((target_url + scl_secret).encode()).hexdigest()
 
         res = f"https://screenshotlayer.com/php_helper_scripts/scl_api.php?secret_key={key}&url={target_url}"
+
+        res = await http.get(res)
+        if res.status_code != 200:
+            return None
 
         return res
     except HTTPError:
