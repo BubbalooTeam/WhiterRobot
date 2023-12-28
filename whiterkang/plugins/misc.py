@@ -553,7 +553,6 @@ async def virus_total(c: WhiterX, m: Message):
 @WhiterX.on_message(filters.command(["print", "ss"], Config.TRIGGER))
 async def screenshot(c: WhiterX, m: Message):
     msg = m.text
-    user_id = f"{message.from_user.id}"
     the_url = msg.split(" ", 1)
     wrong = False
 
@@ -577,7 +576,7 @@ async def screenshot(c: WhiterX, m: Message):
         sent = await m.reply_text(await tld(m.chat.id, "TAKING_PRINT"))
         res = await cssworker_url(target_url=the_url)
     except BaseException as e:
-        await message.reply(f"<b>Failed due to:</b> <code>{e}</code>")
+        await m.reply(f"<b>Failed due to:</b> <code>{e}</code>")
         return
 
     if res:
