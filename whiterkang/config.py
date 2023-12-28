@@ -23,9 +23,9 @@ class Config:
     DEV_USERS = (  # lista de devs
         838926101,  # @fnixdev
         5374262463, # @junglivre
-        1715384854,  # @DaviTudo 
-        1574959180, #@KlonoaSulista
-
+        1715384854, # @DaviTudo 
+        1574959180, # @KlonoaSulista
+        6419654672 # @lucmsilva
     )
     ADMINS = {}
     LASTFM_API_KEY = os.environ.get("LASTFM_API_KEY")
