@@ -77,7 +77,6 @@ def draw_scrobble(
         # assign fonts
         songfont = poppins if checkUnicode(song_name) else arial
         artistfont = open_sans if checkUnicode(artist_name) else arial23
-        text_font = open_sans if checkUnicode(current_time_str + " / " + duration_str) else arial23
 
         # draw text on canvas
         white = '#ffffff'
@@ -111,6 +110,9 @@ def draw_scrobble(
         
         current_time_str = f"{current_time // 60:02d}:{current_time % 60:02d}"
         duration_str = f"{duration // 60:02d}:{duration % 60:02d}"
+
+        text_font = open_sans if checkUnicode(current_time_str + " / " + duration_str) else arial23
+        
         draw.text((248, 245), current_time_str + " / " + duration_str, fill=white, font=text_font)
 
         # return canvas
