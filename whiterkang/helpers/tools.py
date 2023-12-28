@@ -397,7 +397,7 @@ async def cssworker_url(target_url: str):
         if res.status_code != 200:
             return None
 
-        return res
+        return res.content
     except HTTPError:
         return None
     except Exception:
