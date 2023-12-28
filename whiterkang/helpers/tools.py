@@ -383,7 +383,7 @@ async def cssworker_url(target_url: str):
     try:
         acs = await http.get(url)
 
-        if not "https://" or "http://" in target_url:
+        if not ["https://", "http://"] in target_url:
             target_url = "https://" + target_url
 
         soup = BeautifulSoup(acs.text, features="html.parser")
