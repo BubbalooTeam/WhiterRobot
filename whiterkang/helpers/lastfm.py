@@ -31,6 +31,8 @@ def truncate(text, font, limit):
 def checkUnicode(text):
     return text == str(text.encode('utf-8'))[2:-1]
 
+from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageFilter
+
 def draw_scrobble(
     img_: str,
     pfp: str,
@@ -75,6 +77,7 @@ def draw_scrobble(
         # assign fonts
         songfont = poppins if checkUnicode(song_name) else arial
         artistfont = open_sans if checkUnicode(artist_name) else arial23
+        text_font = open_sans if checkUnicode(current_time_str + " / " + duration_str) else arial23
 
         # draw text on canvas
         white = '#ffffff'
@@ -94,6 +97,21 @@ def draw_scrobble(
             canvas.paste(leve, (248, 190), mask=leve)
             draw.text((278, 187), truncate("loved", artistfont, 315),
                     fill=white, font=artistfont)
+
+        duration = 15
+        current_time = 5
+        bar_color = (0, 0, 0) # black
+        progress_color = (255, 255, 255) # white
+        radius = 10
+        bar_width = 300
+
+        draw.rectangle((248, 220, 248 + bar_width, 240), fill=bar_color, outline=None, width=0, radius=radius)
+        progress_width = round(bar_width * current_time / duration)
+        draw.rectangle((248, 220, 248 + progress_width, 240), fill=progress_color, outline=None, width=0, radius=radius)
+        
+        current_time_str = f"{current_time // 60:02d}:{current_time % 60:02d}"
+        duration_str = f"{duration // 60:02d}:{duration % 60:02d}"
+        draw.text((248, 245), current_time_str + " / " + duration_str, fill=white, font=text_font)
 
         # return canvas
         image = BytesIO()
