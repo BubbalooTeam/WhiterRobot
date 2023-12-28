@@ -392,12 +392,13 @@ async def cssworker_url(target_url: str):
         key = md5((target_url + scl_secret).encode()).hexdigest()
         res = f"https://screenshotlayer.com/php_helper_scripts/scl_api.php?secret_key={key}&url={target_url}"
         resp = await http.get(res)
-        if not resp.status_code != 200 and not resp.content:
-            resp = await http.get("https://telegra.ph/file/8b3f16e296b6f1d0111f4.jpg")
-        return resp.content
+        if not resp.status_code != 200 and not resp:
+            res = "https://telegra.ph/file/8b3f16e296b6f1d0111f4.jpg"
+        return res
     except HTTPError:
         return None
-
+    except Exception:
+        return None
 
 def cleanhtml(raw_html):
     cleanr = re.compile("<.*?>")
