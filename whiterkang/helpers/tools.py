@@ -396,8 +396,10 @@ async def cssworker_url(target_url: str):
         res = await http.get(res)
         if res.status_code != 200:
             return None
-
-        return res.content
+        else:
+            resp = f"https://screenshotlayer.com/php_helper_scripts/scl_api.php?secret_key={key}&url={target_url}"
+            return resp
+        
     except HTTPError:
         return None
     except Exception:
