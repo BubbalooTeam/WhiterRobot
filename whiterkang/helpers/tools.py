@@ -388,7 +388,7 @@ async def cssworker_url(target_url: str):
 
         resp = await http.get(target_url)
 
-        if not resp.status_code != 200 and not resp:
+        if not resp.status_code != 200:
             res = "https://telegra.ph/file/8b3f16e296b6f1d0111f4.jpg"
             return res
 
