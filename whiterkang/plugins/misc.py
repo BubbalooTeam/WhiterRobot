@@ -597,11 +597,11 @@ async def screenshot(c: WhiterX, m: Message):
                 # or the bot doesn't have access to send media in the chat.
                 return
         else:
-            await sent.edit(
-                "Couldn't get url value, most probably API is not accessible."
-            )
+            await sent.delete()
+            await m.reply_photo("https://telegra.ph/file/8b3f16e296b6f1d0111f4.jpg")
     else:
-        await sent.edit("Failed because API is not responding, try again later.")
+        await sent.delete()
+        await m.reply_photo("https://telegra.ph/file/8b3f16e296b6f1d0111f4.jpg")
 
 
 
