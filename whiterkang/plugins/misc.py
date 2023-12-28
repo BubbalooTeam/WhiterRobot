@@ -576,7 +576,7 @@ async def screenshot(c: WhiterX, m: Message):
         sent = await m.reply_text(await tld(m.chat.id, "TAKING_PRINT"))
         res = await cssworker_url(target_url=the_url)
     except BaseException as e:
-        await m.reply(f"<b>Failed due to:</b> <code>{e}</code>")
+        await sent.edit(f"<b>Failed due to:</b> <code>{e}</code>")
         return
 
     if res:
