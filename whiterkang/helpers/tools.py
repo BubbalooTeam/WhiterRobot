@@ -382,10 +382,15 @@ async def cssworker_url(target_url: str):
 
     try:
         res = await http.get(url)
+        print("0")
         soup = BeautifulSoup(res.text(), "html.parser")
+        print("1")
         scl_secret = soup.findAll("input")[1]["value"]
+        print("2")
         key = md5((target_url + scl_secret).encode()).hexdigest()
+        print("3")
         resp = f"https://screenshotlayer.com/php_helper_scripts/scl_api.php?secret_key={key}&url={target_url}"
+        print(resp)
         return resp
     except HTTPError:
         return None
