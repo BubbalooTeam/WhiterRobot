@@ -230,6 +230,7 @@ async def now_play(c: WhiterX, m: Message):
     song_ = recent_song[0]
     song_name = song_["name"]
     artist_name = song_["artist"]["name"]
+    timestamp = song_["date"]["uts"]
     image_ = song_["image"][3].get("#text")
     params_ = {
         "method": "track.getInfo",
@@ -245,7 +246,6 @@ async def now_play(c: WhiterX, m: Message):
         get_track = view_data["track"]
         print(get_track)
         duration = get_track["duration"]
-        timestamp = get_track["timestamp"]
         get_scrob = int(get_track["userplaycount"])
         if get_scrob == 0:
             scrob = get_scrob + 1
@@ -254,7 +254,6 @@ async def now_play(c: WhiterX, m: Message):
         listening = (await tld(m.chat.id, "IS_LISTERING_")).format(scrob)
     except KeyError:
         duration = 1
-        timestamp = 1
         listening = await tld(m.chat.id, "IS_LISTERING")
     if image_:
         img_ = download(image_, Config.DOWN_PATH)
@@ -269,6 +268,8 @@ async def now_play(c: WhiterX, m: Message):
         pfp = await WhiterX.download_media(photos)
     else:
         pfp = 'whiterkang/resources/user.png'
+
+    timestamp = timestamp - duration
 
 
     image = draw_scrobble(img_, pfp, song_name, artist_name,
