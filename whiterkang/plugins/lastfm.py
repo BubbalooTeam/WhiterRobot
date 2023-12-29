@@ -244,6 +244,7 @@ async def now_play(c: WhiterX, m: Message):
         view_data = view_data_.json()
         get_track = view_data["track"]
         get_scrob = int(get_track["userplaycount"])
+        duration = int(get_track["duration"])
         if get_scrob == 0:
             scrob = get_scrob + 1
         else:
@@ -266,7 +267,7 @@ async def now_play(c: WhiterX, m: Message):
         pfp = 'whiterkang/resources/user.png'
 
     image = draw_scrobble(img_, pfp, song_name, artist_name,
-                          user_lastfm, listening, loved)
+                          user_lastfm, listening, loved, get_scrob, duration)
     prof = f"https://www.last.fm/user/{user_lastfm}"
 
     pre_link_ = f"{song_name} {artist_name}"

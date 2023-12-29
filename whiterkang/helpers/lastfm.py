@@ -40,7 +40,10 @@ def draw_scrobble(
     artist_name: str,
     user_lastfm: str,
     listening: str,
-    loved: bool):
+    loved: bool,
+    current_time: int,
+    duration: int,
+    ):
         # background object
         canvas = Image.new("RGB", (600, 250), (18, 18, 18))
         draw = ImageDraw.Draw(canvas)
@@ -97,8 +100,7 @@ def draw_scrobble(
             draw.text((278, 187), truncate("loved", artistfont, 315),
                     fill=white, font=artistfont)
 
-        duration = 60
-        current_time = 5
+        
         bar_color = (30, 30, 30) # black
         progress_color = (255, 255, 255) # white
         bar_width = 300
