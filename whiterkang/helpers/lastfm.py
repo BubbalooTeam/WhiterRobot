@@ -97,9 +97,9 @@ def draw_scrobble(
             draw.text((278, 187), truncate("loved", artistfont, 315),
                     fill=white, font=artistfont)
 
-        duration = 15
+        duration = 60
         current_time = 5
-        bar_color = (10, 10, 10) # black
+        bar_color = (30, 30, 30) # black
         progress_color = (255, 255, 255) # white
         bar_width = 300
 
