@@ -253,8 +253,8 @@ async def now_play(c: WhiterX, m: Message):
             scrob = get_scrob
         listening = (await tld(m.chat.id, "IS_LISTERING_")).format(scrob)
     except KeyError:
-        duration = 0
-        timestamp = 0
+        duration = 1
+        timestamp = 1
         listening = await tld(m.chat.id, "IS_LISTERING")
     if image_:
         img_ = download(image_, Config.DOWN_PATH)
