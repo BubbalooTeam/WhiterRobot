@@ -505,6 +505,7 @@ UNWARNED_CALLBACKQUERY: "La advertencia para {} ha sido eliminada por {}."
 #donate
 donate_string: "Si te gusta el proyecto, ¿quieres donar? Increíble.\n¡Esto me ayudará a mantenerlo vivo y libre! Puede mostrar su amor y apoyo donando. Cualquier valor es apreciado. ¡Gracias!"
 donate_bnt: "Donar"
+plan_maintenance_bnt: "Plan de mantenimiento"
 
 #admins
 ADMINS_STRING: "<b>Administradores en el chat</b> <code>{chat_title}</code>:\n\n{admins_list}"
