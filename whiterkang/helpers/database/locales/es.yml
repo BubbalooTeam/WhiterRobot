@@ -503,7 +503,7 @@ NO_RULES_WARN_YOU: "¡Esto no es para ti! Si quieres ver las reglas escribe /rul
 UNWARNED_CALLBACKQUERY: "La advertencia para {} ha sido eliminada por {}."
 
 #donate
-donate_string: "Si te gusta el proyecto, ¿quieres donar? Increíble.\n¡Esto me ayudará a mantenerlo vivo y libre! Puede mostrar su amor y apoyo donando. Cualquier valor es apreciado. ¡Gracias!"
+donate_string: "Si te gusta el proyecto, ¿quieres donar? Increíble.\n¡Esto me ayudará a me mantenerlo vivo y libre! Puede mostrar su amor y apoyo donando. Cualquier valor es apreciado. ¡Gracias!"
 donate_bnt: "Donar"
 plan_maintenance_bnt: "Plan de mantenimiento"
 
