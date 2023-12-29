@@ -41,8 +41,6 @@ def draw_scrobble(
     user_lastfm: str,
     listening: str,
     loved: bool,
-    current_time: int,
-    duration: int,
     ):
         # background object
         canvas = Image.new("RGB", (600, 250), (18, 18, 18))
@@ -101,21 +99,6 @@ def draw_scrobble(
                     fill=white, font=artistfont)
 
         
-        bar_color = (30, 30, 30) # black
-        progress_color = (255, 255, 255) # white
-        bar_width = 300
-
-        draw.rounded_rectangle((248, 220, 248 + bar_width, 240), fill=bar_color, outline=None, width=0, radius=10)
-        progress_width = round(bar_width * current_time / duration)
-        draw.rounded_rectangle((248, 220, 248 + progress_width, 240), fill=progress_color, outline=None, width=0, radius=10)
-        
-        current_time_str = f"{current_time // 60:02d}:{current_time % 60:02d}"
-        duration_str = f"{duration // 60:02d}:{duration % 60:02d}"
-
-        text_font = open_sans if checkUnicode(current_time_str + " / " + duration_str) else arial23
-
-        draw.text((248, 245), current_time_str + " / " + duration_str, fill=white, font=text_font)
-
         # return canvas
         image = BytesIO()
         final_img = str(uuid4()) + ".jpg"
