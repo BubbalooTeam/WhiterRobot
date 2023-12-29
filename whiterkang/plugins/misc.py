@@ -603,6 +603,16 @@ async def screenshot(c: WhiterX, m: Message):
         await sent.delete()
         await m.reply_photo("https://telegra.ph/file/082b97b7fa44c85782b85.jpg")
 
+@WhiterX.on_message(filters.command("donate", Config.TRIGGER))
+async def donation(c: WhiterX, m: Message):
+    chat_id = m.chat.id
+    keyboard = [
+        [
+            InlineKeyboardButton(await tld(chat_id, "donate_bnt"), url="https://livepix.gg/DaviTudo")
+        ]
+    ]
+    await m.reply(await tld(chat_id, "donate_string"), reply_markup=InlineKeyboardMarkup(keyboard))
+
 
 
 inline_handler.add_cmd("weather <location>", "Get weather information for the given location or city.", weather_url_thumb, aliases=["weather"])
