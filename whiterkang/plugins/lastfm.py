@@ -243,6 +243,9 @@ async def now_play(c: WhiterX, m: Message):
         view_data_ = await http.get(API, params=params_)
         view_data = view_data_.json()
         get_track = view_data["track"]
+        print(get_track)
+        duration = get_track["duration"]
+        timestamp = get_track["timestamp"]
         get_scrob = int(get_track["userplaycount"])
         if get_scrob == 0:
             scrob = get_scrob + 1
@@ -250,6 +253,8 @@ async def now_play(c: WhiterX, m: Message):
             scrob = get_scrob
         listening = (await tld(m.chat.id, "IS_LISTERING_")).format(scrob)
     except KeyError:
+        duration = 0
+        timestamp = 0
         listening = await tld(m.chat.id, "IS_LISTERING")
     if image_:
         img_ = download(image_, Config.DOWN_PATH)
@@ -265,8 +270,9 @@ async def now_play(c: WhiterX, m: Message):
     else:
         pfp = 'whiterkang/resources/user.png'
 
+
     image = draw_scrobble(img_, pfp, song_name, artist_name,
-                          user_lastfm, listening, loved, 60, 300)
+                          user_lastfm, listening, loved, timestamp, duration)
     prof = f"https://www.last.fm/user/{user_lastfm}"
 
     pre_link_ = f"{song_name} {artist_name}"
