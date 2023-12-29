@@ -230,7 +230,7 @@ async def now_play(c: WhiterX, m: Message):
     song_ = recent_song[0]
     song_name = song_["name"]
     artist_name = song_["artist"]["name"]
-    timestamp = int(song_["date"]["uts"])
+    timestamp = int(recent_song["date"]["uts"])
     image_ = song_["image"][3].get("#text")
     params_ = {
         "method": "track.getInfo",
