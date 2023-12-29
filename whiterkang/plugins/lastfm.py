@@ -230,7 +230,7 @@ async def now_play(c: WhiterX, m: Message):
     song_ = recent_song[0]
     song_name = song_["name"]
     artist_name = song_["artist"]["name"]
-    timestamp = song_["date"]["uts"]
+    timestamp = int(song_["date"]["uts"])
     image_ = song_["image"][3].get("#text")
     params_ = {
         "method": "track.getInfo",
@@ -245,7 +245,7 @@ async def now_play(c: WhiterX, m: Message):
         view_data = view_data_.json()
         get_track = view_data["track"]
         print(get_track)
-        duration = get_track["duration"]
+        duration = int(get_track["duration"])
         get_scrob = int(get_track["userplaycount"])
         if get_scrob == 0:
             scrob = get_scrob + 1
