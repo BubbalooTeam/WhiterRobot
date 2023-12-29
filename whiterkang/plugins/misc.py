@@ -608,7 +608,7 @@ async def donation(c: WhiterX, m: Message):
     chat_id = m.chat.id
     keyboard = [
         [
-            InlineKeyboardButton(await tld(chat_id, "donate_bnt"), url="https://livepix.gg/DaviTudo")
+            InlineKeyboardButton(await tld(chat_id, "donate_bnt"), url="https://livepix.gg/davitudo")
         ]
     ]
     await m.reply(await tld(chat_id, "donate_string"), reply_markup=InlineKeyboardMarkup(keyboard))
