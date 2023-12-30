@@ -181,8 +181,8 @@ async def thanks_for(c: WhiterX, m: Message):
             ]
             await c.send_message(
                 chat_id=gid,
-                text=("<b>print('</b><i>Hi guys. Thanks for adding me to the group, report bugs and errors at -> @fnixsup</i><b>')</b>"),
+                text=(await tld(chat_id, "THANKS_FOR")),
                 disable_notification=True,
             )
         except ChatWriteForbidden:
-            print(f"\n\n[ ERROR ] Bot cannot send messages in {chat_id}\n")
+            await c.send_log(f"\n\n[ ERROR ] WhiterKang cannot send messages in {chat_id}\n")
