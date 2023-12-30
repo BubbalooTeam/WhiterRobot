@@ -613,9 +613,10 @@ async def config(c: WhiterX, union: Message | CallbackQuery):
     reply = union.edit_message_text if isinstance(union, CallbackQuery) else union.reply_text
     chat = union.message.chat if isinstance(union, CallbackQuery) else union.chat
 
-    if isinstance(union, Message) and m.chat.type != ChatType.PRIVATE:
-        if not await find_gp(chat.id):
-            await add_gp(union)
+    if isinstance(union, Message):
+        if union.chat.type != ChatType.PRIVATE:
+            if not await find_gp(chat.id):
+                await add_gp(union)
 
     keyboard = [
         [
