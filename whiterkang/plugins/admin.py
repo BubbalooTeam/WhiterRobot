@@ -695,7 +695,7 @@ async def greet_new_members(c: WhiterX, m: Message):
                 ]
             ]
             await c.send_message(
-                chat_id=gid,
+                chat_id=chat_id,
                 text=(await tld(chat_id, "THANKS_FOR")),
                 reply_markup=InlineKeyboardMarkup(keyboard),
                 disable_notification=True,
