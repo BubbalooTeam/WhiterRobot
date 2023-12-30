@@ -7,7 +7,7 @@ import os.path
 
 
 from hydrogram import filters
-from hydrogram.errors import PeerIdInvalid, UserIdInvalid, UsernameInvalid, BadRequest, Forbidden 
+from hydrogram.errors import PeerIdInvalid, UserIdInvalid, UsernameInvalid, BadRequest, Forbidden, ChatWriteForbidden
 from hydrogram.errors.exceptions.bad_request_400 import ChatNotModified
 from hydrogram.types import ChatPermissions, Message, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, ChatPrivileges
 from hydrogram.enums import ChatMemberStatus, ChatMembersFilter, ChatType
@@ -685,7 +685,7 @@ async def greet_new_members(c: WhiterX, m: Message):
         if not await find_gp(chat_id):
             await add_gp(m)
         try:
-            keyboard [
+            keyboard = [
                 [
                     InlineKeyboardButton(await tld(chat_id, "CONFIG_BNT"), callback_data="config"),
                 ],
