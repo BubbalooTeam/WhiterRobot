@@ -22,7 +22,7 @@ from hydrogram.types import (
     ChatPrivileges,
 )
 
-from whiterkang import WhiterX, version, START_TIME, db
+from whiterkang import WhiterX, version, START_TIME, db, Config
 from whiterkang.helpers import add_user, find_user, add_lang, tld, find_gp, add_gp, require_admin, input_str
 
 HELPABLE: list[str] = []
@@ -35,7 +35,7 @@ for modules in glob.glob("whiterkang/plugins/*.py"):
 
 
 @WhiterX.on_callback_query(filters.regex(pattern=r"^start_back$"))
-@WhiterX.on_message(filters.command("start"))
+@WhiterX.on_message(filters.command("start", Config.TRIGGER))
 async def start_(c: WhiterX, m: Union[Message, CallbackQuery]):
     msg = m if isinstance(m, Message) else m.message
     keyboard = InlineKeyboardMarkup(
@@ -138,7 +138,7 @@ async def set_lang(c: WhiterX, m: Message):
 
 
 @WhiterX.on_callback_query(filters.regex(pattern=r"^help_menu"))
-@WhiterX.on_message(filters.command("help") & filters.private)
+@WhiterX.on_message(filters.command("help", Config.TRIGGER) & filters.private)
 async def help_menu(c: WhiterX, m: Union[Message, CallbackQuery]):
     reply_msg = m.edit_message_text if isinstance(m, CallbackQuery) else m.reply_text
     msg = m if isinstance(m, Message) else m.message
