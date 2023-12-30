@@ -25,6 +25,7 @@ from whiterkang import WhiterX, version, START_TIME, db
 from whiterkang.helpers import time_formatter, add_user, find_user, add_lang, tld, find_gp, add_gp, require_admin
 
 HELPABLE: list[str] = []
+LANGS = ["en", "pt", "es"]
 
 for modules in glob.glob("whiterkang/plugins/*.py"):
     imported_module = import_module((modules)[:-3].replace("/", "."))
@@ -162,27 +163,3 @@ async def help_plugin(c: WhiterX, cb: CallbackQuery):
     keyboard = [InlineKeyboardButton(await tld(cb.message.chat.id, "BACK_BNT"), "help_menu")]
     text = (await tld(cb.message.chat.id, "HELP_BASE")).format(await tld(cb.message.chat.id, f"help-name-{match}")) + await tld(cb.message.chat.id, f"help-plugin-{match}")
     await cb.edit_message_text(text, reply_markup=InlineKeyboardMarkup([keyboard]))
-
-@WhiterX.on_message(filters.new_chat_members & filters.group)
-async def thanks_for(c: WhiterX, m: Message):
-    if c.me.id in [x.id for x in m.new_chat_members]:
-        chat_id = m.chat.id
-        if not await find_gp(chat_id):
-            await add_gp(m)
-        try:
-            keyboard [
-                [
-                    InlineKeyboardButton(await tld(chat_id, "CONFIG_BNT"), callback_data="config"),
-                ],
-                [
-                    InlineKeyboardButton("💵" + await tld(chat_id, "donate_bnt"), url="https://livepix.gg/davitudo"),
-                    InlineKeyboardButton("💶" + await tld(chat_id, "plan_maintenance_bnt"), url="https://livepix.gg/davitudo/whiterkangx"),
-                ]
-            ]
-            await c.send_message(
-                chat_id=gid,
-                text=(await tld(chat_id, "THANKS_FOR")),
-                disable_notification=True,
-            )
-        except ChatWriteForbidden:
-            await c.send_log(f"\n\n[ ERROR ] WhiterKang cannot send messages in {chat_id}\n")

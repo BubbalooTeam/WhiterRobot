@@ -679,6 +679,31 @@ async def greet_new_members(c: WhiterX, m: Message):
     username = ", ".join(
         map(lambda a: "@" + a.username if a.username else a.mention, members)
     )
+
+    if c.me.id in [x.id for x in members]:
+        chat_id = m.chat.id
+        if not await find_gp(chat_id):
+            await add_gp(m)
+        try:
+            keyboard [
+                [
+                    InlineKeyboardButton(await tld(chat_id, "CONFIG_BNT"), callback_data="config"),
+                ],
+                [
+                    InlineKeyboardButton("💵" + await tld(chat_id, "donate_bnt"), url="https://livepix.gg/davitudo"),
+                    InlineKeyboardButton("💶" + await tld(chat_id, "plan_maintenance_bnt"), url="https://livepix.gg/davitudo/whiterkangx"),
+                ]
+            ]
+            await c.send_message(
+                chat_id=gid,
+                text=(await tld(chat_id, "THANKS_FOR")),
+                reply_markup=InlineKeyboardMarkup(keyboard),
+                disable_notification=True,
+            )
+            return
+        except ChatWriteForbidden:
+            await c.send_log(f"\n\n[ ERROR ] WhiterKang cannot send messages in {chat_id}\n")
+            return
     
     #Check if is GBANNED
     if await check_antispam(m.chat.id):
