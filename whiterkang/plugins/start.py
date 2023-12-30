@@ -18,10 +18,11 @@ from hydrogram.types import (
     InlineKeyboardButton,
     InlineKeyboardMarkup,
     Message,
+    ChatPrivileges,
 )
 
 from whiterkang import WhiterX, version, START_TIME, db
-from whiterkang.helpers import time_formatter, add_user, find_user, add_lang, tld, find_gp, add_gp
+from whiterkang.helpers import time_formatter, add_user, find_user, add_lang, tld, find_gp, add_gp, require_admin
 
 HELPABLE: list[str] = []
 
@@ -121,6 +122,19 @@ async def infos(c: WhiterX, cb: CallbackQuery):
         reply_markup=button,
     )
 
+@WhiterX.on_message(filters.command(["setlang", "lang"]))
+@require_admin(ChatPrivileges(can_change_info=True), allow_in_private=True)
+async def set_lang(c: WhiterX, m: Message):
+    lang = input_str(m).lower()
+    if not lang:
+        return await m.reply(await tld(m.chat.id, "LANG"))
+    if not lang.split()[0] in LANGS:
+        return await m.reply(await tld(m.chat.id, "LANG_"))
+    await add_lang(m.chat.id, lang.split()[0])
+    await asyncio.sleep(0.5)
+    await m.reply(await tld(m.chat.id, "LANG_SET"))
+
+
 @WhiterX.on_callback_query(filters.regex(pattern=r"^help_menu"))
 @WhiterX.on_message(filters.command("help") & filters.private)
 async def help_menu(c: WhiterX, m: Union[Message, CallbackQuery]):
@@ -148,3 +162,27 @@ async def help_plugin(c: WhiterX, cb: CallbackQuery):
     keyboard = [InlineKeyboardButton(await tld(cb.message.chat.id, "BACK_BNT"), "help_menu")]
     text = (await tld(cb.message.chat.id, "HELP_BASE")).format(await tld(cb.message.chat.id, f"help-name-{match}")) + await tld(cb.message.chat.id, f"help-plugin-{match}")
     await cb.edit_message_text(text, reply_markup=InlineKeyboardMarkup([keyboard]))
+
+@WhiterX.on_message(filters.new_chat_members & filters.group)
+async def thanks_for(c: WhiterX, m: Message):
+    if c.me.id in [x.id for x in m.new_chat_members]:
+        chat_id = m.chat.id
+        if not await find_gp(chat_id):
+            await add_gp(m)
+        try:
+            keyboard [
+                [
+                    InlineKeyboardButton(await tld(chat_id, "CONFIG_BNT"), callback_data="config"),
+                ],
+                [
+                    InlineKeyboardButton("💵" + await tld(chat_id, "donate_bnt"), url="https://livepix.gg/davitudo"),
+                    InlineKeyboardButton("💶" + await tld(chat_id, "plan_maintenance_bnt"), url="https://livepix.gg/davitudo/whiterkangx"),
+                ]
+            ]
+            await c.send_message(
+                chat_id=gid,
+                text=("<b>print('</b><i>Hi guys. Thanks for adding me to the group, report bugs and errors at -> @fnixsup</i><b>')</b>"),
+                disable_notification=True,
+            )
+        except ChatWriteForbidden:
+            print(f"\n\n[ ERROR ] Bot cannot send messages in {chat_id}\n")

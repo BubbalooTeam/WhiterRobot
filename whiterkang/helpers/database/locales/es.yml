@@ -22,10 +22,12 @@ REPO_BNT: "📦 Código Fuente"
 ABOUT_BNT: "ℹ️ Sobre"
 SUP_BNT: "Soporte"
 CONFIG_TEXT: "<b>⚙ Configuración</b>: esta es la configuración para este grupo. Para obtener más información, <b>haga clic en los botones a continuación.</b>"
+CONFIG_BNT: "⚙️ Config."
 HELP_BASE: "Aquí hay ayuda para el módulo <b>{}</b>:\n\n"
 MOREINFO_BNT: "🔧 Más información..."
 ONLY_DM: "Este comando sólo se puede usar en mi DM."
 ONLY_GROUPS: "Este comando solo se puede usar en grupos, vaya a uno e inténtelo nuevamente."
+THANKS_FOR: "<i>Saludos, mi nombre es <b>{}</b>, soy un bot multifuncional</i> - <b><u>Útil y divertido para tu chat</u></b> , <i>Espero que disfrutes la experiencia...</i>\n<i><u>¡Si quieres contribuir, haz clic en el botón donar o compra un plan de mantenimiento!</u></i>"
 
 # Smartphone help
 help-name-smartphone: "Telefonó"
