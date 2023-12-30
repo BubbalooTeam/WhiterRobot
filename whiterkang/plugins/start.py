@@ -7,6 +7,7 @@
 
 import time
 import glob
+import asyncio
 
 from typing import Union
 from importlib import import_module
@@ -22,7 +23,7 @@ from hydrogram.types import (
 )
 
 from whiterkang import WhiterX, version, START_TIME, db
-from whiterkang.helpers import time_formatter, add_user, find_user, add_lang, tld, find_gp, add_gp, require_admin
+from whiterkang.helpers import add_user, find_user, add_lang, tld, find_gp, add_gp, require_admin, input_str
 
 HELPABLE: list[str] = []
 LANGS = ["en", "pt", "es"]
@@ -123,7 +124,7 @@ async def infos(c: WhiterX, cb: CallbackQuery):
         reply_markup=button,
     )
 
-@WhiterX.on_message(filters.command(["setlang", "lang"]))
+@WhiterX.on_message(filters.command(["setlang", "lang"], Config.TRIGGER))
 @require_admin(ChatPrivileges(can_change_info=True), allow_in_private=True)
 async def set_lang(c: WhiterX, m: Message):
     lang = input_str(m).lower()
