@@ -608,7 +608,7 @@ async def media_config(c: WhiterX, callback: CallbackQuery):
 
 @WhiterX.on_callback_query(filters.regex(r"config"))
 @WhiterX.on_message(filters.command("config", Config.TRIGGER))
-@require_admin(ChatPrivileges(can_change_info=True))
+@require_admin(ChatPrivileges(can_change_info=True), allow_in_private=True)
 async def config(c: WhiterX, union: Message | CallbackQuery):
     reply = union.edit_message_text if isinstance(union, CallbackQuery) else union.reply_text
     chat = union.message.chat if isinstance(union, CallbackQuery) else union.chat
