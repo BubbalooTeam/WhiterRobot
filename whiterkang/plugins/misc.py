@@ -677,7 +677,7 @@ async def plate(c: WhiterX, m: Message):
         await m.reply_text(f"⚠️ <b>{rjson['message']}</b>", quote=True)
 
     else:
-        await m.reply_text(format_plate_info(chat_id, rjson), quote=True)
+        await m.reply_text(await format_plate_info(chat_id, rjson), quote=True)
 
 
 @WhiterX.on_message(filters.command("donate", Config.TRIGGER))
