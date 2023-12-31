@@ -614,7 +614,7 @@ async def ddd(c: WhiterX, m: Message):
     
     base_url = "https://brasilapi.com.br/api/ddd/v1"
     res = requests.get("{}/{}".format(base_url, ddd))
-    if res == 200:
+    if res.status_code == 200:
         state = res.json().get("state")
         states = requests.get(f"https://brasilapi.com.br/api/ibge/uf/v1/{state}")
         state_name = states.json().get("nome")
