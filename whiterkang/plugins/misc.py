@@ -606,8 +606,8 @@ async def screenshot(c: WhiterX, m: Message):
 @WhiterX.on_message(filters.command("ddd", Config.TRIGGER))
 @disableable_dec("ddd")
 async def ddd(c: WhiterX, m: Message):
+    chat_id = m.chat.id
     try:
-         chat_id = m.chat.id
          ddd = m.text.split(maxsplit=1)[1]
     except IndexError:
         return await m.reply_text(await tld(chat_id, "NO_DDD_ARGS"))
@@ -630,9 +630,9 @@ async def ddd(c: WhiterX, m: Message):
 @WhiterX.on_message(filters.command("cep", Config.TRIGGER))
 @disableable_dec("cep")
 async def cep(c: WhiterX, m: Message):
+    chat_id = m.chat.id
     try:
         cep = m.text.split(maxsplit=1)[1]
-        chat_id = m.chat.id
     except IndexError:
         return await m.reply(await tld(chat_id, "NO_CEP_ARGS"))
 
@@ -655,10 +655,10 @@ async def cep(c: WhiterX, m: Message):
 @WhiterX.on_message(filters.command("plate", Config.TRIGGER))
 @disableable_dec("plate")
 async def plate(c: WhiterX, m: Message):
+    chat_id = m.chat.id
     try:
         plate = m.text.split(maxsplit=1)[1]
         plate = PLATE_REGEX.match(plate)
-        chat_id = m.chat.id
     except IndexError:
         return await m.reply(await tld(chat_id, "NO_PLATES_ARGS"))
     
