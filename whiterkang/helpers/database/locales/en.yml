@@ -130,8 +130,19 @@ PIN_LOGGER: "<b>{}:</b>\n#PIN\n<b>Administrator:</b> {}<code>({})</code>\n<b>Mes
 
 
 #ddd
-DDD_RESULT: "📞 <b>DDD - {}</b> \n<b>- State:</b> {} - {}\n\n<b>Cities:</b> <code>{}</code>"
+NO_DDD_ARGS: "<i>You did not specify any DDD!!</i> <b>Please specify a DDD...</b>"
+DDD_RESULT: "📞 <b>DDD - {}</b> \n<b>- State:</b> {} - {}\n\n<b>Cities:</b> <code>{} </code>"
+ERROR_DDD_API: "<b>DDD-API says:</b> <code><u>Invalid response</u></code>"
 
+#CEP
+NO_CEP_ARGS: "<i>You did not enter any zip code, please enter a zip code.</i>"
+CEP_INVALID: "<b>📮 This CEP is invalid!</b>"
+CEP_RESULT: "🌏 <b><i>{}</i></b>\n<b>- City:</b> <i>{}</i>\n<b>- State:< /b> <i>{} - {}</i>\n<b>- Neighborhood:</b> <i>{}</i>\n<b>- Street:</b> </ i>{}</i>"
+
+#plates
+PLATES_NO_ARGS: "<i>No license plate was specified!</i>"
+PLATES_RESULT: "ℹ️ <b>Plate Information</b>\n\n📆 <b>Updated information on {}</b>\n<b>Plate:</b> <code>{}</code >\n<b>Chassis:</b> <code>{}</code>\n<b>Model:</b> <code>{}</code>\n<b>Color:</ b> <code>{}</code>\n<b>Year/Model:</b> <code>{}/{}</code>\n<b>City:</b> <code> {} - {}</code>\n<b>Status:</b> <code>{}</code>"
+API_PLATES_ERROR: "<b>PLATES-API says:</b> <code>Invalid Response</code>"
 
 #Bans
 UNBAN_SUCCESS: "This user can rejoin the group."

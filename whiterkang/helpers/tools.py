@@ -21,8 +21,6 @@ from PIL import Image, ImageOps
 from io import BytesIO
 from speedtest import Speedtest
 from bs4 import BeautifulSoup
-from hashlib import md5
-
 
 from hydrogram import emoji
 from hydrogram.enums import ChatMemberStatus, ChatType, MessageEntityType
@@ -279,6 +277,10 @@ PERMISSIONS_STRING = {
     "can_promote_members": "NO_PROMOTE_MEMBERS_PERM",
 }
 
+PLATE_REGEX = re.compile(
+    r"(?:^| |\n)(([a-z]{3})-?([0-9][a-z0-9][0-9]{2}))(?: |\n|$)", re.IGNORECASE
+)
+
 
 def time_formatter(seconds: float) -> str:
     """tempo"""
@@ -389,7 +391,7 @@ async def cssworker_url(target_url: str):
         soup = BeautifulSoup(acs.text, features="html.parser")
         scl_secret = soup.findAll("input")[1]["value"]
 
-        key = md5((target_url + scl_secret).encode()).hexdigest()
+        key = (target_url + scl_secret).encode()
 
         res = f"https://screenshotlayer.com/php_helper_scripts/scl_api.php?secret_key={key}&url={target_url}"
         return res
@@ -633,7 +635,8 @@ async def check_perms(
         await sender((await tld(chat.id, string)))
     return False
 
-async def scan_file(path: str) -> requests.Response:
+@aiowrap
+def scan_file(path: str) -> requests.Response:
     """ scan file """
     url = 'https://www.virustotal.com/vtapi/v2/file/scan'
     path_name = path.split('/')[-1]
@@ -642,16 +645,16 @@ async def scan_file(path: str) -> requests.Response:
     files = {
         'file': (path_name, open(path, 'rb'))  # skipcq
     }
-    return await http.post(url, files=files, params=params)
+    return requests.post(url, files=files, params=params)
 
-
-async def get_report(sha1: str) -> requests.Response:
+@aiowrap
+def get_report(sha1: str) -> requests.Response:
     """ get report of files """
     url = 'https://www.virustotal.com/vtapi/v2/file/report'
     params = {
         'apikey': Config.VT_API_KEY, 'resource': sha1, 'allinfo': 'False'
     }
-    return await http.get(url, params=params)
+    return requests.get(url, params=params)
 
 async def speedtst_performer(msg): 
     test = Speedtest()
@@ -671,3 +674,29 @@ async def speedtst_performer(msg):
     cc = result["server"]["cc"]
     path = (result["share"])
     return dl, ul, name, host, ping, isp, country, cc, path
+
+@aiowrap
+def format_plate(plate: str) -> str:
+    groups = re.search(PLATE_REGEX, plate).groups()
+    if groups[2].isnumeric():
+        return f"{groups[1]}-{groups[2]}"
+    return f"{groups[1]}{groups[2]}"
+
+async def format_plate_info(chat_id: int, info: dict) -> str:
+    try:
+        date = datetime.fromisoformat(info["data"]).strftime("%d/%m/%Y às %H:%M:%S")
+    except ValueError:
+        date = info["data"]
+
+    return (await tld(chat_id, "PLATES_RESULT")).format(
+        date,
+        await format_plate(info["placa"]),
+        info["chassi"].rjust(17, "*") if info["chassi"] else "Não informado",
+        info["modelo"].title(),
+        info["cor"].title(),
+        info["ano"],
+        info["anoModelo"],
+        info["municipio"].title(),
+        info["uf"],
+        info["situacao"],
+    )

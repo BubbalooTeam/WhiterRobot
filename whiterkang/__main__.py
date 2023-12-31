@@ -22,7 +22,7 @@ logging.basicConfig(level=logging.INFO,
                     datefmt='%d-%b-%y %H:%M:%S',
                     handlers=[
                         RotatingFileHandler(
-                            "WhiterX.log", maxBytes=20480, backupCount=10),
+                            "WhiterX.log", maxBytes=2801100, backupCount=1),
                         logging.StreamHandler()
                     ])
 

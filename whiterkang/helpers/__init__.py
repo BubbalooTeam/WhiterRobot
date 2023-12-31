@@ -38,6 +38,8 @@ from .tools import (
     scan_file,
     get_report,
     speedtst_performer,
+    PLATE_REGEX,
+    format_plate_info,
 )
 from .decorators import disableable_dec, inline_handler, input_str, DISABLABLE_CMDS, require_admin
 from .antispam import gban_user, check_ban, ungban_user, check_antispam #não mecher

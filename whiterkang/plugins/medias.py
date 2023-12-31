@@ -563,7 +563,7 @@ async def sdl(c: WhiterX, m: Message):
         ):
             return None
 
-        await c.send_chat_action(message.chat.id, ChatAction.UPLOAD_DOCUMENT)
+        await c.send_chat_action(m.chat.id, ChatAction.UPLOAD_DOCUMENT)
         await m.reply_media_group(media=medias)
         return None
     return None

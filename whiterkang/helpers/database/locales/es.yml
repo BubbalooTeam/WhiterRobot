@@ -132,7 +132,18 @@ PIN_LOGGER: "<b>{}:</b>\n#PIN\n<b>Administrador:</b> {}<code>({})</code>\n<b>Men
   
   
 #ddd
-DDD_RESULT: "📞 <b>DDD - {}</b> \n<b>- Estado:</b> {} - {}\n\n<b>Ciudades:</b> <code>{} </code>"
+NO_DDD_ARGS: "<i>¡¡No especificaste ningún DDD!!</i> <b>Por favor, especifica un DDD...</b>"
+DDD_RESULT: "📞 <b>DDD - {}</b> \n<b>- Estado:</b> {} - {}\n\n<b>Ciudades:</b> <code>{}  </código>"
+ERROR_DDD_API: "<b>DDD-API dice:</b> <code><u>Respuesta no válida</u></code>"
+
+#CEP
+NO_CEP_ARGS: "<i>No ingresaste ningún código postal, ingresa un código postal.</i>"
+CEP_INVALID: "<b>📮 ¡Este CEP no es válido!</b>"
+CEP_RESULT: "🌏 <b><i>{}</i></b>\n<b>- Ciudad:</b> <i>{}</i>\n<b>- Estado:<  /b> <i>{} - {}</i>\n<b>- Barrio:</b> <i>{}</i>\n<b>- Calle:</b> </  yo>{}</i>"
+
+PLATES_NO_ARGS: "<i>¡No se especificó ninguna matrícula!</i>"
+PLATES_RESULT: "ℹ️ <b>Información de la placa</b>\n\n📆 <b>Información actualizada sobre {}</b>\n<b>Placa:</b> <code>{}</code>  \n<b>Chasis:</b> <code>{}</code>\n<b>Modelo:</b> <code>{}</code>\n<b>Color:</ b  > <code>{}</code>\n<b>Año/Modelo:</b> <code>{}/{}</code>\n<b>Ciudad:</b> <code> {  } - {}</code>\n<b>Estado:</b> <code>{}</code>"
+API_PLATES_ERROR: "<b>PLATES-API dice:</b> <code>Invalid Response</code>"
     
     
 #bans

@@ -129,7 +129,19 @@ UNPIN_LOGGER: "<b>{}:</b>\n#UNPIN\n<b>Administrador:</b> {}<code>({})</code>\n<b
 PIN_LOGGER: "<b>{}:</b>\n#PIN\n<b>Administrador:</b> {}<code>({})</code>\n<b>Mensagem:</b> [Link]({})\n<b>Modo:</b> {}"
 
 #ddd
+NO_DDD_ARGS: "<i>Você não especificou nenhum DDD!!</i> <b>Por favor especifique um DDD...</b>"
 DDD_RESULT: "📞 <b>DDD - {}</b> \n<b>- Estado:</b> {} - {}\n\n<b>Cidades:</b> <code>{}</code>"
+ERROR_DDD_API: "<b>DDD-API diz:</b> <code><u>Invalid response</u></code>"
+
+#cep
+NO_CEP_ARGS: "<i>Você não inseriu nenhum cep, por favor insira um CEP.</i>"
+CEP_INVALID: "<b>📮 Este CEP é invalido!</b>"
+CEP_RESULT: "🌏 <b><i>{}</i></b>\n<b>- Cidade:</b> <i>{}</i>\n<b>- Estado:</b> <i>{} - {}</i>\n<b>- Bairro:</b> <i>{}</i>\n<b>- Rua:</b> </i>{}</i>"
+
+#plates
+PLATES_NO_ARGS: "<i>Nenhuma placa de carro foi especificada!</i>"
+PLATES_RESULT: "ℹ️ <b>Informações da Placa</b>\n\n📆 <b>Informações atualizadas em {}</b>\n<b>Placa:</b> <code>{}</code>\n<b>Chassi:</b> <code>{}</code>\n<b>Modelo:</b> <code>{}</code>\n<b>Cor:</b> <code>{}</code>\n<b>Ano/Modelo:</b> <code>{}/{}</code>\n<b>Cidade:</b> <code>{} - {}</code>\n<b>Situação:</b> <code>{}</code>"
+API_PLATES_ERROR: "<b>PLATES-API says:</b> <code>Invalid Response</code>"
 
 
 #Bans
@@ -547,3 +559,4 @@ VT_EXIT: "🔒 Fechar"
 VT_INFO_FILE: "<b>🗄 Nome do arquivo:</b> <code>{}</code>\n\n<b>💿 Tamanho do arquivo:</b> </code>{}</code>"
 VT_THREATS: "☣️ <i>{} Ameaça(s) foram detectadas!</i>\n\n<b>{}</b>\n\n<i>Descrição</i>\n<code>{}</code>\n\n<b><a href='{}'>Relatório Detalhado</b>"
 VT_FILE_IS_CLEAN: "O arquivo está limpo ✅"
+

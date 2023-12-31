@@ -30,7 +30,7 @@ from hydrogram.enums import ChatType
 from hydrogram.errors import BadRequest
 
 from whiterkang import WhiterX, Config
-from whiterkang.helpers import tld, inline_handler, group_apps, weather_apikey, disableable_dec, scan_file, get_report, humanbytes, find_gp, add_gp, cssworker_url
+from whiterkang.helpers import tld, inline_handler, group_apps, weather_apikey, disableable_dec, scan_file, get_report, humanbytes, find_gp, add_gp, cssworker_url, PLATE_REGEX, format_plate_info
 
 IMG_PATH = Config.DOWN_PATH + "WhiterOS-RemoveBG.png"
 
@@ -602,6 +602,83 @@ async def screenshot(c: WhiterX, m: Message):
     else:
         await sent.delete()
         await m.reply_photo("https://telegra.ph/file/082b97b7fa44c85782b85.jpg")
+
+@WhiterX.on_message(filters.command("ddd", Config.TRIGGER))
+@disableable_dec("ddd")
+async def ddd(c: WhiterX, m: Message):
+    try:
+         chat_id = m.chat.id
+         ddd = m.text.split(maxsplit=1)[1]
+    except IndexError:
+        return await m.reply_text(await tld(chat_id, "NO_DDD_ARGS"))
+    
+    base_url = "https://brasilapi.com.br/api/ddd/v1"
+    res = requests.get("{}/{}".format(base_url, ddd))
+    if res == 200:
+        state = res.json().get("state")
+        states = requests.get(f"https://brasilapi.com.br/api/ibge/uf/v1/{state}")
+        state_name = states.json().get("nome")
+        cities = res.json().get("cities")
+        cidade = "\n- ".join(cities).lower().title() + "."
+        rep = await tld(chat_id, "DDD_RESULT")
+    
+        await m.reply_text(rep.format(ddd, state_name, state, cidade))
+    else:
+        return await m.reply(await tld(chat_id, "ERROR_DDD_API"))
+
+
+@WhiterX.on_message(filters.command("cep", Config.TRIGGER))
+@disableable_dec("cep")
+async def cep(c: WhiterX, m: Message):
+    try:
+        cep = m.text.split(maxsplit=1)[1]
+        chat_id = m.chat.id
+    except IndexError:
+        return await m.reply(await tld(chat_id, "NO_CEP_ARGS"))
+
+    base_url = "https://brasilapi.com.br/api/cep/v1"
+    res = requests.get(f"{base_url}/{cep}")
+    city = res.json().get("city")
+    state = res.json().get("state")
+    states = requests.get(f"https://brasilapi.com.br/api/ibge/uf/v1/{state}")
+    state_name = states.json().get("nome")
+    neighborhood = res.json().get("neighborhood")
+    street = res.json().get("street")
+
+    if res.status_code == 404:
+        await m.reply(await tld(chat_id, "CEP_INVALID"))
+        return
+    else:
+        rep = (await tld(chat_id, "CEP_RESULT")).format(cep, city, state_name, state, neighborhood, street)
+        await m.reply_text(rep)
+
+@WhiterX.on_message(filters.command("plate", Config.TRIGGER))
+@disableable_dec
+async def plate(c: WhiterX, m: Message):
+    try:
+        plate = m.text.split(maxsplit=1)[1]
+        plate = PLATE_REGEX.match(plate)
+        chat_id = m.chat.id
+    except IndexError:
+        return await m.reply(await tld(chat_id, "NO_PLATES_ARGS"))
+    
+    if not plate:
+        return
+    
+    plate = plate.group(1).upper().replace("-", "")
+    
+    try:
+        r = requests.get("https://infoplaca-api.amanoteam.com/{}".format(plate))
+        rjson = r.json()
+    except Exception:
+        return await m.reply(await tld(chat_id, "API_PLATES_ERROR"))
+    
+    if rjson["error"]:
+        await m.reply_text(f"⚠️ <b>{rjson['message']}</b>", quote=True)
+
+    else:
+        await m.reply_text(format_plate_info(rjson), quote=True)
+
 
 @WhiterX.on_message(filters.command("donate", Config.TRIGGER))
 async def donation(c: WhiterX, m: Message):
