@@ -653,7 +653,7 @@ async def cep(c: WhiterX, m: Message):
         await m.reply_text(rep)
 
 @WhiterX.on_message(filters.command("plate", Config.TRIGGER))
-@disableable_dec
+@disableable_dec("plate")
 async def plate(c: WhiterX, m: Message):
     try:
         plate = m.text.split(maxsplit=1)[1]
