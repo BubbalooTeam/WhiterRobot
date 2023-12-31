@@ -63,6 +63,7 @@ async def broadcasting_(c: WhiterX, m: Message):
         query_ = query.strip("-d")
     else:
         query_ = query
+
     async for users in ulist:
         try:
             await c.send_message(chat_id= users["id_"], text=query_, disable_web_page_preview=web_preview)
