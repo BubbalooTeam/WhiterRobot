@@ -660,7 +660,7 @@ async def plate(c: WhiterX, m: Message):
         plate = m.text.split(maxsplit=1)[1]
         plate = PLATE_REGEX.match(plate)
     except IndexError:
-        return await m.reply(await tld(chat_id, "NO_PLATES_ARGS"))
+        return await m.reply(await tld(chat_id, "PLATES_NO_ARGS"))
     
     if not plate:
         return
@@ -677,7 +677,7 @@ async def plate(c: WhiterX, m: Message):
         await m.reply_text(f"⚠️ <b>{rjson['message']}</b>", quote=True)
 
     else:
-        await m.reply_text(format_plate_info(rjson), quote=True)
+        await m.reply_text(format_plate_info(chat_id, rjson), quote=True)
 
 
 @WhiterX.on_message(filters.command("donate", Config.TRIGGER))
