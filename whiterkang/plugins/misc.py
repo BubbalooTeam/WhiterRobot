@@ -31,7 +31,7 @@ from hydrogram.enums import ChatType
 from hydrogram.errors import BadRequest
 
 from whiterkang import WhiterX, Config
-from whiterkang.helpers import tld, inline_handler, group_apps, weather_apikey, disableable_dec, scan_file, get_report, humanbytes, find_gp, add_gp, cssworker_url, PLATE_REGEX, format_plate_info, http
+from whiterkang.helpers import tld, inline_handler, group_apps, weather_apikey, disableable_dec, scan_file, get_report, humanbytes, find_gp, add_gp, cssworker_url, PLATE_REGEX, format_plate_info, http, input_str
 
 IMG_PATH = Config.DOWN_PATH + "WhiterOS-RemoveBG.png"
 
