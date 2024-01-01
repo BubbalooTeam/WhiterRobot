@@ -458,7 +458,7 @@ async def get_download_button(format: str, yt_id: str, user_id: int, chat_id: in
             ]
         ]
 
-    if scroll:
+    if scroll == True:
         back_btn = [
             [
                 InlineKeyboardButton(
@@ -514,7 +514,7 @@ async def get_download_button(format: str, yt_id: str, user_id: int, chat_id: in
                         )
                     )
             buttons += sublists(video_btns, width=2)
-            if scroll:
+            if scroll == True:
                 buttons += back_btn
 
         if aud:
@@ -530,7 +530,7 @@ async def get_download_button(format: str, yt_id: str, user_id: int, chat_id: in
                 ),
                 width=2,
             )
-            if scroll:
+            if scroll == True:
                 buttons += back_btn
 
     return SearchResult(

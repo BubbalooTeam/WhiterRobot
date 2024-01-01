@@ -268,7 +268,10 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
     pages = int(pages)
     scroll = True
 
-    infos = YT_VAR[key_search]
+    try:
+        infos = YT_VAR[key_search]
+    except IndexError:
+        return await cq.answer("Error when obtaining informations, perform a new search...", show_alert=True)
     l_infos = (len(infos))
 
     page = (pages+1)
@@ -425,7 +428,7 @@ async def download_handler(c: WhiterX, cq: CallbackQuery):
     except BaseException as e:
         await c.send_log(e)
         try:
-            await cq.edit_message_caption(caption="<b>Error:</b> <i>{}</i>".format(e))
+            return await cq.edit_message_caption(caption="<b>Error:</b> <i>{}</i>".format(e))
         except Exception as err:
             return await c.send_err(err)
     try:
