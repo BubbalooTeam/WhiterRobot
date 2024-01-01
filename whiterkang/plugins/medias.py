@@ -270,7 +270,7 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
 
     try:
         infos = YT_VAR[key_search]
-    except IndexError:
+    except (IndexError, KeyError):
         return await cq.answer("Error when obtaining informations, perform a new search...", show_alert=True)
     l_infos = (len(infos))
 
@@ -283,8 +283,10 @@ async def scroll_ytdl(c: WhiterX, cq: CallbackQuery):
             return await cq.answer("That's the end of list", show_alert=True)
     skip_page = (pages+5)
     back_page = (pages-1)
-
-    yt = infos[page]
+    try:
+        yt = infos[page]
+    except (IndexError, KeyError):
+        return await cq.answer("Error when obtaining informations, perform a new search...", show_alert=True)
     yt_id = yt["id"]
 
     keyboard = [
