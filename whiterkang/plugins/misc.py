@@ -693,7 +693,7 @@ async def mcserver(c: WhiterX, m: Message):
     reply = await m.reply(await tld(chat_id, "COM_3"))
 
     try:
-        r = await HTTP.get(f"https://api.mcsrvstat.us/3/{args}")
+        r = await http.get(f"https://api.mcsrvstat.us/3/{args}")
     except httpx.TimeoutException:
         await reply.edit("Error in return api")
         return
