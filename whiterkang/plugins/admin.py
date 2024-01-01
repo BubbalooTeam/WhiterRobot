@@ -1544,11 +1544,11 @@ async def ban(c: WhiterX, m: Message):
 async def antispam_status(c: WhiterX, m: Message):
     chat_id = m.chat.id
     flag = input_str(m)
-    if flag == "true" or "on":
+    if ["true", "on"] in flag:
         await DB_ANTISPAM.update_one({"chat_id": m.chat.id}, {"$set": {"status": True}}, upsert=True)
         await m.reply_text(await tld(chat_id, "ANTISPAM_ON"))
         return
-    elif flag == "false" or "off":
+    elif ["false", "off"] in flag:
         await DB_ANTISPAM.update_one({"chat_id": m.chat.id}, {"$set": {"status": False}}, upsert=True)
         await m.reply_text(await tld(chat_id, "ANTISPAM_OFF"))
         return 
@@ -1560,3 +1560,19 @@ async def antispam_status(c: WhiterX, m: Message):
         status = False
 
     await m.reply_text((await tld(chat_id, "ANTISPAM_ERR_WRONG_ARG")).format(status))
+
+@WhiterX.on_message(filters.command("unpin", Config.TRIGGER))
+@require_admin(ChatPrivileges(can_change_info=True), allow_in_private=True)
+async def unpin_message(c: WhiterX, m: Message):
+    chat_id = m.chat.id
+    # support unpinning all
+    if input_str(m) == "all":
+        return await c.unpin_all_chat_messages(chat_id)
+
+    try:
+        mid = m.reply_to_message.id
+        await c.unpin_chat_message(chat_id, mid)
+        await m.reply((await tld(chat_id, "PIN_SUCCESS")).format(mid))
+    except BadRequest:
+        await message.reply(await tld(chat_id, "UNPIN_NOT_MODIFIED"))
+        return

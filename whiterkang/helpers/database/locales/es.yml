@@ -112,24 +112,15 @@ IS_AFK: "¡{} está AFK!\n<b>Visto por última vez hace</b> <i>{}</i>"
 IS_AFK_REASON: "¡{} está AFK!\nDijo que es: {}\n\n<b>Visto por última vez hace</b> <i>{}</i>"
 AFK_LOOGER: "¡{} ya no está AFK!"
   
-  
-#pin
-NO_PIN_BOT: "¡No puedo anclar mensajes aquí! Asegúrate de que soy administrador y puedo anclar mensajes."
-PIN_NO_REPLY: "<i>Necesitas responder a un mensaje para fijarlo.</i>"
-PIN_SUCCESS: '<i>Fijéi <a href="{}">este mensaje</a>.</i>'
-UNPIN_ALL_SUCCESS: "<i>He desanclado todos los mensajes de chat.</i>"
-UNPIN_SUCCESS: '<i>He desanclado <a href="{}">este mensaje</a>.</i>'
-UNPIN_NO_REPLY: "<i>Necesitas responder a un mensaje para desanclar o usar <code>/unpin all</code> para desanclar todo.<i>"
-ANTICHANNELPIN_ENABLED: "Se ha <b>habilitado</b> la eliminación de mensajes de canales vinculados a este grupo."
-ANTICHANNELPIN_DISABLED: "Se ha <b>deshabilitado</b> la eliminación de mensajes de canales vinculados a este grupo."
-ANTICHANNELPIN_ERROR: "Dame un argumento válido <b>on/off</b>."
-CHANNELPIN_DISABLED: "Actualmente, los mensajes del canal desanclar son: <b>Deshabilitado</b>."
-CHANNELPIN_ENABLED: "Actualmente, el desanclar mensajes del canal está: <b>Habilitado</b>."
-PIN_SILENT_ON: "Silencio."
-PIN_SILENT_OFF: "Notificar a los miembros del grupo."
-UNPIN_LOGGER: "<b>{}:</b>\n#UNPIN\n<b>Administrador:</b> {}<code>({})</code>\n<b>Mensaje:</b> [Enlace]({})"
-PIN_LOGGER: "<b>{}:</b>\n#PIN\n<b>Administrador:</b> {}<code>({})</code>\n<b>Mensaje:</b> [Enlace]({})\n<b>Modo:</b> {}"
-  
+#pin 
+PIN_NO_REPLY_MSG: "¡Responder a un mensaje para fijar!"
+PIN_NOT_MODIFIED: "¡Este mensaje ya está fijado!"
+UNPIN_NOT_MODIFIED: "¡No hay mensajes fijados para desbloquear!"
+PIN_SUCCESS: "<i>¡Fijé <b><a href='{}'>este mensaje</a></b> correctamente!</i>"
+UNPIN_SUCCESS: "<i>¡Desanclaré <b><a href='{}'>este mensaje</a></b> correctamente!</i>"
+ANTICHANNELPIN_ENABLED: "Desanclar mensajes de canales vinculados a este grupo ha sido <b>{}.</b>"
+ANTICHANNELPIN_ERROR: "Por favor, proporcione un argumento de <b>activación/desactivación</b> válido."
+CHANNELPIN: "Los mensajes del canal actualmente desanclados son: <b>{}</b>."
   
 #ddd
 NO_DDD_ARGS: "<i>¡¡No especificaste ningún DDD!!</i> <b>Por favor, especifica un DDD...</b>"
@@ -146,29 +137,24 @@ PLATES_RESULT: "ℹ️ <b>Información de la placa</b>\n\n📆 <b>Información a
 API_PLATES_ERROR: "<b>PLATES-API dice:</b> <code>Invalid Response</code>"
     
     
-#bans
+#Restrictions
 UNBAN_SUCCESS: "Este usuario puede volver a unirse al grupo."
-UNBAN_LOGGER: "<b>{}:</b>\n#UNBAN\n<b>Administrador:</b> {}\n<b>Usuario:</b> {} (<code>{}</code>)"
-BAN_IN_ADMIN: "¿Por qué prohibiría a un administrador? Suena como una idea bastante tonta."
-BAN_IN_DEV: "¿Por qué prohibiría a mi desarrollador? Suena como una idea bastante tonta."
-BAN_MY_SELF: "No me desterraré, ¿estás loco?"
-BAN_SUCCESS: "El usuario {} fue prohibido por {} en el chat <b>{}</b>"
-BAN_LOADING: "<code>Prohibir usuario...</code>"
-NO_BAN_BOT: "¡No puedo restringir personas aquí! Asegúrate de que soy un administrador y puedo agregar nuevos administradores."
-BAN_LOGGER: "<b>{}:</b>\n#BAN\n<b>Administrador:</b> {}\n<b>Usuario:</b> {} (<code>{}</code>)\n<b>Motivo:</b> <code>{}</code>"
-TBAN_LOGGER: "<b>{}:</b>\n#TEMP_BANNED\n<b>Administrador:</b> {}\n<b>Usuario:</b> {} (<code>{}</code>)\n<b>Hora:</b> {}\n<b>Motivo:</b> <code>{}</code>"
-TBAN_SUCCESS: "{} fue suspendido temporalmente por <b>{}</b> en <b>{}</b>"
-BANS_NOT_SPECIFIED_USER: "<code>No se especificó un ID de usuario o mensaje válido.</code>"
-BANS_ID_INVALID: "<code>Nombre de usuario o ID de usuario no válido, intente nuevamente con información válida ⚠</code>"
-MUTE_IN_ADMIN: "¿Por qué mutaría a un administrador? Me parece una idea bastante tonta."
+BAN_IN_ADMIN: "¿Por qué prohibiría a un administrador? Parece una idea realmente estúpida."
+BAN_IN_DEV: "¿Por qué debería prohibir a mi desarrollador? Parece una idea realmente estúpida."
+BAN_MY_SELF: "No me voy a prohibir, ¿estás loco?"
+BAN_SUCCESS: "El usuario {} fue baneado por {} en el chat <b>{}</b>"
+BAN_LOADING: "<code>Prohibición de usuario...</code>"
+NO_BAN_BOT: "¡No puedo restringir a las personas aquí! Asegúrate de ser administrador y poder agregar nuevos administradores."
+TBAN_SUCCESS: "{} fue baneado temporalmente por <b>{}</b> el <b>{}</b>"
+BANS_NOT_ESPECIFIED_USER: "<code>No se ha especificado ningún ID de usuario o mensaje válido.</code>"
+MUTE_IN_ADMIN: "¿Por qué debería silenciar a un administrador? Me parece una idea bastante estúpida."
 MUTE_IN_MYSELF: "¡No mutaré!"
-MUTE_SUCESS: "{} esta apagado (mutado) en <b>{}</b>"
-MUTING: "<code>Usuario silenciando...</code>"
-MUTE_IN_DEV: "¿Por qué mutaría a mi desarrollador? Me parece una idea realmente estúpida."
-NO_MUTE_USER: "No tiene suficientes derechos para silenciar usuarios"
-NO_MUTE_BOT: "¡No puedo restringir a las personas aquí! Asegúrate de que soy un administrador y puedo agregar nuevos administradores."
-PEER_ID_INVALID: "No tengo control sobre este usuario, o la identificación no es válida.  Si respondes a uno de sus mensajes, podré interactuar con él."
-  
+MUTE_SUCESS: "{} está silenciado(silenciado) en <b>{}</b>"
+MUTING: "<code>Silenciar usuario...</code>"
+MUTE_IN_DEV: "¿Por qué debería silenciar a mi desarrollador? Parece una idea realmente estúpida."
+NO_MUTE_BOT: "¡No puedo restringir a las personas aquí! Asegúrate de ser administrador y poder agregar nuevos administradores."
+PEER_ID_INVALID: "No tengo control sobre este usuario, o la identificación no es válida. Si respondes a uno de sus mensajes, podré interactuar con él."
+
 #rules
 RULES_UPDATED: "¡Las nuevas reglas del grupo se establecieron con éxito!"
 RULES_NO_ARGS: "<b>No especificaste un argumento para cambiar las reglas</b>"

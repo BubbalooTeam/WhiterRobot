@@ -111,22 +111,14 @@ IS_AFK: "{} está AFK!\n<b>Visto pela última vez à</b> <i>{}</i> <b>atrás</b>
 IS_AFK_REASON: "{} está AFK!\nDisse que está: {}\n\n<b>Visto pela última vez à</b> <i>{}</i> <b>atrás</b>"
 AFK_LOOGER: "{} não está mais AFK!"
 
-#pin
-NO_PIN_BOT: "Não consigo fixar mensagens aqui! Verifique se sou administrador e posso fixar mensagens."
-PIN_NO_REPLY: "<i>Você precisa responder uma mensagem para fixa-la.</i>"
-PIN_SUCCESS: '<i>Eu fixei <a href="{}">esta mensagem</a>.</i>'
-UNPIN_ALL_SUCCESS: "<i>Eu desfixei todas mensagens do chat.</i>"
-UNPIN_SUCCESS: '<i>Eu desfixei <a href="{}">esta mensagem</a>.</i>'
-UNPIN_NO_REPLY: "<i>Você precisa responder uma mensagem para desafixar ou usar <code>/unpin all</code> para desfixar todas.<i>"
-ANTICHANNELPIN_ENABLED: "A Desfixação de mensagens de canais vinculados a este grupo foi <b>Ativada.</b>"
-ANTICHANNELPIN_DISABLED: "A Desfixação de mensagens de canais vinculados a este grupo foi <b>Desativada.</b>"
+PIN_NO_REPLY_MSG: "Responda a uma mensagem para fixar!"
+PIN_NOT_MODIFIED: "Essa mensagem já está fixada!"
+UNPIN_NOT_MODIFIED: "Não há nenhuma mensagem fixada para desafixar!"
+PIN_SUCCESS: "<i>Eu fixei <b><a href='{}'>está mensagem</a></b> com sucesso!</i>"
+UNPIN_SUCCESS: "<i>Eu desafixei <b><a href='{}'>está mensagem</a></b> com sucesso!</i>"
+ANTICHANNELPIN_ENABLED: "A Desfixação de mensagens de canais vinculados a este grupo foi <b>{}.</b>"
 ANTICHANNELPIN_ERROR: "Por Favor, Me de um argumento valido <b>on/off</b>."
-CHANNELPIN_DISABLED: "Atualmente a desfixação de mensagens de canais está: <b>Desativada</b>."
-CHANNELPIN_ENABLED: "Atualmente a desfixação de mensagens de canais está: <b>Ativada</b>."
-PIN_SILENT_ON: "Silencio."
-PIN_SILENT_OFF: "Notificar os membros do grupo."
-UNPIN_LOGGER: "<b>{}:</b>\n#UNPIN\n<b>Administrador:</b> {}<code>({})</code>\n<b>Mensagem:</b> [Link]({})"
-PIN_LOGGER: "<b>{}:</b>\n#PIN\n<b>Administrador:</b> {}<code>({})</code>\n<b>Mensagem:</b> [Link]({})\n<b>Modo:</b> {}"
+CHANNELPIN: "Atualmente a desfixação de mensagens de canais está: <b>{}</b>."
 
 #ddd
 NO_DDD_ARGS: "<i>Você não especificou nenhum DDD!!</i> <b>Por favor especifique um DDD...</b>"
@@ -144,26 +136,21 @@ PLATES_RESULT: "ℹ️ <b>Informações da Placa</b>\n\n📆 <b>Informações at
 API_PLATES_ERROR: "<b>PLATES-API says:</b> <code>Invalid Response</code>"
 
 
-#Bans
+#Restrictions
 UNBAN_SUCCESS: "Este usuário pode entrar novamente no grupo."
-UNBAN_LOGGER: "<b>{}:</b>\n#UNBAN\n<b>Administrador:</b> {}\n<b>Usuario:</b> {} (<code>{}</code>)"
 BAN_IN_ADMIN: "Por que eu baniria um(a) administrador(a)? Parece uma ideia bem idiota."
 BAN_IN_DEV: "Por que eu baniria meu(minha) desenvolvedor(a)? Parece uma ideia bem idiota."
 BAN_MY_SELF: "Eu não vou me banir, você está louco?"
 BAN_SUCCESS: "Usuário {} foi banido por {} no chat <b>{}</b>"
 BAN_LOADING: "<code>Banindo usuário...</code>"
 NO_BAN_BOT: "Não posso restringir as pessoas aqui! Certifique-se de que sou administrador e de que posso adicionar novos administradores."
-BAN_LOGGER: "<b>{}:</b>\n#BAN\n<b>Administrador:</b> {}\n<b>Usuário:</b> {} (<code>{}</code>)\n<b>Motivo:</b> <code>{}</code>" 
-TBAN_LOGGER: "<b>{}:</b>\n#TEMP_BANNED\n<b>Admin:</b> {}\n<b>Usuario:</b> {} (<code>{}</code>)\n<b>Tempo:</b> {}\n<b>Motivo:</b> <code>{}</code>"
 TBAN_SUCCESS: "{} foi banido(a) temporariamente por <b>{}</b> em <b>{}</b>"
 BANS_NOT_ESPECIFIED_USER: "<code>Nenhum user_id válido ou mensagem especificada.</code>"
-BANS_ID_INVALID: "<code>Nome de usuário ou ID de usuário inválido, tente novamente com informações válidas ⚠</code>"
 MUTE_IN_ADMIN: "Porque eu iria mutar um(a) administrador(a)? Isso me parece uma idéia bem idiota."
 MUTE_IN_MYSELF: "Eu não vou mutar!"
 MUTE_SUCESS: "{} está silenciado(mutado) em <b>{}</b>"
 MUTING: "<code>Mutando Usuário...</code>"
 MUTE_IN_DEV: "Porque eu iria mutar meu desenvolvedor? Isso me parece uma idéia muito idiota."
-NO_MUTE_USER: "Você não tem direitos suficientes para silenciar usuários"
 NO_MUTE_BOT: "Não posso restringir as pessoas aqui! Certifique-se de que sou administrador e de que posso adicionar novos administradores."
 PEER_ID_INVALID: "Eu não tenho controle sobre esse usuário, ou o ID não é válido. Se você responder a uma de suas mensagens, eu serei capaz interagir com ele."
 
