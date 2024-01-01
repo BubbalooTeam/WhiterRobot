@@ -1575,5 +1575,5 @@ async def unpin_message(c: WhiterX, m: Message):
         await c.unpin_chat_message(chat_id, mid)
         await m.reply((await tld(chat_id, "UNPIN_SUCCESS")).format(f"t.me/c/{chat}/{mid}"))
     except BadRequest:
-        await message.reply(await tld(chat_id, "UNPIN_NOT_MODIFIED"))
+        await m.reply(await tld(chat_id, "UNPIN_NOT_MODIFIED"))
         return
