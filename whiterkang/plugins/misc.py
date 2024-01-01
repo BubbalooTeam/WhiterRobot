@@ -687,7 +687,7 @@ async def mcserver(c: WhiterX, m: Message):
     chat_id = m.chat.id
 
     if not args:
-        await message.reply_text("I need args..")
+        await m.reply_text("I need args..")
         return
 
     reply = await m.reply(await tld(chat_id, "COM_3"))
