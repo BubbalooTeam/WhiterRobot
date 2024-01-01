@@ -7,6 +7,7 @@ import requests
 import html
 import asyncio
 import json
+import httpx
 
 from gpytranslate import Translator
 from covid import Covid
@@ -30,7 +31,7 @@ from hydrogram.enums import ChatType
 from hydrogram.errors import BadRequest
 
 from whiterkang import WhiterX, Config
-from whiterkang.helpers import tld, inline_handler, group_apps, weather_apikey, disableable_dec, scan_file, get_report, humanbytes, find_gp, add_gp, cssworker_url, PLATE_REGEX, format_plate_info
+from whiterkang.helpers import tld, inline_handler, group_apps, weather_apikey, disableable_dec, scan_file, get_report, humanbytes, find_gp, add_gp, cssworker_url, PLATE_REGEX, format_plate_info, http
 
 IMG_PATH = Config.DOWN_PATH + "WhiterOS-RemoveBG.png"
 
@@ -679,6 +680,64 @@ async def plate(c: WhiterX, m: Message):
     else:
         await m.reply_text(await format_plate_info(chat_id, rjson), quote=True)
 
+@WhiterX.on_message(filters.command("mcserver", Config.TRIGGER))
+@disableable_dec("mcstatus")
+async def mcserver(c: WhiterX, m: Message):
+    args = input_str(m)
+    chat_id = m.chat.id
+
+    if not args:
+        await message.reply_text("I need args..")
+        return
+
+    reply = await m.reply(await tld(chat_id, "COM_3"))
+
+    try:
+        r = await HTTP.get(f"https://api.mcsrvstat.us/3/{args}")
+    except httpx.TimeoutException:
+        await reply.edit("Error in return api")
+        return
+
+    if r.status_code in [500, 504, 505]:
+        await reply.edit("Server Unavalaible!")
+        return
+
+    a = r.json()
+    if a["online"]:
+        text = "<b>Minecraft Server:</b>"
+        text += f"\n<b>IP:</b> {a['hostname'] if 'hostname' in a else a['ip']}\
+(<code>{a['ip']}</code>)"
+        text += f"\n<b>Port:</b> <code>{a['port']}</code>"
+        text += f"\n<b>Online:</b> <code>{a['online']}</code>"
+        text += f"\n<b>Mods:</b> <code>{len(a['mods']['names']) if 'mods' in a else 'N/A'}</code>"
+        text += f"\n<b>Players:</b> <code>{a['players']['online']}/{a['players']['max']}</code>"
+        if "list" in a["players"]:
+            text += "\n<b>Players list:</b> {}".format(
+                ", ".join(
+                    f"<a href='https://namemc.com/profile/{name}'>{name}</a>"
+                    for name in a["players"]["list"]
+                )
+            )
+
+        text += f"\n<b>Version:</b> <code>{a['version']}</code>"
+        with contextlib.suppress(KeyError):
+            text += f"\n<b>Software:</b> <code>{a['software']}</code>"
+        text += f"\n<b>MOTD:</b> <i>{a['motd']['clean'][0]}</i>"
+
+    elif not a["ip"] or a["ip"] == "127.0.0.1":
+        await reply.edit(strings["mcstatus_invalid_server"])
+        return
+
+    else:
+        text = (
+            "<b>Minecraft Server</b>:"
+            f"\n<b>IP:</b> {a['hostname'] if 'hostname' in a else a['ip']} \
+(<code>{a['ip']}</code>)"
+            f"\n<b>Port:</b> <code>{a['port']}</code>"
+            f"\n<b>Online:</b> <code>{a['online']}</code>"
+        )
+
+    await reply.edit(text, disable_web_page_preview=True)
 
 @WhiterX.on_message(filters.command("donate", Config.TRIGGER))
 async def donation(c: WhiterX, m: Message):
