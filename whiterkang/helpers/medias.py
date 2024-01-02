@@ -428,6 +428,7 @@ class SearchResult:
         return json.dumps(out, indent=4)
 
 async def get_download_button(format: str, yt_id: str, user_id: int, chat_id: int, key_search: str, scroll: bool) -> SearchResult:
+    print(scroll)
     aud = False
     vid = False
     buttons = []
@@ -458,7 +459,7 @@ async def get_download_button(format: str, yt_id: str, user_id: int, chat_id: in
             ]
         ]
 
-    if scroll == True:
+    if scroll is True:
         back_btn = [
             [
                 InlineKeyboardButton(
@@ -514,7 +515,7 @@ async def get_download_button(format: str, yt_id: str, user_id: int, chat_id: in
                         )
                     )
             buttons += sublists(video_btns, width=2)
-            if scroll == True:
+            if scroll is True:
                 buttons += back_btn
 
         if aud:
@@ -530,7 +531,7 @@ async def get_download_button(format: str, yt_id: str, user_id: int, chat_id: in
                 ),
                 width=2,
             )
-            if scroll == True:
+            if scroll is True:
                 buttons += back_btn
 
     return SearchResult(
