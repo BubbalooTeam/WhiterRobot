@@ -703,7 +703,7 @@ async def format_plate_info(chat_id: int, info: dict) -> str:
         info["situacao"],
     )
 
-arq = ARQ("https://arq.hamker.dev", Config.ARQ_API_KEY, http)
+arq = ARQ("https://arq.hamker.dev", Config.ARQ_API_KEY, httpx.Client())
 
 async def quotify(messages: list):
     response = await arq.quotly(messages)
