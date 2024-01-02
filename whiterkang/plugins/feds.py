@@ -71,7 +71,7 @@ async def join_fed(c: WhiterX, m: Message):
         await m.reply("This chat has already joined a federation! Please use /fleave to leave that federation")
         return
     
-    await add_fed_chat(chat_id, fed_id)
+    await add_fed_chat(chat_id, fed["fed_id"])
 
     await m.reply("Great! Chat <b>{}</b> is now a part of <b>{}</b> federation!".format(
         m.chat.title, html.escape(fed['fed_name'], False))
