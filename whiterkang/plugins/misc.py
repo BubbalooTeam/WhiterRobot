@@ -7,6 +7,7 @@ import html
 import asyncio
 import json
 import httpx
+import logging
 
 from gpytranslate import Translator
 from covid import Covid
@@ -26,7 +27,7 @@ from hydrogram.types import (
     InlineQueryResultArticle,
     InputTextMessageContent,
 )
-from hydrogram.enums import ChatType
+from hydrogram.enums import ChatType, ChatAction
 from hydrogram.errors import BadRequest
 
 from whiterkang import WhiterX, Config
@@ -740,14 +741,12 @@ async def mcserver(c: WhiterX, m: Message):
 
 @WhiterX.on_message(filters.command("q", Config.TRIGGER))
 async def quotly_func(c: WhiterX, m: Message):
+    chat_id = m.chat.id
     if not m.reply_to_message:
         return await m.reply_text("Reply to a message to quote it.")
 
     if not m.reply_to_message.text:
-        return await m.reply_text(
-            "Replied message has no text, can't quote it."
-        )
-    msg = await m.reply_text("<i>Quoting Messages...</i>")
+        return
     if len(m.command) < 2:
         messages = [m.reply_to_message]
 
@@ -755,7 +754,7 @@ async def quotly_func(c: WhiterX, m: Message):
         arg = isArgInt(m)
         if arg[0]:
             if arg[1] < 2 or arg[1] > 10:
-                return await msg.edit("Argument must be between 2-10.")
+                return
 
             count = arg[1]
 
@@ -764,7 +763,7 @@ async def quotly_func(c: WhiterX, m: Message):
             messages = [
                 i
                 for i in await c.get_messages(
-                    m.chat.id,
+                    chat_id,
                     range(
                         m.reply_to_message.id,
                         m.reply_to_message.id + (count + 5),
@@ -775,35 +774,29 @@ async def quotly_func(c: WhiterX, m: Message):
             ]
             messages = messages[:count]
         else:
-            if input_str(m) != "r":
-                return await msg.edit(
-                    "Incorrect Argument, Pass **'r'** or **'INT'**, **EX:** __/q 2__"
-                )
+            if m.text.strip().split(None, 1)[1].strip() != "r":
+                return
             reply_message = await c.get_messages(
-                m.chat.id,
+                chat_id,
                 m.reply_to_message.id,
                 replies=1,
             )
             messages = [reply_message]
     else:
-        return await msg.edit(
-            "Incorrect argument, check quotly module in help section."
-        )
+        return
     try:
         if not m:
-            return await msg.edit("Something went wrong.")
+            return
 
         sticker = await quotify(messages)
+        await c.send_chat_action(chat_id, ChatAction.CHOOSE_STICKER)
         if not sticker[0]:
-            await m.reply_text(sticker[1])
-            return await msg.delete()
+            return
         sticker = sticker[1]
         await m.reply_sticker(sticker)
-        await msg.delete()
         sticker.close()
     except Exception as e:
-        await msg.edit(
-            "Something went wrong while quoting messages,\nThis error usually happens when there's a message containing something other than text, or one of the messages in-between are deleted.\n<b>Error:</b> {}".format(e))
+        return
 
 @WhiterX.on_message(filters.command("donate", Config.TRIGGER))
 async def donation(c: WhiterX, m: Message):
