@@ -111,10 +111,11 @@ IS_AFK_REASON: "{} is AFK!\nSaid it is: {}\n\n<b>Last seen</b> <i>{}</i> <b>ago<
 AFK_IS_NOW: "{} is now AFK!"
 AFK_LOOGER: "{} is no longer AFK!"
 
-PIN_NO_REPLY_MSG: "Reply to a message to pin!"
+PIN_NO_REPLY_MSG: "Reply to a message to pin/unpin!"
 PIN_NOT_MODIFIED: "This message is already pinned!"
 UNPIN_NOT_MODIFIED: "There are no pinned messages to unpin!"
 PIN_SUCCESS: "<i>I pinned <b><a href='{}'>this message</a></b> successfully!</i>"
+NPIN_SUCCESS: "<i>I pinned <b><a href='{}'>this message</a></b> successfully and also notified all members!</i>"
 UNPIN_SUCCESS: "<i>I unpinned <b><a href='{}'>this message</a></b> successfully!</i>"
 ANTICHANNELPIN_ENABLED: "Unpinning messages from channels linked to this group has been <b>{}.</b>"
 ANTICHANNELPIN_ERROR: "Please Give Me a Valid <b>on/off</b> Argument."

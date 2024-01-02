@@ -1562,13 +1562,14 @@ async def antispam_status(c: WhiterX, m: Message):
     await m.reply_text((await tld(chat_id, "ANTISPAM_ERR_WRONG_ARG")).format(status))
 
 @WhiterX.on_message(filters.command("unpin", Config.TRIGGER))
-@require_admin(ChatPrivileges(can_change_info=True), allow_in_private=True)
+@require_admin(ChatPrivileges(can_change_info=True))
 async def unpin_message(c: WhiterX, m: Message):
     chat_id = m.chat.id
     # support unpinning all
     if input_str(m) == "all":
         return await c.unpin_all_chat_messages(chat_id)
-
+    elif not m.reply_to_message:
+        return await m.reply(await tld(chat_id, "PIN_NO_REPLY_MSG"))
     try:
         mid = m.reply_to_message.id
         chat = str(f"{chat_id}").replace("-100", "")
@@ -1576,4 +1577,23 @@ async def unpin_message(c: WhiterX, m: Message):
         await m.reply((await tld(chat_id, "UNPIN_SUCCESS")).format(f"t.me/c/{chat}/{mid}"))
     except BadRequest:
         await m.reply(await tld(chat_id, "UNPIN_NOT_MODIFIED"))
+        return
+
+@WhiterX.on_message(filters.command("pin", Config.TRIGGER))
+@require_admin(ChatPrivileges(can_change_info=True))
+async def unpin_message(c: WhiterX, m: Message):
+    chat_id = m.chat.id
+    if not m.reply_to_message:
+        return await m.reply(await tld(chat_id, "PIN_NO_REPLY_MSG"))
+    try:
+        mid = m.reply_to_message.id
+        chat = str(f"{chat_id}").replace("-100", "")
+        dns = "loud" not in m.text
+        await c.pin_chat_message(chat_id, mid, disable_notification=dns)
+        if dns:
+            await m.reply((await tld(chat_id, "PIN_SUCCESS")).format(f"t.me/c/{chat}/{mid}"))
+        else:
+            await m.reply((await tld(chat_id, "NPIN_SUCCESS")).format(f"t.me/c/{chat}/{mid}"))
+    except BadRequest:
+        await m.reply(await tld(chat_id, "PIN_NOT_MODIFIED"))
         return

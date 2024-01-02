@@ -111,10 +111,11 @@ IS_AFK: "{} está AFK!\n<b>Visto pela última vez à</b> <i>{}</i> <b>atrás</b>
 IS_AFK_REASON: "{} está AFK!\nDisse que está: {}\n\n<b>Visto pela última vez à</b> <i>{}</i> <b>atrás</b>"
 AFK_LOOGER: "{} não está mais AFK!"
 
-PIN_NO_REPLY_MSG: "Responda a uma mensagem para fixar!"
+PIN_NO_REPLY_MSG: "Responda a uma mensagem para fixar/desafixar!"
 PIN_NOT_MODIFIED: "Essa mensagem já está fixada!"
 UNPIN_NOT_MODIFIED: "Não há nenhuma mensagem fixada para desafixar!"
 PIN_SUCCESS: "<i>Eu fixei <b><a href='{}'>está mensagem</a></b> com sucesso!</i>"
+NPIN_SUCCESS: "<i>Eu fixei <b><a href='{}'>está mensagem</a></b> com sucesso e também notifiquei todos os membros!</i>"
 UNPIN_SUCCESS: "<i>Eu desafixei <b><a href='{}'>está mensagem</a></b> com sucesso!</i>"
 ANTICHANNELPIN_ENABLED: "A Desfixação de mensagens de canais vinculados a este grupo foi <b>{}.</b>"
 ANTICHANNELPIN_ERROR: "Por Favor, Me de um argumento valido <b>on/off</b>."

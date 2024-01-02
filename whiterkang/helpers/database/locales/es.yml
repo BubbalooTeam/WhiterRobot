@@ -113,10 +113,11 @@ IS_AFK_REASON: "¡{} está AFK!\nDijo que es: {}\n\n<b>Visto por última vez hac
 AFK_LOOGER: "¡{} ya no está AFK!"
   
 #pin 
-PIN_NO_REPLY_MSG: "¡Responder a un mensaje para fijar!"
+PIN_NO_REPLY_MSG: "¡Responder a un mensaje para fijar/desanclaré!"
 PIN_NOT_MODIFIED: "¡Este mensaje ya está fijado!"
 UNPIN_NOT_MODIFIED: "¡No hay mensajes fijados para desbloquear!"
 PIN_SUCCESS: "<i>¡Fijé <b><a href='{}'>este mensaje</a></b> correctamente!</i>"
+NPIN_SUCCESS: "<i>Fijé <b><a href='{}'>este mensaje</a></b> correctamente y también notifiqué a todos los miembros.</i>"
 UNPIN_SUCCESS: "<i>¡Desanclaré <b><a href='{}'>este mensaje</a></b> correctamente!</i>"
 ANTICHANNELPIN_ENABLED: "Desanclar mensajes de canales vinculados a este grupo ha sido <b>{}.</b>"
 ANTICHANNELPIN_ERROR: "Por favor, proporcione un argumento de <b>activación/desactivación</b> válido."
