@@ -35,12 +35,12 @@ async def add_fed(fed_name, creator_id):
     return creator_id, fed_name, fed_id
 
 async def add_fed_chat(fed_id, chat_id):
-    await DB_FEDS.update_one(
-        {'fed_id': fed_id},
-        {"$push": {'chats': chat_id}}
+    return await DB_FEDS.update_one(
+        {'_id': fed_id},
+        {"$addToSet": {'chats': {'$each': [chat_id]}}}
     )
 async def del_fed_chat(fed_id, chat_id):
-    await DB_FEDS.update_one(
+    return await DB_FEDS.update_one(
         {'fed_id': fed_id},
         {"$pull": {'chats': {'$each': [chat_id]}}}
     )
