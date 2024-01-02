@@ -39,7 +39,6 @@ async def add_fed_chat(fed_id, chat_id):
         {'_id': fed_id},
         {"$set": {'chats': {'$each': [chat_id]}}}, upsert=True
     )
-
 async def del_fed_chat(fed_id, chat_id):
     await DB_FEDS.update_one(
         {'_id': fed_id},
