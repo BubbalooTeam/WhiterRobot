@@ -28,26 +28,24 @@ class Config:
         6419654672, # @lucmsilva
     )
     ADMINS = {}
-    LASTFM_API_KEY = os.environ.get("LASTFM_API_KEY")
     API_ID = int(os.environ.get("API_ID"))
-    RAM_CHECK = 1
-    CPU_MHZ_CHECK = 1000
-    STORAGE_CHECK = 20
     API_HASH = os.environ.get("API_HASH")
     BOT_TOKEN = os.environ.get("BOT_TOKEN")
     GP_LOGS = int(os.environ.get("GP_LOGS"))
     REMOVE_BG_API_KEY = os.environ.get("REMOVE_BG_API_KEY")  
     DB_URI = os.environ.get("DATABASE_URL")
+    LASTFM_API_KEY = os.environ.get("LASTFM_API_KEY")
+    SW_API = os.environ.get("SW_API")
+    VT_API_KEY = os.environ.get("VT_API_KEY")
+    ARQ_API_KEY = os.environ.get("ARQ_API_KEY", "https://arq.hamker.dev")
+    PEXELS_API_KEY = os.environ.get("PEXELS_API_KEY")
+    GBAN_LOGS = os.environ.get("GBAN_LOGS")
+    GSMARENA_API = os.environ.get("GSMARENA_API")
     TRIGGER = os.environ.get("TRIGGER", "/ !".split())
     WHITELIST_CHATS = set([])  # chat id aq
     EDIT_SLEEP_TIMEOUT = 5
     OWNER = int(1715384854)
     DOWN_PATH = "whiterkang/xcache/"
-    SW_API = os.environ.get("SW_API")
-    VT_API_KEY = os.environ.get("VT_API_KEY")
-    PEXELS_API_KEY = os.environ.get("PEXELS_API_KEY")
-    GBAN_LOGS = os.environ.get("GBAN_LOGS")
-    GSMARENA_API = os.environ.get("GSMARENA_API")
     
     HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY")
     HEROKU_API_NAME = os.environ.get("HEROKU_API_NAME")

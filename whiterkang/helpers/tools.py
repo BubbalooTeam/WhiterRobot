@@ -11,6 +11,7 @@ import asyncio
 import spamwatch
 import logging
 import json
+import aiohttp
 
 from datetime import datetime, timedelta
 from httpx import HTTPError
@@ -21,6 +22,7 @@ from PIL import Image, ImageOps
 from io import BytesIO
 from speedtest import Speedtest
 from bs4 import BeautifulSoup
+from Python_ARQ import ARQ
 
 from hydrogram import emoji
 from hydrogram.enums import ChatMemberStatus, ChatType, MessageEntityType
@@ -700,3 +702,23 @@ async def format_plate_info(chat_id: int, info: dict) -> str:
         info["uf"],
         info["situacao"],
     )
+
+arq = ARQ("https://arq.hamker.dev", Config.ARQ_API_KEY, http)
+
+async def quotify(messages: list):
+    response = await arq.quotly(messages)
+    print(response.result)
+    if not response.ok:
+        return [False, response.result]
+    sticker = response.result
+    sticker = BytesIO(sticker)
+    sticker.name = "sticker.webp"
+    return [True, sticker]
+
+def isArgInt(m: Message) -> list:
+    count = m.text.strip().split(None, 1)[1].strip()
+    try:
+        count = int(count)
+        return [True, count]
+    except ValueError:
+        return [False, 0]

@@ -37,6 +37,7 @@ Pillow
 pyaes
 PyroMod
 stagger
+Python-ARQ
 PySocks
 pyyaml
 python-dotenv

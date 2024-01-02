@@ -30,7 +30,7 @@ from hydrogram.enums import ChatType
 from hydrogram.errors import BadRequest
 
 from whiterkang import WhiterX, Config
-from whiterkang.helpers import tld, inline_handler, group_apps, weather_apikey, disableable_dec, scan_file, get_report, humanbytes, find_gp, add_gp, cssworker_url, PLATE_REGEX, format_plate_info, http, input_str
+from whiterkang.helpers import tld, inline_handler, group_apps, weather_apikey, disableable_dec, scan_file, get_report, humanbytes, find_gp, add_gp, cssworker_url, PLATE_REGEX, format_plate_info, http, input_str, quotify, isArgInt
 
 IMG_PATH = Config.DOWN_PATH + "WhiterOS-RemoveBG.png"
 
@@ -724,7 +724,7 @@ async def mcserver(c: WhiterX, m: Message):
         text += f"\n<b>MOTD:</b> <i>{a['motd']['clean'][0]}</i>"
 
     elif not a["ip"] or a["ip"] == "127.0.0.1":
-        await reply.edit(strings["mcstatus_invalid_server"])
+        await reply.edit("Invalid serer...")
         return
 
     else:
@@ -737,6 +737,73 @@ async def mcserver(c: WhiterX, m: Message):
         )
 
     await reply.edit(text, disable_web_page_preview=True)
+
+@WhiterX.on_message(filters.command("q", Config.TRIGGER))
+async def quotly_func(c: WhiterX, m: Message):
+    if not m.reply_to_message:
+        return await m.reply_text("Reply to a message to quote it.")
+
+    if not m.reply_to_message.text:
+        return await m.reply_text(
+            "Replied message has no text, can't quote it."
+        )
+    msg = await m.reply_text("<i>Quoting Messages...</i>")
+    if len(m.command) < 2:
+        messages = [m.reply_to_message]
+
+    elif len(m.command) == 2:
+        arg = isArgInt(m)
+        if arg[0]:
+            if arg[1] < 2 or arg[1] > 10:
+                return await msg.edit("Argument must be between 2-10.")
+
+            count = arg[1]
+
+            # Fetching 5 extra messages so that we can ignore media
+            # messages and still end up with correct offset
+            messages = [
+                i
+                for i in await c.get_messages(
+                    m.chat.id,
+                    range(
+                        m.reply_to_message.id,
+                        m.reply_to_message.id + (count + 5),
+                    ),
+                    replies=0,
+                )
+                if not i.empty and not i.media
+            ]
+            messages = messages[:count]
+        else:
+            if input_str(m) != "r":
+                return await msg.edit(
+                    "Incorrect Argument, Pass **'r'** or **'INT'**, **EX:** __/q 2__"
+                )
+            reply_message = await c.get_messages(
+                m.chat.id,
+                m.reply_to_message.id,
+                replies=1,
+            )
+            messages = [reply_message]
+    else:
+        return await msg.edit(
+            "Incorrect argument, check quotly module in help section."
+        )
+    try:
+        if not m:
+            return await msg.edit("Something went wrong.")
+
+        sticker = await quotify(messages)
+        if not sticker[0]:
+            await m.reply_text(sticker[1])
+            return await msg.delete()
+        sticker = sticker[1]
+        await m.reply_sticker(sticker)
+        await msg.delete()
+        sticker.close()
+    except Exception as e:
+        await msg.edit(
+            "Something went wrong while quoting messages,\nThis error usually happens when there's a message containing something other than text, or one of the messages in-between are deleted.\n<b>Error:</b> {}".format(e))
 
 @WhiterX.on_message(filters.command("donate", Config.TRIGGER))
 async def donation(c: WhiterX, m: Message):
