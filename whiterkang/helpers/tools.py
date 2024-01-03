@@ -796,13 +796,14 @@ async def quotify(messages: [Message], replied: bool):
         }
 
     # Agora, vamos processar os dados e prepará-los para a solicitação
-    response = requests.post('https://bot.lyo.su/quote/generate', json=json).json()
-    if not response.ok:
-        return [False, response.result]
-    buffer = base64.b64decode(response['result']['image'].encode('utf-8'))
-    buffer = BytesIO(buffer)
-    buffer.name = "sticker.webp"
-    return [True, buffer]
+    try:
+        response = requests.post('https://bot.lyo.su/quote/generate', json=json).json()
+        buffer = base64.b64decode(response['result']['image'].encode('utf-8'))
+        buffer = BytesIO(buffer)
+        buffer.name = "sticker.webp"
+        return [True, buffer]
+    except Exception:
+        return [False, None]
 
 
 
