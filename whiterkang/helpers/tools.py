@@ -705,7 +705,7 @@ async def format_plate_info(chat_id: int, info: dict) -> str:
 
 arq = ARQ("https://arq.hamker.dev", Config.ARQ_API_KEY, aiohttp.ClientSession())
 
-async def quotify(messages: [Message]):
+async def quotify(messages: [Message], replied: bool):
     if not isinstance(messages, list):
         messages = [messages]
 
@@ -761,7 +761,7 @@ async def quotify(messages: [Message]):
                             "text": message.reply_to_message.text,
                             "chatId": message.reply_to_message.from_user.id,
                         }
-                        if message.reply_to_message
+                        if message.reply_to_message and replied
                         else {}
                     )
                     if len(messages) == 1

@@ -742,6 +742,7 @@ async def mcserver(c: WhiterX, m: Message):
 @WhiterX.on_message(filters.command("q", Config.TRIGGER))
 async def quotly_func(c: WhiterX, m: Message):
     chat_id = m.chat.id
+    replied = False
     if not m.reply_to_message:
         return await m.reply_text("Reply to a message to quote it.")
 
@@ -775,7 +776,7 @@ async def quotly_func(c: WhiterX, m: Message):
             messages = messages[:count]
         else:
             if m.text.strip().split(None, 1)[1].strip() != "r":
-                return
+                replied = True
             reply_message = await c.get_messages(
                 chat_id,
                 m.reply_to_message.id,
@@ -788,7 +789,9 @@ async def quotly_func(c: WhiterX, m: Message):
         if not m:
             return
         try:
-            sticker = await quotify(messages)
+            sticker = await quotify(messages, replied)
+            if not sticker[0]:
+                return await m.reply("Something went wrong!")
         except Exception as e:
             logging.error(e)
         await c.send_chat_action(chat_id, ChatAction.CHOOSE_STICKER)
