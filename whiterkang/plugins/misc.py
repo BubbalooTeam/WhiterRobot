@@ -776,13 +776,14 @@ async def quotly_func(c: WhiterX, m: Message):
             messages = messages[:count]
         else:
             if m.text.strip().split(None, 1)[1].strip() != "r":
-                replied = True
+                replied = False
             reply_message = await c.get_messages(
                 chat_id,
                 m.reply_to_message.id,
                 replies=1,
             )
             messages = [reply_message]
+            replied = True
     else:
         return
     try:
