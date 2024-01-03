@@ -297,7 +297,12 @@ entity_mapping = {
     MessageEntityType.MENTION: "mention",
     MessageEntityType.PHONE_NUMBER: "phone",
     MessageEntityType.PRE: "pre",
-    MessageEntityType.SPOILER: "spoiler"
+    MessageEntityType.SPOILER: "spoiler",
+    MessageEntityType.STRIKETHROUGH: "strikethrough",
+    MessageEntityType.TEXT_LINK: "hyperlink",
+    MessageEntityType.TEXT_MENTION: "mention",
+    MessageEntityType.UNDERLINE: "underline",
+    MessageEntityType.URL: "url",
 }
 
 
