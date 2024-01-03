@@ -303,6 +303,7 @@ entity_mapping = {
     MessageEntityType.TEXT_MENTION: "mention",
     MessageEntityType.UNDERLINE: "underline",
     MessageEntityType.URL: "url",
+    None: "text"
 }
 
 
@@ -738,12 +739,14 @@ async def quotify(messages: [Message], replied: bool):
             "messages": [
                 {
                     "entities": [
-                        {
-                            "type": entity_mapping.get(entity.type, "text"),
+                        {   
+                            **({"type": entity_mapping.get(entity.type, "text")} if entity and entity_mapping else "text"),
                             "offset": entity.offset,
                             "length": entity.length,
                         }
-                        for entity in message.entities
+                        for entity in (message.entities or [])
+                        if entity and entity_mapping
+
                     ],
                     "chatId": message.forward_from.id
                     if message.forward_from
