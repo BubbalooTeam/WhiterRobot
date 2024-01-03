@@ -780,11 +780,9 @@ async def quotify(messages: [Message]):
             for message in messages
         ],
     }
-    print(json)
-    stickerfy = requests.post('https://bot.lyo.su/quote/generate', json=json)
-    stickerfy = stickerfy.json()
     
-    buffer = base64.b64decode(stickerfy['result']['image'].encode('utf-8'))
+    response = requests.post('https://bot.lyo.su/quote/generate', json=json).json()
+    buffer = base64.b64decode(response['result']['image'].encode('utf-8'))
 
     sticker = BytesIO(buffer)
     sticker.name = "sticker.webp"
