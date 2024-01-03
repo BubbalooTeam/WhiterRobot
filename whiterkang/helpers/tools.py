@@ -283,7 +283,7 @@ PLATE_REGEX = re.compile(
     r"(?:^| |\n)(([a-z]{3})-?([0-9][a-z0-9][0-9]{2}))(?: |\n|$)", re.IGNORECASE
 )
 
-entity_mapping: {
+entity_mapping = {
     MessageEntityType.BOT_COMMAND: "command",
     MessageEntityType.BANK_CARD: "bank_card",
     MessageEntityType.BLOCKQUOTE: "blockquote",
