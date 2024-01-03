@@ -739,7 +739,7 @@ async def quotify(messages: [Message], replied: bool):
                 {
                     "entities": [
                         {
-                            "type": entity_mapping[entity.type] if entity_mapping is not None and entity is not None and entity.type in entity_mapping else "text",
+                            "type": entity_mapping.get(entity.type, "text"),
                             "offset": entity.offset,
                             "length": entity.length,
                         }
