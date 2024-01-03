@@ -787,13 +787,12 @@ async def quotly_func(c: WhiterX, m: Message):
     try:
         if not m:
             return
-
-        sticker = await quotify(messages)
+        try:
+            sticker = await quotify(messages)
+        except Exception as e:
+            logging.error(e)
         await c.send_chat_action(chat_id, ChatAction.CHOOSE_STICKER)
-        if not sticker[0]:
-            return
-        sticker = sticker[1]
-        await m.reply_sticker(sticker)
+        await m.reply_sticker(sticker[1])
         sticker.close()
     except Exception as e:
         return
