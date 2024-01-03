@@ -761,7 +761,7 @@ async def quotify(messages: [Message], replied: bool):
                             "text": message.reply_to_message.text,
                             "chatId": message.reply_to_message.from_user.id,
                         }
-                        if message.reply_to_message and replied
+                        if message.reply_to_message and replied == True
                         else {}
                     )
                     if len(messages) == 1
