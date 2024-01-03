@@ -283,6 +283,23 @@ PLATE_REGEX = re.compile(
     r"(?:^| |\n)(([a-z]{3})-?([0-9][a-z0-9][0-9]{2}))(?: |\n|$)", re.IGNORECASE
 )
 
+entity_maping: {
+    MessageEntityType.BOT_COMMAND: "command",
+    MessageEntityType.BANK_CARD: "bank_card",
+    MessageEntityType.BLOCKQUOTE: "blockquote",
+    MessageEntityType.BOLD: "bold",
+    MessageEntityType.CASHTAG: "cashtag",
+    MessageEntityType.CODE: "code",
+    MessageEntityType.CUSTOM_EMOJI: "emoji",
+    MessageEntityType.EMAIL: "email",
+    MessageEntityType.HASHTAG: "hashtag",
+    MessageEntityType.ITALIC: "italic",
+    MessageEntityType.MENTION: "mention",
+    MessageEntityType.PHONE_NUMBER: "phone",
+    MessageEntityType.PRE: "pre",
+    MessageEntityType.SPOILER: "spoiler"
+}
+
 
 def time_formatter(seconds: float) -> str:
     """tempo"""
@@ -715,7 +732,14 @@ async def quotify(messages: [Message], replied: bool):
             "backgroundColor": "#1c1c1c",
             "messages": [
                 {
-                    "entities": [],
+                    "entities": [
+                        {
+                            "type": entity_maping[entity.type],
+                            "offset": entity.offset,
+                            "length": entity.length,
+                        }
+                        for entity in message.entities
+                    ],
                     "chatId": message.forward_from.id
                     if message.forward_from
                     else message.from_user.id,
@@ -773,10 +797,11 @@ async def quotify(messages: [Message], replied: bool):
 
     # Agora, vamos processar os dados e prepará-los para a solicitação
     response = requests.post('https://bot.lyo.su/quote/generate', json=json).json()
+    if not response.ok:
+        return [False, response.result]
     buffer = base64.b64decode(response['result']['image'].encode('utf-8'))
     buffer = BytesIO(buffer)
     buffer.name = "sticker.webp"
-
     return [True, buffer]
 
 
