@@ -781,7 +781,7 @@ async def quotify(messages: [Message]):
         ],
     }
     print(json)
-    stickerfy = await http.post('https://bot.lyo.su/quote/generate', params=json)
+    stickerfy = requests.post('https://bot.lyo.su/quote/generate', json=json)
     stickerfy = stickerfy.json()
     
     buffer = base64.b64decode(stickerfy['result']['image'].encode('utf-8'))
