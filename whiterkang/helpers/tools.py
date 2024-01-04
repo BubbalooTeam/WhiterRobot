@@ -735,7 +735,7 @@ async def quotify(messages: [Message], replied: bool):
     json = {
             "type": "quote",
             "format": "png",
-            "backgroundColor": "#1c1c1c",
+            "backgroundColor": "#00000190",
             "messages": [
                 {
                     "entities": [
