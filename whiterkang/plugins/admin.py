@@ -1519,7 +1519,7 @@ async def cleanup(c: WhiterX, m: Message):
         await sent.edit_text(
             (await tld(chat_id, "ZOMBIES_BAN")).format(count, m.chat.title)
         )
-        logtxt += "<b>Deleted accounts banned:</b> {}".format(count)
+        logtxt += "\n<b>Deleted accounts banned:</b> {}".format(count)
     else:
         await sent.edit_text(await tld(chat_id, "NO_ZOMBIES"))
     await send_chat_log(chat_id, logtxt, "cleanup")
