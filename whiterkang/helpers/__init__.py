@@ -49,3 +49,4 @@ from .antispam import gban_user, check_ban, ungban_user, check_antispam #não me
 from .medias import DownloadMedia, extract_info, get_download_button, SearchResult #não mexer
 from .groups import *
 from .lastfm import draw_scrobble
+from .upload import upclient

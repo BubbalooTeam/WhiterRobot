@@ -1,6 +1,7 @@
 # Copyright (C) 2023 BubbalooTeam
 
 import os
+import re
 import requests
 import contextlib
 import html
@@ -15,6 +16,7 @@ from uuid import uuid4
 from datetime import datetime
 from removebg import RemoveBg
 from typing import Union
+from pathlib import Path
 
 
 from hydrogram import filters
@@ -31,8 +33,7 @@ from hydrogram.enums import ChatType, ChatAction
 from hydrogram.errors import BadRequest
 
 from whiterkang import WhiterX, Config
-from whiterkang.helpers import tld, inline_handler, group_apps, weather_apikey, disableable_dec, scan_file, get_report, humanbytes, find_gp, add_gp, cssworker_url, PLATE_REGEX, format_plate_info, http, input_str, quotify, isArgInt
-
+from whiterkang.helpers import tld, inline_handler, group_apps, weather_apikey, disableable_dec, scan_file, get_report, humanbytes, find_gp, add_gp, cssworker_url, PLATE_REGEX, format_plate_info, http, input_str, quotify, isArgInt, upclient
 IMG_PATH = Config.DOWN_PATH + "WhiterOS-RemoveBG.png"
 
 get_coords = "https://api.weather.com/v3/location/search"
@@ -141,6 +142,9 @@ async def get_tr_lang(m, text):
 
 def get_status_emoji(status_code: int) -> str:
     return status_emojis.get(status_code, "n/a")
+
+class ProcessCanceled(Exception):
+    """raise if thread has terminated"""
 
 
 @WhiterX.on_message(filters.command(["cota"], Config.TRIGGER))
@@ -800,6 +804,38 @@ async def quotly_func(c: WhiterX, m: Message):
         sticker.close()
     except Exception as e:
         return
+    
+@WhiterX.on_message(filters.command("upload", Config.TRIGGER))
+async def upload_(_, m: Message):
+    url = input_str(m)
+    if not url:
+        return await m.reply("Vou enviar o Vento?")
+    is_url = re.search(r"(?:https?|ftp)://[^|\s]+\.[^|\s]+", url)
+    del_path = False
+    if is_url:
+        del_path = True
+        try:
+            url, _ = await upclient.url_download(m, url)
+        except ProcessCanceled:
+            await m.reply("`Process Canceled!`")
+            return
+        except Exception as e_e:  # pylint: disable=broad-except
+            await m.reply(str(e_e))
+            return
+    if "|" in url:
+        url, file_name = url.split("|")
+        path_ = url.strip()
+        if os.path.isfile(url):
+            new_path = os.path.join(Config.DOWN_PATH, file_name.strip())
+            os.rename(url, new_path)
+            path_ = new_path
+    try:
+        string = Path(url)
+    except IndexError:
+        await m.reply("wrong syntax\n`.upload [path] or [direct link]`")
+    else:
+        await upclient.upload_path(m=m, path=string, del_path=del_path)
+        
 
 @WhiterX.on_message(filters.command("donate", Config.TRIGGER))
 async def donation(c: WhiterX, m: Message):
