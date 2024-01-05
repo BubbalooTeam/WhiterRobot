@@ -1639,18 +1639,18 @@ async def setloggable(c: WhiterX, m: Message):
 @WhiterX.on_message(filters.command(["unsetlog", "unsetchatlog"], Config.TRIGGER))
 async def ulkloggable(c: WhiterX, m: Message):
     chat_id = m.chat.id
-    finders = get_chat_log(chat_id)
+    finders = await get_chat_log(chat_id)
     if finders[0] == True:
-        try:
-            await del_chat_log(chat_id)
-        except Exception:
-            try:
-                await m.reply("Error in unlink ChatLog...")
-            except Exception:
-                return
         try:
             await c.send_message(finders[1], "LogChannel has been unlinked from <b>{}</b>".format(m.chat.title))
             await m.reply("Sucessfully LogChannel has been un-set")
+            try:
+                await del_chat_log(chat_id)
+            except Exception:
+                try:
+                    await m.reply("Error in unlink ChatLog...")
+                except Exception:
+                    return
         except Exception:
             try:
                 await m.reply("Error in un-set message ChatLog...")
