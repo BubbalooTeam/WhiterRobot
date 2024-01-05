@@ -1615,6 +1615,7 @@ async def unpin_message(c: WhiterX, m: Message):
     await send_chat_log(chat_id, "<b>Chat:</b> {}\n<b>Admin:</b> {}\n<b><b>Silencity:</b> <i>{}</i>".format(m.chat.title, m.from_user.mention, dns), "pin")
 
 @WhiterX.on_message(filters.command(["setlog", "setchatlog"], Config.TRIGGER))
+@require_admin()
 async def setloggable(c: WhiterX, m: Message):
     if m.chat.type == ChatType.CHANNEL:
         await m.reply("<i>Now, forward the /setlog to the group you want to tie this channel to!</i>")
@@ -1637,6 +1638,7 @@ async def setloggable(c: WhiterX, m: Message):
             return
         
 @WhiterX.on_message(filters.command(["unsetlog", "unsetchatlog"], Config.TRIGGER))
+@require_admin()
 async def ulkloggable(c: WhiterX, m: Message):
     chat_id = m.chat.id
     finders = await get_chat_log(chat_id)
