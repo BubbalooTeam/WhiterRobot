@@ -41,6 +41,10 @@ from whiterkang.helpers import (
     DISABLABLE_CMDS,
     group_locks,
     group_filter,
+    get_chat_log,
+    add_chat_log,
+    del_chat_log,
+    send_chat_log,
 )
 from whiterkang.helpers.tools import extract_time
 
@@ -341,6 +345,7 @@ async def set_warns_limit(c: WhiterX, m: Message):
         return await m.reply("Esse limite não é valido.")
     await WARNS_LIMIT.update_one({"chat_id": m.chat.id}, {"$set": {"limit": warns_limit}}, upsert=True)
     await m.reply(f"<i>O limite de advertências foi alterado para {warns_limit}</i>")
+    await send_chat_log(m.chat.id, "<b>Chat:</b> {}\n<b>Admin:</b> {}\n<b>New limit:</b> {}".format(m.chat.title, m.from_user.first_name, warns_limit), "setwarnlimit")
 
     
 @WhiterX.on_message(filters.command(["setwarnmode", "setwarnaction"], Config.TRIGGER))
@@ -356,8 +361,9 @@ async def set_warns_mode(c: WhiterX, m: Message):
         await WARN_ACTION.update_one({"chat_id": m.chat.id}, {"$set": {"action": warn_action_txt}}, upsert=True)
        
         await m.reply_text(
-        f"A ação de advertências do chat foi alterado para: {warn_action_txt}"
-    )
+            f"A ação de advertências do chat foi alterado para: {warn_action_txt}"
+        )
+        await send_chat_log(m.chat.id, "<b>Chat:</b> {}\n<b>Admin:</b> {}\n<b>New mode:</b> {}".format(m.chat.title, m.from_user.first_name, warn_action_txt), "setwarnmode")
     else:
         if await WARN_ACTION.find_one({"chat_id": m.chat.id}):
             r = await WARN_ACTION.find_one({"chat_id": m.chat.id})
@@ -492,6 +498,7 @@ async def set_goodbye_message(c: WhiterX, m: Message):
             await sent.edit_text(
                 "Mensagem de Despedida Alterada em {chat_title}".format(chat_title=m.chat.title)
             )
+            await send_chat_log(m.chat.id, "<b>Chat:</b> {}\n<b>Admin:</b> {}".format(m.chat.title, m.from_user.mention), "setgoodbye")
     else:
         await m.reply_text(
             "De um argumento exemplo: /setgoodbye Olá {mention}",
@@ -1001,7 +1008,7 @@ async def get_all_chat_note(c: WhiterX, m: Message):
         reply_text += await tld(chat_id, "NOTES_SUB_LIST")
         await m.reply_text(reply_text, quote=True)
 
-@WhiterX.on_message(filters.command(["rmnote", "delnote"]))
+@WhiterX.on_message(filters.command(["rmnote", "delnote", "clear"]))
 @disableable_dec("delnote")
 @require_admin(ChatPrivileges(can_change_info=True))
 async def rmnote(c: WhiterX, m: Message):
@@ -1488,12 +1495,13 @@ async def locktypes(c: WhiterX, m: Message):
 
     await m.reply_text(perms)
 
-@WhiterX.on_message(filters.command(["cleanup", "zombies"], prefixes=["/", "!"]))
+@WhiterX.on_message(filters.command(["cleanup", "zombies"], Config.TRIGGER))
 @disableable_dec("zombies")
 @require_admin(ChatPrivileges(can_restrict_members=True))
 async def cleanup(c: WhiterX, m: Message):
     chat_id = m.chat.id
     count = 0
+    logtxt = "<b>Chat:</b> {}\n<b>Admin:</b> {}".format(m.chat.title, m.from_user.id)
     sent = await m.reply_text(await tld(chat_id, "COM_1"))
     async for t in c.get_chat_members(chat_id=chat_id):
         if t.user.is_deleted:
@@ -1507,12 +1515,14 @@ async def cleanup(c: WhiterX, m: Message):
                     f"<b>Erro:</b> <code>{e}</code>"
                 )
                 return await c.send_err("<b>Error!!</b> <code>{}</code>".format(e))
-    if count:
+    if count >= 1:
         await sent.edit_text(
             (await tld(chat_id, "ZOMBIES_BAN")).format(count, m.chat.title)
         )
+        logtxt += "<b>Deleted accounts banned:</b> {}".format(count)
     else:
         await sent.edit_text(await tld(chat_id, "NO_ZOMBIES"))
+    await send_chat_log(chat_id, logtxt, "cleanup")
 
 @WhiterX.on_message(filters.command("ban", Config.TRIGGER))
 @disableable_dec("ban")
@@ -1534,10 +1544,14 @@ async def ban(c: WhiterX, m: Message):
         m.from_user.mention,
         m.chat.title
     )
+    logtxt = "<b>Chat:</b> {}\n<b>Admin:</b> {}\n<b>User:</b> {} (<code>{}</code>)".format(m.chat.title, m.from_user.mention, target_user.mention)
     if reason:
         await m.reply_text(text + (await tld(chat_id, "REASON")).format(reason))
+        logtxt += "\n<b>Reason:</b> {}".format(reason)
     else:
         await m.reply_text(text)
+    await send_chat_log(chat_id, logtxt, "ban")
+    
 
 @WhiterX.on_message(filters.command("antispam", Config.TRIGGER))
 @require_admin(ChatPrivileges(can_change_info=True))
@@ -1578,6 +1592,7 @@ async def unpin_message(c: WhiterX, m: Message):
     except BadRequest:
         await m.reply(await tld(chat_id, "UNPIN_NOT_MODIFIED"))
         return
+    await send_chat_log(chat_id, "<b>Chat:</b> {}\n<b>Admin:</b> {}".format(m.chat.title, m.from_user.mention), "unpin")
 
 @WhiterX.on_message(filters.command("pin", Config.TRIGGER))
 @require_admin(ChatPrivileges(can_change_info=True))
@@ -1597,3 +1612,52 @@ async def unpin_message(c: WhiterX, m: Message):
     except BadRequest:
         await m.reply(await tld(chat_id, "PIN_NOT_MODIFIED"))
         return
+    await send_chat_log(chat_id, "<b>Chat:</b> {}\n<b>Admin:</b> {}\n<b><b>Silencity:</b> <i>{}</i>".format(m.chat.title, m.from_user.mention, dns), "pin")
+
+@WhiterX.on_message(filters.command(["setlog", "setchatlog"], Config.TRIGGER))
+async def setloggable(c: WhiterX, m: Message):
+    if m.chat.type == ChatType.CHANNEL:
+        await m.reply("<i>Now, forward the /setlog to the group you want to tie this channel to!</i>")
+        return
+    
+    elif m.forward_from_chat:
+        chat_id = m.chat.id
+        try:
+            await add_chat_log(chat_id, m.forward_from_chat.id)
+        except Exception:
+            await m.reply("Error in add/update log Channel...")
+            return
+    try:
+        await c.send_message(m.forward_from_chat.id, "LogChannel has been defined from <b>{}</b>".format(m.chat.title))
+        await m.reply("Successfully in set logChannel!")
+    except Exception:
+        try:
+            await m.reply("Error in setting ChatLog...")
+        except Exception:
+            return
+        
+@WhiterX.on_message(filters.command(["unsetlog", "unsetchatlog"], Config.TRIGGER))
+async def ulkloggable(c: WhiterX, m: Message):
+    chat_id = m.chat.id
+    finders = get_chat_log(chat_id)
+    if finders[0] == True:
+        try:
+            await del_chat_log(chat_id)
+        except Exception:
+            try:
+                await m.reply("Error in unlink ChatLog...")
+            except Exception:
+                return
+        try:
+            await c.send_message(finders[1], "LogChannel has been unlinked from <b>{}</b>".format(m.chat.title))
+            await m.reply("Sucessfully LogChannel has been un-set")
+        except Exception:
+            try:
+                await m.reply("Error in un-set message ChatLog...")
+            except Exception:
+                return
+    else:
+        try:
+            await m.reply("No channels are linked to this chat. Are you sure you have already had LogChanells linked here?")
+        except Exception:
+            return

@@ -64,6 +64,6 @@ class WhiterKangBOT(Client):
             chat_id=Config.GP_LOGS,
             text="#WhiterKang #ERROR #LOGS\n\n{}".format(e)
         )
-
+        
 
 WhiterX = WhiterKangBOT()
