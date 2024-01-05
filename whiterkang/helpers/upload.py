@@ -2,7 +2,7 @@ import datetime
 import asyncio
 import os
 
-from . import get_progress, tld, humanbytes
+from . import get_progress, tld, humanbytes, aiowrap
 from .. import WhiterX, Config
 
 from hydrogram.types import Message
@@ -189,13 +189,14 @@ class Uploader:
     async def upload_path(self, m: Message, path: Path, del_path: bool):
         file_paths = []
         if path.exists():
+            @aiowrap
             def explorer(_path: Path) -> None:
                 if _path.is_file() and _path.stat().st_size:
                     file_paths.append(_path)
                 elif _path.is_dir():
                     for i in sorted(_path.iterdir(), key=lambda a: (a.name)):
                         explorer(i)
-            explorer(path)
+            await explorer(path)
         else:
             path = path.expanduser()
             str_path = os.path.join(*(path.parts[1:] if path.is_absolute() else path.parts))
