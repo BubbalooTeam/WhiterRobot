@@ -1501,7 +1501,7 @@ async def locktypes(c: WhiterX, m: Message):
 async def cleanup(c: WhiterX, m: Message):
     chat_id = m.chat.id
     count = 0
-    logtxt = "<b>Chat:</b> {}\n<b>Admin:</b> {}".format(m.chat.title, m.from_user.id)
+    logtxt = "<b>Chat:</b> {}\n<b>Admin:</b> {}".format(m.chat.title, m.from_user.mention)
     sent = await m.reply_text(await tld(chat_id, "COM_1"))
     async for t in c.get_chat_members(chat_id=chat_id):
         if t.user.is_deleted:
@@ -1544,7 +1544,7 @@ async def ban(c: WhiterX, m: Message):
         m.from_user.mention,
         m.chat.title
     )
-    logtxt = "<b>Chat:</b> {}\n<b>Admin:</b> {}\n<b>User:</b> {} (<code>{}</code>)".format(m.chat.title, m.from_user.mention, target_user.mention)
+    logtxt = "<b>Chat:</b> {}\n<b>Admin:</b> {}\n<b>User:</b> {} (<code>{}</code>)".format(m.chat.title, m.from_user.mention, target_user.id)
     if reason:
         await m.reply_text(text + (await tld(chat_id, "REASON")).format(reason))
         logtxt += "\n<b>Reason:</b> {}".format(reason)
