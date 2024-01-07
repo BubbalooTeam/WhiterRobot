@@ -21,7 +21,7 @@ No support other than the commands(setup) below will be given to anyone who clon
 
 Setup
 -----
-1. Create a clone bot and config/run using Ubuntu Linux ``git clone https://github.com/BubbalooTeam/WhiterRobot``.
+1. Create a clone bot and config/run using Ubuntu Linux: ``git clone https://github.com/BubbalooTeam/WhiterRobot``.
 2. Go to bot folder : ``cd WhiterRobot``.
 3. Install to the necessary deps ``sudo pip install -r requirements.txt``.
 4. Go to https://my.telegram.org/apps and create a new app.
