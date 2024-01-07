@@ -15,6 +15,9 @@ Requirements
 - Python 3.9+
 - An Ubuntu operating system (Windows not supported)
 
+Warning
+-------
+No support other than the commands(setup) below will be given to anyone who clones this bot!!
 
 Setup
 -----
@@ -34,7 +37,7 @@ If you find any bugs/issues with the bot you have three options:
 - Create a new issue in our `GitHub <https://github.com/BubbalooTeam/WhiterRobot>`__ describing the issue.
 - If you know how to fix the issue, fork our repo and open up a pull request.
 
-© 2023 - `BubbalooTeam™ <https://github.com/BubbalooTeam>`__
+© 2024 - `BubbalooTeam™ <https://github.com/BubbalooTeam>`__
 
 .. Badges
 .. |Black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
